@@ -25,11 +25,11 @@ scopes.
    :header-rows: 1
 
    * - Graph
-     - Num Nodes
-     - Num Edges
-     - name_resolution
-     - Size (MB)
-     - Download
+      - Num Nodes
+      - Num Edges
+      - Reachable pairs
+      - Size (MB)
+      - Download
    * - :ref:`name_resolution_jiaozi`
      - 54952
      - 46322

@@ -75,13 +75,13 @@ NOT_AVAILABLE = "not available"
 #: count columns of its graph table; a None grammar file means the per-graph
 #: ``<graph>.cnf``.
 GRAMMAR_COLUMNS: dict[str, list[tuple[str, Optional[str]]]] = {
-    "biological_uniprot": [("grammar", None)],
-    "c_alias_analysis": [("c_alias", "c_alias.cnf")],
-    "context_sensitive_data_flow": [("aa", "aa.cnf")],
-    "data_provenance": [("prov_derivation", "prov_derivation.cnf")],
-    "field_sensitive_alias": [("vf", "vf.cnf")],
-    "java_points_to": [("java_points_to", "java_points_to.cnf")],
-    "name_resolution": [("name_resolution", "name_resolution.cnf")],
+    "biological_uniprot": [("Reachable pairs", None)],
+    "c_alias_analysis": [("Reachable pairs", "c_alias.cnf")],
+    "context_sensitive_data_flow": [("Reachable pairs", "aa.cnf")],
+    "data_provenance": [("Reachable pairs", "prov_derivation.cnf")],
+    "field_sensitive_alias": [("Reachable pairs", "vf.cnf")],
+    "java_points_to": [("Reachable pairs", "java_points_to.cnf")],
+    "name_resolution": [("Reachable pairs", "name_resolution.cnf")],
     "rdf": [
         ("subClassOf", "nested_parentheses_subClassOf.cnf"),
         ("subClassOf_type", "nested_parentheses_subClassOf_type.cnf"),

@@ -38,11 +38,11 @@ Python projects, following the W3C PROV model (``Entity``, ``Activity``,
    :header-rows: 1
 
    * - Graph
-     - Num Nodes
-     - Num Edges
-     - prov_derivation
-     - Size (MB)
-     - Download
+      - Num Nodes
+      - Num Edges
+      - Reachable pairs
+      - Size (MB)
+      - Download
    * - :ref:`provenance_sampleproject`
      - 148
      - 763

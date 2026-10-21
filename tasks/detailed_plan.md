@@ -1,154 +1,195 @@
-# Detailed Plan: Task 167 — Single contribution page under the Dataset root
+# Detailed Plan: Task 169 — Correct the count-column name and unify the graph-table design
 
-Issue #167. The data-contribution process is documented in four scattered
-places: the "Contributing data" section of the Graphs page
-(`docs/graphs/index.rst`), a stranded "How to add a new grammar?" section on
-the Dataset root (`docs/dataset.rst`), a stale pointer in the developer guide
-(`docs/developer.rst`, referencing a README section that does not exist under
-that name), and the README. Consolidate it into one page under the Dataset
-root, and elevate the "File structure" archive-layout reference (currently on
-the Graphs page) to its own dataset-level page.
+Issue #169: "Incorrect column name" — the count column on
+`docs/graphs/biological_uniprot.rst` is labeled `grammar`, but per
+`docs/graphs/index.rst` ("Contents") that column is *not* a grammar; it is the
+number of vertex pairs reachable with respect to the canonical grammar's
+language.
+
+All eight per-category graph tables share the shape
+`Graph | Num Nodes | Num Edges | <count col> | Size (MB) | Download`, but the
+count-column header is inconsistent across categories: `c_alias`, `aa`,
+`prov_derivation`, `vf`, `java_points_to`, `name_resolution`, `grammar`, and
+four per-grammar names in `rdf`. The standalone `docs/reachable_pairs.rst`
+page already uses the unified vocabulary **`Reachable pairs`** (rendered by
+`utils/reachable_pairs_tables.py`).
 
 ## Confirmed decisions (user guidance)
 
-- Placement: **flat file + toctree** — new pages are siblings of
-  `dataset.rst`, listed in its toctree, so they appear as subpages under
-  Dataset in the navigation. No existing public URL changes (no directory
-  restructure).
-- File structure: **own dataset-level page** — it describes the full archive
-  layout and is a neutral format reference used by contributors *and* end
-  users (tutorial, issue template); it does not live inside the contribution
-  page.
-- No-duplication: every fact keeps exactly one home; all other mentions become
-  cross-references re-pointed to the new locations.
+- Unified header for every **single-count-column** category: **`Reachable
+  pairs`**.
+- The `rdf` category (four count columns, one per grammar) uses a **multi-row
+  header** (`:header-rows: 2`): row 1 carries a common `Reachable pairs` group
+  spanning the four count columns; row 2 carries the four grammar-specific
+  subheaders (`subClassOf`, `subClassOf_type`, `type`, `broaderTransitive`).
+- `old_graphs` is historical data: it is **not** maintained by the docs-table
+  tools, so it is dropped from `archive_sizes.GRAPH_TABLE_FILES`.
 
-## Reuse analysis
+## Source of truth
 
-- No package code changes (docs-only task).
-- All new-page content is **moved verbatim** from existing sections — nothing
-  is re-described: "Contributing data" (`docs/graphs/index.rst:12-63`),
-  "How to add a new grammar?" (`docs/dataset.rst:26-29`), "File structure"
-  (`docs/graphs/index.rst:65-152`).
-- The issue template (`.github/ISSUE_TEMPLATE/new-data-template.md`) remains
-  the single source of truth for required fields; the pages keep pointing at
-  it instead of restating its content.
-- Page header pattern (`.. only:: html` + `:Release:` / `:Date:`) reused from
-  existing pages; label `contributing_data` reused on the new page;
-  `graph_file_structure` renamed to `file_structure` (all four `:ref:` uses
-  updated in the same commit).
+- `utils/reachable_pairs_tables.py` `GRAMMAR_COLUMNS` (line 77): the ordered
+  `(column header, grammar file)` pairs per category. The header string is
+  used verbatim to locate and rewrite the count cells of each category page in
+  `update_category_columns` (line 400). The `None` grammar file means the
+  per-graph `<graph>.cnf`.
+- `utils/archive_sizes.py` `iter_graph_tables` / `_parse_table` (line 129):
+  parses every graph table; `rows[0]` is treated as a **flat single-row
+  header**, and `update_table` / `main` / `_table_urls` locate `Download` and
+  `Size (MB)` in `rows[0]`.
+- `docs/graphs/index.rst` "Contents" (lines 113–127): the human description of
+  the count column.
+- `tests/utils/test_reachable_pairs_tables.py` and
+  `tests/utils/test_archive_sizes.py`: pin the current parsing/rendering
+  behavior, including the in-sync check against the real repo
+  (`test_check_mode_on_the_real_repo_is_in_sync`).
 
----
+## Subtasks
 
-### S1: Move "File structure" to its own dataset-level page [done] 202952d
+### S1: Rename the single-count-column headers to `Reachable pairs` [done]
 
-**Code:** none (docs/templates/skills only).
-
-**Tests:** fresh docs build under the no-warnings policy (orphan-document and
-duplicate-label checks included).
-
-**Docs:**
-- New `docs/file_structure.rst` — title "File structure", label
-  `.. _file_structure:` (renamed from `graph_file_structure`), standard page
-  header; content moved verbatim from `docs/graphs/index.rst:65-152` (archive
-  layout, partial archives, MTX format, "Indexed labels" and "Reversed edges"
-  subsections demoted one level).
-- `docs/dataset.rst`: add `file_structure` to the toctree (same commit — an
-  unwired document is an orphan warning under the no-warnings policy).
-- `docs/graphs/index.rst`: remove the "File structure" section.
-- Re-point every reference to the old location:
-  - `:ref:`graph_file_structure`` → `:ref:`file_structure``:
-    `docs/tutorial.rst` (2×), `docs/queries/rpq/index.rst`.
-  - Prose "the 'File structure' section of the :ref:`graphs` page" → the new
-    page: `docs/flpq.rst` (2×), `docs/queries/rpq/data/reachability.rst`,
-    `docs/queries/rpq/data/label_star.rst`,
-    `docs/reference/tools/index.rst`.
-  - `.github/ISSUE_TEMPLATE/new-data-template.md`: the "Data format" link
-    `.../graphs/index.html` → `.../file_structure.html`.
-  - `.opencode/skills/add-graph/SKILL.md`: "File structure section of
-    `docs/graphs/index.rst`" → `docs/file_structure.rst`.
-  - Discovered during implementation (different phrasing, caught by the
-    build + grep sweep): `docs/flpq.rst` RSM "Placement" paragraph and the
-    `flpq_data/tools/check_archive_structure.py` module docstring — both
-    re-pointed to the new page (docstring-only change; the module's 80 tests
-    pass).
+**Code:** `utils/reachable_pairs_tables.py` — in `GRAMMAR_COLUMNS`, change the
+header string of the seven single-column categories (`biological_uniprot`,
+`c_alias_analysis`, `context_sensitive_data_flow`, `data_provenance`,
+`field_sensitive_alias`, `java_points_to`, `name_resolution`) from its current
+value to `"Reachable pairs"`. Leave the `grammar` element of each tuple
+unchanged. Do not touch `rdf` in this subtask.
+**Tests:** `tests/utils/test_reachable_pairs_tables.py` — the existing
+`test_check_mode_on_the_real_repo_is_in_sync` is the in-sync gate; after the
+docs are updated it must pass. No new test is required for the rename itself.
+**Docs:** `docs/graphs/biological_uniprot.rst`, `c_alias_analysis.rst`,
+`context_sensitive_data_flow.rst`, `data_provenance.rst`,
+`field_sensitive_alias.rst`, `java_points_to.rst`, `name_resolution.rst` —
+change the count-column header cell (currently `grammar`, `c_alias`, `aa`,
+`prov_derivation`, `vf`, `java_points_to`, `name_resolution` respectively) to
+`Reachable pairs`. Cell values are untouched.
 
 **Spec:**
-- The moved text is verbatim except heading levels; no sentence is rewritten
-  or dropped.
-- After the commit, no file in the repo references `graph_file_structure` or
-  describes the archive layout outside `docs/file_structure.rst`.
-- The Graphs page keeps "Format conversion", "Contents", and the category
-  tables untouched.
+- Only the header cell text changes in each page; the table otherwise stays
+  byte-identical.
+- `archive_sizes` is unaffected by this subtask (it keys on `Download` /
+  `Size (MB)` only), and `reachable_pairs_tables` re-checks against the CSV by
+  header name, so after the rename the in-sync check must report zero
+  problems.
 
-### S2: Create the "Contributing data" page; remove the old sections [done] 46dabfd
+### S2: Teach the table parsers about multi-row headers
 
-**Code:** none (docs only).
-
-**Tests:** fresh docs build under the no-warnings policy.
-
-**Docs:**
-- New `docs/contributing_data.rst` — title "Contributing data", label
-  `.. _contributing_data:` (moved from the Graphs page), standard page header.
-  Sections, in order:
-  - Intro (from `docs/graphs/index.rst:17-23`): all new data enters through
-    the single CONTRIBUTE NEW DATA issue; prepare → validate → publish → open
-    issue; maintainers upload and merge; no PR needed. Plus one sentence
-    pointing to :ref:`file_structure` for the archive layout every
-    contribution must follow.
-  - "Contribution cases" (from `docs/graphs/index.rst:25-33`).
-  - "Validation" (from `docs/graphs/index.rst:35-45`).
-  - "Consistency invariants" (from `docs/graphs/index.rst:47-55`).
-  - "Not accepted via this flow" (from `docs/graphs/index.rst:57-63`).
-  - "Grammars" (from `docs/dataset.rst:26-29`, condensed to avoid repeating
-    the intro's issue-creation sentence): grammars arrive with the data they
-    apply to (template's "Queries and grammars" section); accepted only if
-    instantiated as at least one query with reference results in a
-    contributed archive.
-- `docs/dataset.rst`: remove the "How to add a new grammar?" section; add
-  `contributing_data` to the toctree (before `file_structure`); extend the
-  intro by one sentence naming the two new subpages.
-- `docs/graphs/index.rst`: remove the "Contributing data" section (the page
-  becomes a pure catalog: intro, Format conversion, Contents, tables). The
-  page previously had no intro paragraph (it started with the moved
-  section), so one sentence is added naming what the catalog page holds.
+**Code:** `utils/archive_sizes.py` — make `_parse_table` read the
+`:header-rows: N` option and emit the first `N` rows as header rows
+(`rows[0..N-1]`) with the rest as data rows (`rows[N:]`); a table is a graph
+table when any header row contains `Download`. Add a helper
+`header_columns(table) -> list[str]` returning the flat per-column header key
+(the non-empty header cells of a column joined by `" / "`, in row order); a
+column that is empty in a row contributes nothing (so a merged group yields
+`"Reachable pairs / subClassOf"`). Update `update_table`, `main`, and
+`_table_urls` to locate `Download` / `Size (MB)` via `header_columns` instead
+of `rows[0]`. Keep the doctests of `iter_graph_tables` and `update_table`
+valid (single-row tables must still round-trip).
+`utils/reachable_pairs_tables.py` — `update_category_columns` locates each
+count column by its flat key (from the new `header_columns` helper) instead of
+a bare `rows[0]` membership test; the table is selected as the one containing
+any of the wanted keys.
+**Tests:** `tests/utils/test_archive_sizes.py` — add a `:header-rows: 2`
+fixture: `iter_graph_tables` still returns one table, `header_columns`
+yields `[..., "Reachable pairs / subClassOf", ..., "Size (MB)", "Download"]`,
+and `update_table` fills the Size cell (the column left of `Download`) without
+touching the four count cells; idempotent on a second pass. Add a
+single-row regression case asserting behavior is unchanged.
+`tests/utils/test_reachable_pairs_tables.py` — add a multi-row-header category
+table and assert `update_category_columns` matches a count column by its flat
+key and reports "missing from the table header" when the key is absent.
+**Docs:** none (behavior for existing single-row tables is preserved).
 
 **Spec:**
-- The issue-template link appears exactly once on the new page (in the
-  intro); the grammar section references the template's section name without
-  repeating the full link.
-- After the commit, "Contributing data" content exists only in
-  `docs/contributing_data.rst`; the label `contributing_data` resolves to the
-  new page.
+- Single-row tables (`:header-rows: 1`) produce the same flat keys as before,
+  so `old_graphs` (if still scanned) and all current single-row category pages
+  are byte-identical on a no-op run.
+- The change is additive: the flat key for a single-row table equals the old
+  `rows[0]` cell, so no existing assertion's meaning changes.
 
-### S3: Re-point external pointers; changelog [done] deef55a
+### S3: Give `rdf.rst` the multi-row header
 
-**Code:** none (README/docs/changelog only).
+**Code:** none (pure docs).
+**Tests:** `tests/utils/test_reachable_pairs_tables.py`
+`test_check_mode_on_the_real_repo_is_in_sync` must pass after S2's parser
+handles the 2-row `rdf` table.
+**Docs:** `docs/graphs/rdf.rst` — set `:header-rows: 2` and add the second
+header row: row 1 = `Graph | Num Nodes | Num Edges | (Reachable pairs group
+over the 4 count columns) | Size (MB) | Download`; row 2 = the four grammar
+subheaders under the group. The data rows keep all eight cells.
+**Spec:**
+- The merged `Reachable pairs` must span exactly the four count columns. The
+  exact reST list-table layout that renders a merged group over sub-columns
+  must be confirmed against the **real Sphinx build** (the docs gate), because
+  the docutils list-table parser is position-based and cannot be validated in
+  isolation. If the merged layout cannot be expressed cleanly, fall back to a
+  2-row header in which row 1 holds `Reachable pairs` in the first count
+  column and empty cells in the other three, and record the decision in Design
+  Notes.
 
-**Tests:** fresh docs build under the no-warnings policy.
+### S4: Drop `old_graphs` from the archive-size tool
 
-**Docs:**
-- `README.rst` "How to contribute new data?": "the full contribution guide is
-  on the Graphs page" → the Contributing data page
-  (`.../FLPQ_Data/contributing_data.html`).
-- `docs/developer.rst` "Adding graphs and grammars": replace the stale
-  pointer (it references a README section titled "How to add a new graph?"
-  that does not exist) with :doc:`/contributing_data`.
-- `CHANGELOG.md` Unreleased → Changed: contribution documentation
-  consolidated under the Dataset section — new "Contributing data" and
-  "File structure" pages; both sections removed from the Graphs page and the
-  Dataset root.
+**Code:** `utils/archive_sizes.py` — remove `"old_graphs/index.rst"` from
+`GRAPH_TABLE_FILES` and update the module docstring (it currently says "the
+old-graphs table") so it describes only the per-category graph tables.
+**Tests:** none reference `GRAPH_TABLE_FILES` or `old_graphs` in
+`archive_sizes`; no test change is required.
+**Docs:** none.
 
 **Spec:**
-- No file references the old locations of either section (verified by grep
-  for "How to add a new graph", "How to add a new grammar", and the two old
-  section headings).
-- The last subtask's commit carries `Closes #167`.
+- `old_graphs/index.rst` keeps rendering as before; it is simply no longer
+  size-checked by the tool. Verified: `old_graphs/index.rst` is a single-row
+  `Graph | Num Nodes | Num Edges | Size (MB) | Download` table (no count
+  column), touched only by `archive_sizes.py`, and no test pins the file list.
 
----
+### S5: Update the "Contents" description of the graph catalog
 
-## Execution order
+**Docs:** `docs/graphs/index.rst` "Contents" (lines 113–127) — restate that
+the count column is titled **`Reachable pairs`** across all categories, and
+that in categories with several grammars (e.g. RDF) the header is two rows:
+a `Reachable pairs` group with one subheader per grammar. Keep the existing
+explanation of "not available" / empty cells and the `Size (MB)` column.
+**Code:** none.
+**Tests:** none (docs-only).
 
-S1 → S2 → S3. One commit per subtask (`docs(167-SN)`); docs-only task — code
-gates (tests, lint, format) are skipped per the workflow rules, but each
-subtask must leave a green fresh docs build; code review + quality gate
-(docs build, CI linkcheck) before merge to `dev`.
+**Spec:**
+- No duplication: the page keeps being the single description of the column
+  semantics; the category pages only show the table.
+
+## Verification commands (per docs/developer.rst)
+
+- Tests: `uv run pytest --cov=flpq_data --cov-report=term-missing --cov-report=json && uv run python utils/check_coverage.py`
+- Style/lint: `uv run pre-commit run --all-files`
+- Type check: `uv run ty check`
+- Docs build (fresh, `-W`): see `docs/README.md`
+- In-sync gate: `uv run python utils/reachable_pairs_tables.py`
+
+## Design Notes (discovered during planning)
+
+### Multi-row list-table header RST is unverified in isolation
+
+Design rationale, as confirmed by the user: a common `Reachable pairs` group
+header over the per-grammar subcolumns.
+
+- The docutils `list-table` parser is **position-based**: the k-th `* -` line
+  in a row is the k-th column; a merged cell is an empty cell in the rows
+  below it within the same column. `publish_doctree` on hand-built
+  multi-row tables collapsed to a single column in my tests, so the exact
+  layout that renders a merged group over four subcolumns could not be
+  confirmed outside the real Sphinx build.
+- What was attempted: several 2-row header layouts (empty cells in the group
+  columns in row 1, `Reachable pairs` in row 2; and the reverse). All
+  collapsed to one cell under isolated docutils parsing.
+- Remaining work: author the `rdf.rst` 2-row header (S3) and validate the
+  rendered HTML in the docs gate; adjust the RST until the merge renders as
+  intended, or fall back to the non-merged 2-row header and record it here.
+
+### `archive_sizes` and `reachable_pairs_tables` share a table parser
+
+- Root cause of the cross-cutting need: `iter_graph_tables` (in
+  `archive_sizes.py`) is imported by `reachable_pairs_tables.py`, and both
+  treat `rows[0]` as a flat header. A 2-row header moves `Size (MB)` /
+  `Download` out of `rows[0]`, which would make the rdf table invisible to
+  both tools.
+- Resolution: `header_columns` (S2) is the single place that flattens
+  header rows into per-column keys; both tools use it, so the multi-row case
+  is handled once.

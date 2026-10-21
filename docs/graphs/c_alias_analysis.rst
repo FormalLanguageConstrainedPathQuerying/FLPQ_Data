@@ -41,11 +41,11 @@ discovered for each program.
    :header-rows: 1
 
    * - Graph
-     - Num Nodes
-     - Num Edges
-     - c_alias
-     - Size (MB)
-     - Download
+      - Num Nodes
+      - Num Edges
+      - Reachable pairs
+      - Size (MB)
+      - Download
    * - :ref:`wc`
      - 332
      - 269
