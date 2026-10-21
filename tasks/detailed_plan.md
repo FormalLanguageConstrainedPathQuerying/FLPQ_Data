@@ -71,7 +71,7 @@ change the count-column header cell (currently `grammar`, `c_alias`, `aa`,
   header name, so after the rename the in-sync check must report zero
   problems.
 
-### S2: Teach the table parsers about multi-row headers
+### S2: Teach the table parsers about multi-row headers [done]
 
 **Code:** `utils/archive_sizes.py` — make `_parse_table` read the
 `:header-rows: N` option and emit the first `N` rows as header rows
@@ -193,3 +193,38 @@ header over the per-grammar subcolumns.
 - Resolution: `header_columns` (S2) is the single place that flattens
   header rows into per-column keys; both tools use it, so the multi-row case
   is handled once.
+
+### docutils list-table cannot render a column-aligned merged group (BLOCKER for S3)
+
+Confirmed by direct experiments against the project's docutils (0.22.4):
+
+- A reST **list-table** merges a group *positionally*: when the group label
+  `Reachable pairs` sits in one cell and its sub-cells (`subClassOf`,
+  `subClassOf_type`, `type`, `broaderTransitive`) sit in the next header row,
+  docutils concatenates them into *consecutive* cells, shifting the group left
+  relative to the `Size (MB)` / `Download` columns. The group cannot be
+  aligned over its four data columns. (The `:colspan:` / `:colwidths:`
+  "colgroup" options that would express a true merge are Sphinx-only —
+  docutils rejects them — and cannot be validated in this docutils-only
+  environment.)
+- A **grid-table** (the `+===+` / `===+` syntax) *does* support merged header
+  cells via colgroups, which is the mechanism that would render the requested
+  design. But every graph table in the dataset is a list-table, so switching
+  the rdf table to a grid-table would (a) change its layout and (b) make the
+  S2 parser (`_parse_table`, which reads the list-table `* -` / `- ` rows)
+  unable to process it.
+- Consequence: the user's requested "common `Reachable pairs` header over the
+  four grammar subheaders, as a multi-row header" cannot be expressed in a
+  list-table, and expressing it in a grid-table breaks the maintenance tools
+  that the other seven categories rely on.
+
+**Blocked subtask:** S3 (and the multi-row tests added in S2 that assert the
+aligned parse). **Remaining work / options** (awaiting user decision):
+  1. Keep the rdf table a **list-table** and use a single-row header with a
+     unified prefix per column, e.g. `Reachable pairs: subClassOf`, `...:
+     subClassOf_type`, `...: type`, `...: broaderTransitive` (distinct,
+     self-describing, no merge). No parser change beyond S1.
+  2. **Revert S2's multi-row support** and ship the unified single-column
+     design for the seven categories only; leave rdf as-is.
+  3. Convert **all** graph tables to grid-tables and teach the parsers the
+     grid syntax (large, touches every category page).

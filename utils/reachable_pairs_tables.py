@@ -35,7 +35,7 @@ import pathlib
 import re
 from typing import Optional, Sequence
 
-from archive_sizes import iter_graph_tables
+from archive_sizes import header_columns, iter_graph_tables
 from config import MAIN_FOLDER
 
 from flpq_data.tools.check_archive_structure import QUERY_CLASSES
@@ -449,16 +449,14 @@ def update_category_columns(
                 "add them to GRAMMAR_COLUMNS"
             ) from err
     wanted = {header for header, _ in columns}
-    tables = [
-        t for t in iter_graph_tables(text) if wanted & {cell for _, cell in t.rows[0]}
-    ]
+    tables = [t for t in iter_graph_tables(text) if wanted & set(header_columns(t))]
     if len(tables) != 1:
         raise ValueError(
             f"expected exactly one table with a count column from {sorted(wanted)}, "
             f"found {len(tables)}"
         )
     table = tables[0]
-    header = [cell for _, cell in table.rows[0]]
+    header = header_columns(table)
     col_index = {name: i for i, name in enumerate(header)}
 
     by_pair: dict[tuple[str, str], Optional[int]] = {
@@ -473,7 +471,7 @@ def update_category_columns(
     for col_header, _ in columns:
         if col_header not in col_index:
             problems.append(f"column {col_header} is missing from the table header")
-    for row in table.rows[1:]:
+    for row in table.rows[table.header_rows :]:
         ref_match = _REF_RE.match(row[0][1])
         if ref_match is None:
             continue

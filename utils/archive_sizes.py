@@ -29,9 +29,11 @@ from sizes import format_size_mb
 
 __all__ = [
     "SIZE_COLUMN",
+    "DOWNLOAD_COLUMN",
     "GRAPH_TABLE_FILES",
     "GraphTable",
     "iter_graph_tables",
+    "header_columns",
     "extract_url",
     "fetch_sizes",
     "update_table",
@@ -64,20 +66,27 @@ class GraphTable:
     ----------
     start_line : int
         The 0-based index of the ``.. list-table::`` line in the file text.
+    header_rows : int
+        The number of header rows (the ``:header-rows:`` option; 1 when the
+        table declares none). ``rows[:header_rows]`` are the header rows and
+        ``rows[header_rows:]`` are the data rows.
     rows : list[list[tuple[int, str]]]
-        The table rows in order; ``rows[0]`` is the header. Each row is a
-        list of ``(line_index, cell_text)`` pairs in column order, where
-        ``line_index`` is the 0-based index of the cell's line.
+        The table rows in order. Each row is a list of ``(line_index,
+        cell_text)`` pairs in column order, where ``line_index`` is the
+        0-based index of the cell's line.
     """
 
     start_line: int
+    header_rows: int
     rows: list[list[tuple[int, str]]]
 
 
 def iter_graph_tables(text: str) -> list[GraphTable]:
     """Returns the graph tables (list-tables with a Download column) in text.
 
-    Tables without a ``Download`` header cell are skipped, as are files'
+    A table is a graph table when any of its header rows (the
+    ``:header-rows:`` count, ``1`` when the table declares none) contains a
+    ``Download`` cell. Tables without one are skipped, as are files'
     non-table content. Only the flat one-cell-per-line layout used by the
     docs graph tables is understood.
 
@@ -89,9 +98,9 @@ def iter_graph_tables(text: str) -> list[GraphTable]:
     Examples
     --------
     >>> text = (
-    ...     ".. list-table::\n   :header-rows: 1\n\n"
-    ...     "   * - Graph\n     - Download\n"
-    ...     "   * - wc\n     - `wc.tar.gz <https://example.com/wc.tar.gz>`_ 📥\n"
+    ...     ".. list-table::\\n   :header-rows: 1\\n\\n"
+    ...     "   * - Graph\\n     - Download\\n"
+    ...     "   * - wc\\n     - `wc.tar.gz <https://example.com/wc.tar.gz>`_ \\u2605\\n"
     ... )
     >>> tables = iter_graph_tables(text)
     >>> len(tables), [cell for _, cell in tables[0].rows[0]]
@@ -120,6 +129,26 @@ def iter_graph_tables(text: str) -> list[GraphTable]:
     return tables
 
 
+def _header_rows_of(lines: list[str], start: int, end: int) -> int:
+    """Returns the ``:header-rows:`` count of the directive at ``lines[start]``.
+
+    Scans the directive's option lines (the ``:name: value`` lines before any
+    table row) and returns the value of ``:header-rows:``; ``1`` when the
+    table declares none.
+    """
+    for idx in range(start + 1, end):
+        line = lines[idx].strip()
+        if not line:
+            continue
+        if line.startswith("*"):
+            break
+        if line.startswith(":header-rows:"):
+            value = line.split(":", 2)[2].strip()
+            if value.isdigit():
+                return max(int(value), 1)
+    return 1
+
+
 def _indent_of(lines: list[str], line_index: int) -> str:
     """Returns the leading whitespace of a line."""
     line = lines[line_index]
@@ -127,7 +156,12 @@ def _indent_of(lines: list[str], line_index: int) -> str:
 
 
 def _parse_table(lines: list[str], start: int, end: int) -> Optional[GraphTable]:
-    """Parses the list-table at ``lines[start]`` or returns None."""
+    """Parses the list-table at ``lines[start]`` or returns None.
+
+    A row starts at a ``* - <first cell>`` line or at a bare ``* -`` line (a
+    row whose first cell is empty, as in the leading cell of a multi-row
+    header group); its remaining cells follow as indented ``- <cell>`` lines.
+    """
     rows: list[list[tuple[int, str]]] = []
     current: Optional[list[tuple[int, str]]] = None
     for idx in range(start + 1, end):
@@ -136,12 +170,60 @@ def _parse_table(lines: list[str], start: int, end: int) -> Optional[GraphTable]
             current = [(idx, row_match.group(2))]
             rows.append(current)
             continue
+        if current is not None and re.match(r"^\s+\* ?-?$", lines[idx]):
+            current = []
+            rows.append(current)
+            continue
         cell_match = _CELL_RE.match(lines[idx])
         if cell_match is not None and current is not None:
             current.append((idx, cell_match.group(2)))
-    if not rows or DOWNLOAD_COLUMN not in [cell for _, cell in rows[0]]:
+    if not rows:
         return None
-    return GraphTable(start_line=start, rows=rows)
+    header_rows = _header_rows_of(lines, start, end)
+    if not any(
+        DOWNLOAD_COLUMN in [cell for _, cell in row] for row in rows[:header_rows]
+    ):
+        return None
+    return GraphTable(start_line=start, header_rows=header_rows, rows=rows)
+
+
+def header_columns(table: GraphTable) -> list[str]:
+    """Returns the flat per-column header keys of a table.
+
+    The non-empty header cells of each column (across the ``header_rows``
+    header rows) are joined with ``" / "`` in row order. A column that is empty
+    in a header row contributes nothing to that row, so a merged group renders
+    as a single key per column (e.g. ``"Reachable pairs / subClassOf"``). A
+    table whose every column is empty yields one empty key.
+
+    Parameters
+    ----------
+    table : GraphTable
+        A parsed graph table.
+
+    Examples
+    --------
+    >>> from archive_sizes import GraphTable
+    >>> table = GraphTable(
+    ...     start_line=0, header_rows=1,
+    ...     rows=[[(0, "Graph"), (1, "Size (MB)"), (2, "Download")],
+    ...           [(3, "wc"), (4, "0.002"), (5, "link")]],
+    ... )
+    >>> header_columns(table)
+    ['Graph', 'Size (MB)', 'Download']
+
+    Returns
+    -------
+    columns : list[str]
+        One flat key per column, in column order.
+    """
+    header = table.rows[: table.header_rows]
+    width = max((len(row) for row in header), default=0)
+    columns: list[str] = []
+    for col in range(width):
+        parts = [row[col][1] for row in header if col < len(row) and row[col][1]]
+        columns.append(" / ".join(parts))
+    return columns
 
 
 def extract_url(cell: str) -> Optional[str]:
@@ -277,16 +359,17 @@ def update_table(text: str, sizes: dict[str, int]) -> tuple[str, int]:
     replacements: list[tuple[int, str]] = []
     changed = 0
     for table in iter_graph_tables(text):
-        header = table.rows[0]
+        columns = header_columns(table)
         download_index = next(
-            i for i, (_, cell) in enumerate(header) if cell == DOWNLOAD_COLUMN
+            i for i, cell in enumerate(columns) if cell == DOWNLOAD_COLUMN
         )
-        has_size = any(cell == SIZE_COLUMN for _, cell in header)
+        has_size = SIZE_COLUMN in columns
         if not has_size:
-            line_index, _ = header[download_index]
+            last_header = table.rows[table.header_rows - 1]
+            line_index, _ = last_header[download_index]
             indent = _indent_of(lines, line_index)
             insertions.append((line_index, f"{indent}- {SIZE_COLUMN}"))
-        for row in table.rows[1:]:
+        for row in table.rows[table.header_rows :]:
             if len(row) <= download_index:
                 continue
             url = extract_url(row[download_index][1])
@@ -323,10 +406,11 @@ def _table_urls(text: str) -> list[str]:
     """Returns the archive URLs referenced by the graph tables of text."""
     urls: list[str] = []
     for table in iter_graph_tables(text):
+        columns = header_columns(table)
         download_index = next(
-            i for i, (_, cell) in enumerate(table.rows[0]) if cell == DOWNLOAD_COLUMN
+            i for i, cell in enumerate(columns) if cell == DOWNLOAD_COLUMN
         )
-        for row in table.rows[1:]:
+        for row in table.rows[table.header_rows :]:
             if len(row) <= download_index:
                 continue
             url = extract_url(row[download_index][1])
@@ -391,14 +475,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         rel_path = path.relative_to(MAIN_FOLDER)
         text = texts[path]
         for table in iter_graph_tables(text):
-            header = [cell for _, cell in table.rows[0]]
-            download_index = header.index(DOWNLOAD_COLUMN)
-            has_size = SIZE_COLUMN in header
+            columns = header_columns(table)
+            download_index = columns.index(DOWNLOAD_COLUMN)
+            has_size = SIZE_COLUMN in columns
             if not has_size:
                 problems.append(
                     f"{rel_path}:{table.start_line + 1}: no {SIZE_COLUMN} column"
                 )
-            for row in table.rows[1:]:
+            for row in table.rows[table.header_rows :]:
                 rows_checked += 1
                 name = row[0][1]
                 if len(row) <= download_index:

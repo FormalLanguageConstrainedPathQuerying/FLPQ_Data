@@ -5,6 +5,7 @@ import pytest
 from archive_sizes import (
     extract_url,
     fetch_sizes,
+    header_columns,
     iter_graph_tables,
     update_table,
 )
@@ -74,6 +75,114 @@ def test_iter_graph_tables_keeps_empty_cells_aligned():
         "",
         f"`skos.tar.gz <{WC_URL}>`_ 📥",
     ]
+
+
+def test_iter_graph_tables_parses_multi_row_header():
+    # A two-row header: a bare ``* -`` row start (row 2) plus the option line.
+    # docutils merges the group positionally, so ``header_columns`` joins the
+    # non-empty header cells of each column with " / " in row order.
+    text = (
+        ".. list-table::\n"
+        "   :header-rows: 2\n"
+        "   :align: left\n"
+        "\n"
+        "   * - Graph\n"
+        "     - Num Nodes\n"
+        "     - Reachable pairs\n"
+        "     -\n"
+        "     - Size (MB)\n"
+        "     - Download\n"
+        "   * -\n"
+        "     -\n"
+        "     - subClassOf\n"
+        "     - type\n"
+        "     -\n"
+        "     -\n"
+        f"   * - :ref:`skos`\n"
+        "     - 144\n"
+        "     - 1\n"
+        "     - 2\n"
+        "     - 0.002\n"
+        f"     - `skos.tar.gz <{WC_URL}>`_ 📥\n"
+    )
+
+    table = iter_graph_tables(text)[0]
+
+    assert table.header_rows == 2
+    assert len(table.rows) == 3
+    # docutils merges the group positionally: the row-2 subheaders land in the
+    # columns after the group label, so header_columns joins them per column.
+    assert header_columns(table) == [
+        "Graph",
+        "Num Nodes / subClassOf",
+        "Reachable pairs / type",
+        "",
+        "Size (MB)",
+        "Download",
+    ]
+    # Data rows start after the two header rows and keep all their cells.
+    assert [cell for _, cell in table.rows[2]] == [
+        ":ref:`skos`",
+        "144",
+        "1",
+        "2",
+        "0.002",
+        f"`skos.tar.gz <{WC_URL}>`_ 📥",
+    ]
+
+
+def test_header_columns_single_row_is_flat():
+    table = iter_graph_tables(TABLE_WITHOUT_SIZE)[0]
+    assert table.header_rows == 1
+    assert header_columns(table) == ["Graph", "Num Nodes", "Download"]
+
+
+def test_update_table_fills_size_with_multi_row_header():
+    text = (
+        ".. list-table::\n"
+        "   :header-rows: 2\n"
+        "   :align: left\n"
+        "\n"
+        "   * - Graph\n"
+        "     - Num Nodes\n"
+        "     - Reachable pairs\n"
+        "     -\n"
+        "     - Size (MB)\n"
+        "     - Download\n"
+        "   * -\n"
+        "     -\n"
+        "     - subClassOf\n"
+        "     - type\n"
+        "     -\n"
+        "     -\n"
+        f"   * - :ref:`skos`\n"
+        "     - 144\n"
+        "     - 1\n"
+        "     - 2\n"
+        "     - 9.99\n"
+        f"     - `skos.tar.gz <{WC_URL}>`_ 📥\n"
+    )
+
+    updated, changed = update_table(text, SIZES)
+
+    # Size (MB) is located via header_columns (column index 4); the size cell
+    # is the one before Download (index 5 -> data index 4).
+    assert changed == 1
+    table = iter_graph_tables(updated)[0]
+    assert header_columns(table)[4] == "Size (MB)"
+    assert header_columns(table)[5] == "Download"
+    assert [cell for _, cell in table.rows[2]] == [
+        ":ref:`skos`",
+        "144",
+        "1",
+        "2",
+        "0.002",
+        f"`skos.tar.gz <{WC_URL}>`_ 📥",
+    ]
+    # Idempotent: the size column is now correct, nothing else to change.
+    again, changed_again = update_table(updated, SIZES)
+    assert changed_again == 0
+    assert again == updated
 
 
 def test_iter_graph_tables_skips_tables_without_download_column():
