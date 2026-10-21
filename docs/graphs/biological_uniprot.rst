@@ -28,14 +28,13 @@ as in `"Subgraph queries by context-free grammars" <https://researchportal.helsi
    data/unigraph_10
 
 .. list-table::
-   :header-rows: 1
 
    * - Graph
-      - Num Nodes
-      - Num Edges
-      - Reachable pairs
-      - Size (MB)
-      - Download
+     - Num Nodes
+     - Num Edges
+     - Reachable pairs
+     - Size (MB)
+     - Download
    * - :ref:`unigraph_1`
      - 3082
      - 11966

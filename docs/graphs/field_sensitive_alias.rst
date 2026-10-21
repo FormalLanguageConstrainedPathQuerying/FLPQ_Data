@@ -27,14 +27,13 @@ field (the ``f_i`` family), as in `"Taming Transitive Redundancy for Context-Fre
    data/omnetpp_field_sensitive_alias
 
 .. list-table::
-   :header-rows: 1
 
    * - Graph
-      - Num Nodes
-      - Num Edges
-      - Reachable pairs
-      - Size (MB)
-      - Download
+     - Num Nodes
+     - Num Edges
+     - Reachable pairs
+     - Size (MB)
+     - Download
    * - :ref:`xz_field_sensitive_alias`
      - 2808
      - 6604

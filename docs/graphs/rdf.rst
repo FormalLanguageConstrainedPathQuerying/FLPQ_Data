@@ -37,15 +37,14 @@ queries over RDF as in `"Context-Free Path Queries on RDF Graphs" <https://arxiv
    data/taxonomy
 
 .. list-table::
-   :header-rows: 1
 
    * - Graph
      - Num Nodes
      - Num Edges
-     - subClassOf
-     - subClassOf_type
-     - type
-     - broaderTransitive
+     - Reachable pairs / subClassOf
+     - Reachable pairs / subClassOf_type
+     - Reachable pairs / type
+     - Reachable pairs / broaderTransitive
      - Size (MB)
      - Download
    * - :ref:`generations`

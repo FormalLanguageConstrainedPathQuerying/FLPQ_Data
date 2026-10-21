@@ -40,14 +40,13 @@ are not stored (see :ref:`graphs`).
    data/tradesoap
 
 .. list-table::
-   :header-rows: 1
 
    * - Graph
-      - Num Nodes
-      - Num Edges
-      - Reachable pairs
-      - Size (MB)
-      - Download
+     - Num Nodes
+     - Num Edges
+     - Reachable pairs
+     - Size (MB)
+     - Download
    * - :ref:`gson`
      - 14114
      - 17467

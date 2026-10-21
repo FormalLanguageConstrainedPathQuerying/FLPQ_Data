@@ -38,14 +38,13 @@ discovered for each program.
    data/kernel
 
 .. list-table::
-   :header-rows: 1
 
    * - Graph
-      - Num Nodes
-      - Num Edges
-      - Reachable pairs
-      - Size (MB)
-      - Download
+     - Num Nodes
+     - Num Edges
+     - Reachable pairs
+     - Size (MB)
+     - Download
    * - :ref:`wc`
      - 332
      - 269

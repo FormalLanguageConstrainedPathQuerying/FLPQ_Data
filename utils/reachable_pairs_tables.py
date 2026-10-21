@@ -83,10 +83,13 @@ GRAMMAR_COLUMNS: dict[str, list[tuple[str, Optional[str]]]] = {
     "java_points_to": [("Reachable pairs", "java_points_to.cnf")],
     "name_resolution": [("Reachable pairs", "name_resolution.cnf")],
     "rdf": [
-        ("subClassOf", "nested_parentheses_subClassOf.cnf"),
-        ("subClassOf_type", "nested_parentheses_subClassOf_type.cnf"),
-        ("type", "nested_parentheses_type.cnf"),
-        ("broaderTransitive", "nested_parentheses_broaderTransitive.cnf"),
+        ("Reachable pairs / subClassOf", "nested_parentheses_subClassOf.cnf"),
+        ("Reachable pairs / subClassOf_type", "nested_parentheses_subClassOf_type.cnf"),
+        ("Reachable pairs / type", "nested_parentheses_type.cnf"),
+        (
+            "Reachable pairs / broaderTransitive",
+            "nested_parentheses_broaderTransitive.cnf",
+        ),
     ],
 }
 

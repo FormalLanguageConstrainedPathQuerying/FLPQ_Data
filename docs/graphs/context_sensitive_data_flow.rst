@@ -27,14 +27,13 @@ families), as in `"Taming Transitive Redundancy for Context-Free Language Reacha
    data/perlbench
 
 .. list-table::
-   :header-rows: 1
 
    * - Graph
-      - Num Nodes
-      - Num Edges
-      - Reachable pairs
-      - Size (MB)
-      - Download
+     - Num Nodes
+     - Num Edges
+     - Reachable pairs
+     - Size (MB)
+     - Download
    * - :ref:`xz`
      - 30492
      - 37173

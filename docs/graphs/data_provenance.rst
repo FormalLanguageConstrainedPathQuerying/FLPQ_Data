@@ -35,14 +35,13 @@ Python projects, following the W3C PROV model (``Entity``, ``Activity``,
    data/provenance_airflow
 
 .. list-table::
-   :header-rows: 1
 
    * - Graph
-      - Num Nodes
-      - Num Edges
-      - Reachable pairs
-      - Size (MB)
-      - Download
+     - Num Nodes
+     - Num Edges
+     - Reachable pairs
+     - Size (MB)
+     - Download
    * - :ref:`provenance_sampleproject`
      - 148
      - 763
