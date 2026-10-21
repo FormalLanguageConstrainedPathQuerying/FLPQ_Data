@@ -1,8 +1,8 @@
 """Keep the Size (MB) column of the docs graph tables in sync with S3.
 
-Every per-category graph table (and the old-graphs table) has a ``Download``
-column linking to the archive on Yandex Object Storage. This tool keeps the
-``Size (MB)`` column next to it accurate:
+Every per-category graph table has a ``Download`` column linking to the
+archive on Yandex Object Storage. This tool keeps the ``Size (MB)`` column
+next to it accurate:
 
 - check mode (default): HEAD every referenced archive and report the rows
   whose size cell disagrees with the stored object;
@@ -47,10 +47,9 @@ SIZE_COLUMN = "Size (MB)"
 DOWNLOAD_COLUMN = "Download"
 
 #: The docs files holding graph tables, as glob patterns relative to docs/.
-GRAPH_TABLE_FILES: tuple[str, ...] = (
-    "graphs/*.rst",
-    "old_graphs/index.rst",
-)
+#: ``old_graphs`` is historical data and is intentionally not maintained by
+#: this tool, so its table is not scanned.
+GRAPH_TABLE_FILES: tuple[str, ...] = ("graphs/*.rst",)
 
 _ROW_RE = re.compile(r"^(\s+)\* - (.*)$")
 # The space after the dash is optional: empty cells are bare ``-`` lines.

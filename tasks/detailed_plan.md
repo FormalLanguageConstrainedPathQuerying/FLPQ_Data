@@ -126,7 +126,7 @@ subheaders under the group. The data rows keep all eight cells.
   column and empty cells in the other three, and record the decision in Design
   Notes.
 
-### S4: Drop `old_graphs` from the archive-size tool
+### S4: Drop `old_graphs` from the archive-size tool [done]
 
 **Code:** `utils/archive_sizes.py` — remove `"old_graphs/index.rst"` from
 `GRAPH_TABLE_FILES` and update the module docstring (it currently says "the
