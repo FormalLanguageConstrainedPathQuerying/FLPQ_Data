@@ -141,7 +141,7 @@ old-graphs table") so it describes only the per-category graph tables.
   `Graph | Num Nodes | Num Edges | Size (MB) | Download` table (no count
   column), touched only by `archive_sizes.py`, and no test pins the file list.
 
-### S5: Update the "Contents" description of the graph catalog
+### S5: Update the "Contents" description of the graph catalog [done]
 
 **Docs:** `docs/graphs/index.rst` "Contents" (lines 113–127) — restate that
 the count column is titled **`Reachable pairs`** across all categories, and

@@ -110,16 +110,18 @@ is dropped.
 Contents
 --------
 
-The per-category tables include one column per grammar language
-applicable to that category. Each cell shows the number of vertex pairs
-reachable with respect to the respective language (i.e. the number of
-pairs ``(u, v)`` for which some string in the language labels a path from
-:math:`u` to :math:`v`). The count depends on the language, not on a
-particular grammar: several grammars may generate the same language and
-yield the same count. A cell reading "not available" means the value has
-not been computed yet; an empty cell means the grammar does not apply to
-that graph. Each table also has a ``Size (MB)`` column: the download size
-of the graph's archive, in megabytes.
+The per-category tables include one count column per grammar language
+applicable to that category, each headed ``Reachable pairs`` (or
+``Reachable pairs / <grammar>`` in categories with several languages, such
+as RDF). Each cell shows the number of vertex pairs reachable with respect
+to the respective language (i.e. the number of pairs ``(u, v)`` for which
+some string in the language labels a path from :math:`u` to :math:`v`). The
+count depends on the language, not on a particular grammar: several grammars
+may generate the same language and yield the same count. A cell reading
+"not available" means the value has not been computed yet; an empty cell
+means the grammar does not apply to that graph. Each table also has a
+``Size (MB)`` column: the download size of the graph's archive, in
+megabytes.
 
 The canonical grammar behind each column is documented once on the
 respective category page, in its "Canonical grammars" section — a grammar
