@@ -1,4 +1,5 @@
 import pathlib
+from typing import Optional
 
 import pytest
 import reachable_pairs_tables
@@ -303,7 +304,7 @@ def test_update_category_columns_multi_row_header():
     )
     # Flat keys produced by header_columns for this positional parse (col 2 =
     # "Reachable pairs / subClassOf_type", col 3 = "type").
-    columns = [
+    columns: list[tuple[str, Optional[str]]] = [
         ("Reachable pairs / subClassOf_type", "a.cnf"),
         ("type", "b.cnf"),
     ]
@@ -342,7 +343,10 @@ def test_update_category_columns_missing_flat_key_is_a_problem():
     )
     # "subClassOf" matches the table's column (selects it); "subClassOf / type"
     # does not, so it is reported as missing from the header.
-    columns = [("subClassOf", "a.cnf"), ("subClassOf / type", "b.cnf")]
+    columns: list[tuple[str, Optional[str]]] = [
+        ("subClassOf", "a.cnf"),
+        ("subClassOf / type", "b.cnf"),
+    ]
     _, problems = update_category_columns(text, ROWS, "cat_a", PAGES, columns=columns)
     assert any(
         "column subClassOf / type is missing from the table header" in p
