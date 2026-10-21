@@ -106,7 +106,7 @@ key and reports "missing from the table header" when the key is absent.
 - The change is additive: the flat key for a single-row table equals the old
   `rows[0]` cell, so no existing assertion's meaning changes.
 
-### S3: Give `rdf.rst` the multi-row header
+### S3: Give `rdf.rst` the unified `Reachable pairs / <grammar>` headers [done]
 
 **Code:** none (pure docs).
 **Tests:** `tests/utils/test_reachable_pairs_tables.py`
@@ -218,12 +218,15 @@ Confirmed by direct experiments against the project's docutils (0.22.4):
   list-table, and expressing it in a grid-table breaks the maintenance tools
   that the other seven categories rely on.
 
-**Blocked subtask:** S3 (and the multi-row tests added in S2 that assert the
-aligned parse). **Remaining work / options** (awaiting user decision):
-  1. Keep the rdf table a **list-table** and use a single-row header with a
-     unified prefix per column, e.g. `Reachable pairs: subClassOf`, `...:
-     subClassOf_type`, `...: type`, `...: broaderTransitive` (distinct,
-     self-describing, no merge). No parser change beyond S1.
+**Resolved (user decision):** the rdf table stays a single-row **list-table**;
+each count column is headed `Reachable pairs / <grammar>` (a per-column
+prefix, not a merged group), and the page renders the prefix and grammar on
+two visual lines to keep the columns narrow. The S2 `header_columns` parser
+resolves these flat keys; the S2 multi-row tests cover the `header_rows`
+mechanism in general. **Superseded options:**
+  1. (chosen) Keep the rdf table a **list-table** and use a single-row header
+     with a unified prefix per column, `Reachable pairs / <grammar>`
+     (distinct, self-describing, no merge). No parser change beyond S2.
   2. **Revert S2's multi-row support** and ship the unified single-column
      design for the seven categories only; leave rdf as-is.
   3. Convert **all** graph tables to grid-tables and teach the parsers the
