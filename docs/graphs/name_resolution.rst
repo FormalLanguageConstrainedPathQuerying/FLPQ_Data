@@ -61,6 +61,7 @@ The grammar file is attached to the archive.
 
 .. math::
 
+   \begin{aligned}
    S &\to \varepsilon \\
      &\mid eps \quad S \\
      &\mid Q \quad S \\
@@ -69,3 +70,4 @@ The grammar file is attached to the archive.
    S\#vpsh_{i} &\to vpsh_{i} \quad S \\
    V &\to S\#vpsh_{i} \quad vpp_{i} \\
    Q &\to S\#psh_{i} \quad pp_{i}
+   \end{aligned}

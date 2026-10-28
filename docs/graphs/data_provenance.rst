@@ -158,6 +158,7 @@ The grammar file is attached to the archive.
 
 .. math::
 
+   \begin{aligned}
    S &\to Entity \quad Core \quad Entity \\
    Core &\to wasDerivedFrom \\
         &\mid wasDerivedFrom_{r} \\
@@ -173,3 +174,4 @@ The grammar file is attached to the archive.
         &\quad Entity \quad wasDerivedFrom_{r} \\
         &\mid specializationOf \quad Entity \quad Core \\
         &\quad Entity \quad specializationOf_{r}
+   \end{aligned}

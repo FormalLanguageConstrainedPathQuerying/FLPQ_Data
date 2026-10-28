@@ -42,8 +42,10 @@ Grammar Template
 
 .. math::
 
+   \begin{aligned}
    S \, &\rightarrow \, d_r \, V \, d \, \\
    V \, &\rightarrow \, ((S \, \mid \, \varepsilon) \, a_r)^{*} \, (S \, \mid \, \varepsilon) \, (a \, (S \, \mid \, \varepsilon))^{*} \, \\
+   \end{aligned}
 
 
 Description

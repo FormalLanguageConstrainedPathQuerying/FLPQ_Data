@@ -42,10 +42,12 @@ Grammar Template
 
 .. math::
 
+   \begin{aligned}
    S \, &\rightarrow \, \varepsilon \, \qquad \qquad &\textit{if } \textit{eps} = \textit{True} \, \\
    S \, &\rightarrow \, \textit{op}_i \, \textit{cp}_i \qquad \qquad &\textit{if } \textit{eps} = \textit{False} \, \\
    S \, &\rightarrow \, \textit{op}_i \, S \, \textit{cp}_i \, S \, &\\
    &\forall \, (\textit{op}_i, \textit{cp}_i) \, \in \, \textit{types} \, &\\
+   \end{aligned}
 
 
 Description

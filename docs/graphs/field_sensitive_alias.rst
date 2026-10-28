@@ -105,7 +105,7 @@ Reversed edges (``a_r``, ``d_r``, ``f_r_i``) are auto-generated from forward edg
 .. math::
 
    M \, \rightarrow \, d_r \, V \, d \, \\
-   V \, \rightarrow \, A_r \, V \mid V \, A \mid f_r_i \, V \, f_i \mid M \mid \varepsilon \, \\
+   V \, \rightarrow \, A_r \, V \mid V \, A \mid f_{r\_i} \, V \, f_i \mid M \mid \varepsilon \, \\
    A_r \, \rightarrow \, M \, a_r \mid a_r \mid \varepsilon \, \\
    A \, \rightarrow \, a \, M \mid a \mid \varepsilon \, \\
 

@@ -49,5 +49,5 @@ Edges Statistics
      - 5060
    * - :math:`f_i`
      - 10790
-   * - :math:`f_r_i`
+   * - :math:`f_{r\_i}`
      - 10790

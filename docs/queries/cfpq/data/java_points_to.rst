@@ -39,10 +39,12 @@ Grammar Template
 ----------------
 
 .. math::
+   \begin{aligned}
    \textit{PointsTo} \, &\rightarrow \, (\textit{assign} \, \mid  \, \textit{load}_f \, \textit{Alias} \, \textit{store}_f)^{*} \, \textit{alloc} \, \\
    \textit{Alias} \, &\rightarrow \, \textit{PointsTo} \, \textit{FlowsTo} \, \\
    \textit{FlowsTo} \, &\rightarrow \, \textit{alloc}_r \, (\textit{assign}_r \, \mid \, \textit{store}_{r\_f} \, \textit{Alias} \, \textit{load}_{r\_f})^* \, \\
    &\forall \, f \, \in \, \textit{fields} \, \\
+   \end{aligned}
 
 
 Description

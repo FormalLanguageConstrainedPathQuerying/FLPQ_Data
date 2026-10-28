@@ -103,6 +103,7 @@ The grammar file is attached to the archive.
 
 .. math::
 
+   \begin{aligned}
    S &\to Seq \quad IsAssociated \quad IsSimilar \\
    Seq &\to IsSimilar \quad (codes\_for \quad IsSimilar)? \\
    IsSimilar &\to \varepsilon \\
@@ -111,3 +112,4 @@ The grammar file is attached to the archive.
              &\mid belongs\_to \quad IsSimilar \quad belongs\_to_{r} \\
              &\mid participate\_in \quad IsSimilar \quad participate\_in_{r} \\
    IsAssociated &\to refers\_to \quad refers\_to_{r}
+   \end{aligned}
