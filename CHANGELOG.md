@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The reachable-pair count columns of the graph tables were inconsistently
+  named (e.g. `grammar` on the biological_uniprot page, bare grammar names
+  on the rdf page); they are now uniformly `Reachable pairs`, with the rdf
+  page's per-grammar columns prefixed `Reachable pairs / <grammar>` (#169).
 - The field-sensitive-alias pages rendered the edge label `f_r_i` as a TeX
   double subscript, which MathJax rejects with "Double subscripts: use
   braces to clarify" (#173); the label is now `f_{r\_i}` in the ten
