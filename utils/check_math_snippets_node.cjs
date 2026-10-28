@@ -14,6 +14,9 @@
  */
 'use strict';
 
+const path = require('node:path');
+const { pathToFileURL } = require('node:url');
+
 const MERROR_RE = /<merror[^>]*>([\s\S]*?)<\/merror>/g;
 
 function collapse(s) {
@@ -38,7 +41,15 @@ function main() {
     }
     require('mathjax')
       .init({
-        loader: { load: ['input/tex'] },
+        loader: {
+          load: ['input/tex'],
+          // MathJax's node entry resolves components to plain absolute
+          // paths and loads them with import(); Node's ESM loader rejects
+          // absolute paths without a URL scheme on Windows ("Received
+          // protocol 'd:'"), so convert them to file:// URLs.
+          require: (file) =>
+            import(path.isAbsolute(file) ? pathToFileURL(file).href : file),
+        },
         startup: { typeset: false },
       })
       .then((MathJax) => {
