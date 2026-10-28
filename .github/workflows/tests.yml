@@ -28,5 +28,11 @@ jobs:
       - name: Show installed packages
         run: uv tree
 
+      # The math-snippet guard validates docs snippets with the MathJax
+      # engine (utils/check_math_snippets_node.cjs); Node is preinstalled
+      # on all runner OSes.
+      - name: Install MathJax with npm
+        run: npm ci
+
       - name: Test FLPQ_Data
         run: uv run pytest

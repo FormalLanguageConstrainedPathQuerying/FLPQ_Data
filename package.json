@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "description": "MathJax version pin for the math-snippet guard (utils/check_math_snippets_node.cjs); must match the mathjax_js URL pinned in docs/conf.py.",
+  "dependencies": {
+    "mathjax": "4.1.3"
+  }
+}

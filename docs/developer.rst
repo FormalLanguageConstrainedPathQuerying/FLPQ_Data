@@ -55,6 +55,16 @@ then from the repository root::
 - The committed :file:`uv.lock` pins every dependency; CI passes ``--frozen``
   to fail on a lockfile that is out of sync with ``pyproject.toml``.
 
+The math-snippet guard (see "Test pipeline") validates docs math with the
+MathJax engine itself, which runs on Node.js (>= 20). Install Node.js once,
+then from the repository root::
+
+   npm ci
+
+The committed :file:`package-lock.json` pins the engine version; it must
+match the ``mathjax_js`` URL in :file:`docs/conf.py`, so the guard and the
+browser render with the same MathJax version.
+
 .. _developer-quality:
 
 Quality checks
