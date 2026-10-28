@@ -18,7 +18,7 @@ Info
    * - Direct download
      - `.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/eclass.tar.gz>`_
    * - Source
-     - `link <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4>`_
+     - `link <https://web.archive.org/web/20160309143952/http://ebusiness-unibw.org/ontologies/eclass/5.1.4/eclass_514en.owl>`_
 
 
 Graph Statistics

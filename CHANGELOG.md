@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Seven grammar pages used `&` alignment tabs in plain display math, which
   MathJax rejects with "Misplaced &" (#174); the blocks are now wrapped in
   `\begin{aligned} ... \end{aligned}`.
+- The eclass graph page's Source link (and the historical old_graphs
+  page's Origin link) pointed to a URL the hosting university removed from
+  its site; they now point to the archived original (Wayback Machine
+  snapshot of the eClassOWL 5.1.4 ontology file the original page
+  redirected to).
 
 ### Changed
 
