@@ -20,6 +20,12 @@ jobs:
       - name: Install dependencies with uv
         run: uv sync --frozen --all-groups
 
+      # The pre-commit math-snippet hook (check-math-snippets) runs the
+      # MathJax Node oracle (utils/check_math_snippets_node.cjs); Node is
+      # preinstalled on the runner.
+      - name: Install MathJax with npm
+        run: npm ci
+
       - name: Run pre-commit
         run: |
           uv run pre-commit run --all-files --color always --verbose --show-diff-on-failure
