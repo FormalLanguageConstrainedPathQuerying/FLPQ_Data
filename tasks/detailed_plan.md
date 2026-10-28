@@ -169,6 +169,37 @@ driver is covered by the S3 tests).
 - The last commit of the task carries `Fixes #173` and `Fixes #174` as
   standalone lines.
 
+### S5: Repoint the dead eclass Source links to the archived ontology [done] bdfdd03
+
+Discovered during the quality gate: the full link check (the CI "Check
+links" step, run locally per the no-push rule) reports
+`http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4` as broken. It is
+the Source link of `docs/graphs/data/eclass.rst` and the Origin link of the
+historical `docs/old_graphs/data/eclass.rst`. The university removed the
+`/ontologies/` subtree from its site (its redirector mangles the path and
+the target 404s; verified directly, not a datacenter-IP block).
+
+**Code:** both eclass pages: the link now points to the Wayback Machine
+snapshot of the original artifact,
+`https://web.archive.org/web/20160309143952/http://ebusiness-unibw.org/ontologies/eclass/5.1.4/eclass_514en.owl`.
+The original landing page was a 303 redirect to exactly this file, so the
+link serves the same content as before; the snapshot is verified to be the
+eClassOWL 5.1.4 ontology (40 MB RDF/XML, "eClassOWL Version 5.1.4").
+
+**Tests:** the full link check runs to completion; the eclass links pass.
+The only failure is `https://junit.org/junit5/` (pre-existing, on dev
+since May 2026), unreachable from this machine's network (IPv6 unrouted,
+IPv4 silently dropped) but green in CI on the base commit — ruled
+environmental by the user, not a broken link.
+
+**Docs:** the change is the docs themselves; `CHANGELOG.md` `[Unreleased]`
+Fixed gains the link repair.
+
+**Spec:**
+- The link resolves (HTTP 200) and points to the actual source artifact.
+- No `linkcheck_ignore` entry: the ignore list is for rate-limited sites,
+  not dead URLs; a dead link must not stay visible on the deployed page.
+
 ## Out of scope
 
 - `$...$` spans via the `texext` extension: zero occurrences in the docs;
