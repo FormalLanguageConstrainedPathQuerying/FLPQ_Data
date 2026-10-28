@@ -122,13 +122,16 @@ coverage gate::
 
    uv run pytest tests/graphs/utils/test_add_reverse_edges.py
 
-The suite also validates the math snippets of the docs pages: Sphinx passes
-math verbatim to MathJax, which renders it in the browser, so a broken
-snippet (e.g. an unescaped underscore inside a ``\textit{...}`` group) sails
-through the Sphinx build and shows up only as an error on the deployed site.
-``tests/utils/test_check_math_snippets.py`` runs
-``utils/check_math_snippets.py`` over every page and fails the suite on any
-broken snippet.
+The suite also validates the math snippets of the docs pages and of the
+package docstrings (rendered on the reference pages): Sphinx passes math
+verbatim to MathJax, which renders it in the browser, so a broken snippet
+sails through the Sphinx build and shows up only as an error on the
+deployed site. The guard therefore validates every snippet with the MathJax
+engine itself — ``utils/check_math_snippets.py`` extracts the ``:math:``
+roles and ``.. math::`` bodies and compiles them with
+``utils/check_math_snippets_node.cjs`` (the same engine version the browser
+loads, see "Development setup") — and fails the suite on any snippet the
+engine rejects, reporting the engine's own error message.
 
 - Doctest discovery and test paths are configured in ``pyproject.toml``
   (``[tool.pytest.ini_options]``).
