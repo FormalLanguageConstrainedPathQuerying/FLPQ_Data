@@ -70,6 +70,12 @@ extensions = [
     "texext",
 ]
 
+# Pin the browser-side MathJax to the exact version the math-snippet guard
+# validates with (utils/check_math_snippets_node.cjs, version in
+# package.json). The guard and the renderer must stay on the same engine
+# version or they can disagree about what renders.
+mathjax_js = "https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-chtml.js"
+
 # generate autosummary pages
 autosummary_generate = True
 

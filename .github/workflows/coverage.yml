@@ -23,6 +23,12 @@ jobs:
       - name: Show installed packages
         run: uv tree
 
+      # The math-snippet guard validates docs snippets with the MathJax
+      # engine (utils/check_math_snippets_node.cjs); Node is preinstalled
+      # on the runner.
+      - name: Install MathJax with npm
+        run: npm ci
+
       # Per-metric gate rationale: see "Test pipeline" in docs/developer.rst.
       # term-missing keeps the uncovered lines in the CI log.
       - name: Test FLPQ_Data with coverage (line and branch >= 95%)
