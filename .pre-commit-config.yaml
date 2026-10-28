@@ -31,3 +31,9 @@ repos:
         language: system
         pass_filenames: false
         files: \.py$
+      - id: check-math-snippets
+        name: Check math snippets with the MathJax engine
+        entry: python3 utils/check_math_snippets.py
+        language: system
+        pass_filenames: false
+        always_run: true

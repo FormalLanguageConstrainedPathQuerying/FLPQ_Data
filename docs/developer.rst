@@ -74,9 +74,10 @@ Linting, formatting, and type checking are managed by uv and run through
 ``pre-commit``. The hook list — hygiene checks, the official ``uv-lock`` and
 ruff hooks (check with autofix plus format), a version-sync check that fails
 when :file:`flpq_data/config.py` and :file:`pyproject.toml` declare different
-versions, and a local ty type check — is defined in
-:file:`.pre-commit-config.yaml`, which is the source of truth; do not
-maintain a copy of it elsewhere.
+versions, a local ty type check, and a math-snippet check that validates the
+docs and docstring math with the MathJax engine (see "Test pipeline") — is
+defined in :file:`.pre-commit-config.yaml`, which is the source of truth; do
+not maintain a copy of it elsewhere.
 
 The ``ruff-pre-commit`` hook revision must match the ruff version locked in
 :file:`uv.lock`; bump both together when upgrading ruff.

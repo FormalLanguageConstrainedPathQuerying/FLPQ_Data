@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- The field-sensitive-alias pages rendered the edge label `f_r_i` as a TeX
+  double subscript, which MathJax rejects with "Double subscripts: use
+  braces to clarify" (#173); the label is now `f_{r\_i}` in the ten
+  per-graph Edges Statistics tables and the canonical-grammar block.
+- Seven grammar pages used `&` alignment tabs in plain display math, which
+  MathJax rejects with "Misplaced &" (#174); the blocks are now wrapped in
+  `\begin{aligned} ... \end{aligned}`.
+
+### Changed
+
+- The math-snippet guard now validates every docs-page and package-docstring
+  math snippet with the MathJax engine itself (mathjax 4.1.3 on Node,
+  `utils/check_math_snippets_node.cjs`) instead of hand-crafted patterns,
+  reporting the engine's own error message; the browser bundle is pinned to
+  the same version (`mathjax_js` in `docs/conf.py`), and the guard also runs
+  as a pre-commit hook.
+
 ## [6.1.1] - 2026-10-15
 
 ### Changed
