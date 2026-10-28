@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer guide &#8212; FLPQ_Data 6.1.1 documentation</title>
+    <title>Developer guide &#8212; FLPQ_Data 6.1.2 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=bd083a2d"></script>
+    <script src="_static/documentation_options.js?v=10584ae1"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,7 +50,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'developer';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.1 documentation"
+          title="Search within FLPQ_Data 6.1.2 documentation"
           href="_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -161,8 +161,8 @@
       
     
     
-    <img src="_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.1 documentation - Home"/>
-    <img src="_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.1 documentation - Home"/>
+    <img src="_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
   
   
 </a></div>
@@ -452,10 +452,10 @@
 <span id="developer"></span><h1>Developer guide<a class="headerlink" href="#developer-guide" title="Link to this heading">#</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>6.1.1</p>
+<dd class="field-odd"><p>6.1.2</p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Oct 15, 2026</p>
+<dd class="field-even"><p>Oct 28, 2026</p>
 </dd>
 </dl>
 <p>How to set up a development environment, run the checks that continuous
@@ -499,6 +499,15 @@ commands inside that environment.</p></li>
 <li><p>The committed <code class="file docutils literal notranslate"><span class="pre">uv.lock</span></code> pins every dependency; CI passes <code class="docutils literal notranslate"><span class="pre">--frozen</span></code>
 to fail on a lockfile that is out of sync with <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.</p></li>
 </ul>
+<p>The math-snippet guard (see “Test pipeline”) validates docs math with the
+MathJax engine itself, which runs on Node.js (&gt;= 20). Install Node.js once,
+then from the repository root:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">npm</span> <span class="n">ci</span>
+</pre></div>
+</div>
+<p>The committed <code class="file docutils literal notranslate"><span class="pre">package-lock.json</span></code> pins the engine version; it must
+match the <code class="docutils literal notranslate"><span class="pre">mathjax_js</span></code> URL in <code class="file docutils literal notranslate"><span class="pre">docs/conf.py</span></code>, so the guard and the
+browser render with the same MathJax version.</p>
 </section>
 <section id="quality-checks">
 <span id="developer-quality"></span><h2>Quality checks<a class="headerlink" href="#quality-checks" title="Link to this heading">#</a></h2>
@@ -506,9 +515,10 @@ to fail on a lockfile that is out of sync with <code class="docutils literal not
 <code class="docutils literal notranslate"><span class="pre">pre-commit</span></code>. The hook list — hygiene checks, the official <code class="docutils literal notranslate"><span class="pre">uv-lock</span></code> and
 ruff hooks (check with autofix plus format), a version-sync check that fails
 when <code class="file docutils literal notranslate"><span class="pre">flpq_data/config.py</span></code> and <code class="file docutils literal notranslate"><span class="pre">pyproject.toml</span></code> declare different
-versions, and a local ty type check — is defined in
-<code class="file docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code>, which is the source of truth; do not
-maintain a copy of it elsewhere.</p>
+versions, a local ty type check, and a math-snippet check that validates the
+docs and docstring math with the MathJax engine (see “Test pipeline”) — is
+defined in <code class="file docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code>, which is the source of truth; do
+not maintain a copy of it elsewhere.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">ruff-pre-commit</span></code> hook revision must match the ruff version locked in
 <code class="file docutils literal notranslate"><span class="pre">uv.lock</span></code>; bump both together when upgrading ruff.</p>
 <p>Install the git hook once so the checks run on every commit:</p>
@@ -546,13 +556,16 @@ coverage gate:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">uv</span> <span class="n">run</span> <span class="n">pytest</span> <span class="n">tests</span><span class="o">/</span><span class="n">graphs</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">test_add_reverse_edges</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>The suite also validates the math snippets of the docs pages: Sphinx passes
-math verbatim to MathJax, which renders it in the browser, so a broken
-snippet (e.g. an unescaped underscore inside a <code class="docutils literal notranslate"><span class="pre">\textit{...}</span></code> group) sails
-through the Sphinx build and shows up only as an error on the deployed site.
-<code class="docutils literal notranslate"><span class="pre">tests/utils/test_check_math_snippets.py</span></code> runs
-<code class="docutils literal notranslate"><span class="pre">utils/check_math_snippets.py</span></code> over every page and fails the suite on any
-broken snippet.</p>
+<p>The suite also validates the math snippets of the docs pages and of the
+package docstrings (rendered on the reference pages): Sphinx passes math
+verbatim to MathJax, which renders it in the browser, so a broken snippet
+sails through the Sphinx build and shows up only as an error on the
+deployed site. The guard therefore validates every snippet with the MathJax
+engine itself — <code class="docutils literal notranslate"><span class="pre">utils/check_math_snippets.py</span></code> extracts the <code class="docutils literal notranslate"><span class="pre">:math:</span></code>
+roles and <code class="docutils literal notranslate"><span class="pre">..</span> <span class="pre">math::</span></code> bodies and compiles them with
+<code class="docutils literal notranslate"><span class="pre">utils/check_math_snippets_node.cjs</span></code> (the same engine version the browser
+loads, see “Development setup”) — and fails the suite on any snippet the
+engine rejects, reporting the engine’s own error message.</p>
 <ul class="simple">
 <li><p>Doctest discovery and test paths are configured in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>
 (<code class="docutils literal notranslate"><span class="pre">[tool.pytest.ini_options]</span></code>).</p></li>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Provenance &#8212; FLPQ_Data 6.1.1 documentation</title>
+    <title>Data Provenance &#8212; FLPQ_Data 6.1.2 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=bd083a2d"></script>
+    <script src="../_static/documentation_options.js?v=10584ae1"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,7 +51,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'graphs/data_provenance';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.1 documentation"
+          title="Search within FLPQ_Data 6.1.2 documentation"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -162,8 +162,8 @@
       
     
     
-    <img src="../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.1 documentation - Home"/>
-    <img src="../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.1 documentation - Home"/>
+    <img src="../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
   
   
 </a></div>
@@ -488,10 +488,10 @@
 <span id="graphs-data-provenance"></span><h1>Data Provenance<a class="headerlink" href="#data-provenance" title="Link to this heading">#</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>6.1.1</p>
+<dd class="field-odd"><p>6.1.2</p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Oct 15, 2026</p>
+<dd class="field-even"><p>Oct 28, 2026</p>
 </dd>
 </dl>
 <p>Data-provenance graphs recording the lineage of data artifacts in a set of
@@ -500,16 +500,14 @@ Python projects, following the W3C PROV model (<code class="docutils literal not
 <div class="toctree-wrapper compound">
 </div>
 <table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Graph</p></th>
-<th class="head"><p>Num Nodes</p></th>
-<th class="head"><p>Num Edges</p></th>
-<th class="head"><p>prov_derivation</p></th>
-<th class="head"><p>Size (MB)</p></th>
-<th class="head"><p>Download</p></th>
-</tr>
-</thead>
 <tbody>
+<tr class="row-odd"><td><p>Graph</p></td>
+<td><p>Num Nodes</p></td>
+<td><p>Num Edges</p></td>
+<td><p>Reachable pairs</p></td>
+<td><p>Size (MB)</p></td>
+<td><p>Download</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="data/provenance_sampleproject.html#provenance-sampleproject"><span class="std std-ref">sampleproject</span></a></p></td>
 <td><p>148</p></td>
 <td><p>763</p></td>
@@ -642,7 +640,8 @@ Python projects, following the W3C PROV model (<code class="docutils literal not
 <h2>Canonical grammars<a class="headerlink" href="#canonical-grammars" title="Link to this heading">#</a></h2>
 <p>The grammar file is attached to the archive.</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}S &amp;\to Entity \quad Core \quad Entity \\
+\[\begin{split}\begin{aligned}
+S &amp;\to Entity \quad Core \quad Entity \\
 Core &amp;\to wasDerivedFrom \\
      &amp;\mid wasDerivedFrom_{r} \\
      &amp;\mid specializationOf \\
@@ -656,7 +655,8 @@ Core &amp;\to wasDerivedFrom \\
      &amp;\mid wasDerivedFrom \quad Entity \quad Core \\
      &amp;\quad Entity \quad wasDerivedFrom_{r} \\
      &amp;\mid specializationOf \quad Entity \quad Core \\
-     &amp;\quad Entity \quad specializationOf_{r}\end{split}\]</div>
+     &amp;\quad Entity \quad specializationOf_{r}
+\end{aligned}\end{split}\]</div>
 </section>
 </section>
 

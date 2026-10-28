@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Graphs &#8212; FLPQ_Data 6.1.1 documentation</title>
+    <title>Graphs &#8212; FLPQ_Data 6.1.2 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=bd083a2d"></script>
+    <script src="../_static/documentation_options.js?v=10584ae1"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,7 +51,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'graphs/index';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.1 documentation"
+          title="Search within FLPQ_Data 6.1.2 documentation"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -162,8 +162,8 @@
       
     
     
-    <img src="../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.1 documentation - Home"/>
-    <img src="../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.1 documentation - Home"/>
+    <img src="../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
   
   
 </a></div>
@@ -465,10 +465,10 @@
 <span id="id1"></span><h1>Graphs<a class="headerlink" href="#graphs" title="Link to this heading">#</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>6.1.1</p>
+<dd class="field-odd"><p>6.1.2</p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Oct 15, 2026</p>
+<dd class="field-even"><p>Oct 28, 2026</p>
 </dd>
 </dl>
 <p>The graph catalog, organized by category: each category page lists its
@@ -572,16 +572,18 @@ is dropped.</p>
 </section>
 <section id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
-<p>The per-category tables include one column per grammar language
-applicable to that category. Each cell shows the number of vertex pairs
-reachable with respect to the respective language (i.e. the number of
-pairs <code class="docutils literal notranslate"><span class="pre">(u,</span> <span class="pre">v)</span></code> for which some string in the language labels a path from
-<span class="math notranslate nohighlight">\(u\)</span> to <span class="math notranslate nohighlight">\(v\)</span>). The count depends on the language, not on a
-particular grammar: several grammars may generate the same language and
-yield the same count. A cell reading “not available” means the value has
-not been computed yet; an empty cell means the grammar does not apply to
-that graph. Each table also has a <code class="docutils literal notranslate"><span class="pre">Size</span> <span class="pre">(MB)</span></code> column: the download size
-of the graph’s archive, in megabytes.</p>
+<p>The per-category tables include one count column per grammar language
+applicable to that category, each headed <code class="docutils literal notranslate"><span class="pre">Reachable</span> <span class="pre">pairs</span></code> (or
+<code class="docutils literal notranslate"><span class="pre">Reachable</span> <span class="pre">pairs</span> <span class="pre">/</span> <span class="pre">&lt;grammar&gt;</span></code> in categories with several languages, such
+as RDF). Each cell shows the number of vertex pairs reachable with respect
+to the respective language (i.e. the number of pairs <code class="docutils literal notranslate"><span class="pre">(u,</span> <span class="pre">v)</span></code> for which
+some string in the language labels a path from <span class="math notranslate nohighlight">\(u\)</span> to <span class="math notranslate nohighlight">\(v\)</span>). The
+count depends on the language, not on a particular grammar: several grammars
+may generate the same language and yield the same count. A cell reading
+“not available” means the value has not been computed yet; an empty cell
+means the grammar does not apply to that graph. Each table also has a
+<code class="docutils literal notranslate"><span class="pre">Size</span> <span class="pre">(MB)</span></code> column: the download size of the graph’s archive, in
+megabytes.</p>
 <p>The canonical grammar behind each column is documented once on the
 respective category page, in its “Canonical grammars” section — a grammar
 is canonical for the whole category, so the per-graph pages do not repeat

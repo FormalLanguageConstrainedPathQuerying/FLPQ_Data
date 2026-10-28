@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
   <ShortName>FLPQ_Data</ShortName>
-  <Description>Search FLPQ_Data 6.1.1 documentation</Description>
+  <Description>Search FLPQ_Data 6.1.2 documentation</Description>
   <InputEncoding>utf-8</InputEncoding>
   <Url type="text/html" method="get"
        template="https://formallanguageconstrainedpathquerying.github.io/FLPQ_Data//search.html?q={searchTerms}"/>
-  <LongName>FLPQ_Data 6.1.1 documentation</LongName>
+  <LongName>FLPQ_Data 6.1.2 documentation</LongName>
   
 </OpenSearchDescription>
