@@ -1,6 +1,6 @@
 [project]
 name = "flpq-data"
-version = "6.1.1"
+version = "6.1.2"
 description = "Python package containing Graphs and Grammars for experimental analysis of Formal Language constrained Path Querying algorithms"
 readme = "README.rst"
 license = "Apache-2.0 AND CC-BY-4.0"

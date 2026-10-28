@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.2] - 2026-10-28
+
 ### Fixed
 
 - The reachable-pair count columns of the graph tables were inconsistently
