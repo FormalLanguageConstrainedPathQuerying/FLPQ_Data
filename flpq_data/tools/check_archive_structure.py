@@ -27,13 +27,13 @@ import tarfile
 import tempfile
 from typing import Optional, Sequence, Set, Union
 
-from pyformlang.regular_expression import Regex
 from pyformlang.rsa import RecursiveAutomaton as RSA
 
 from flpq_data.graphs.readwrite.mtx import _MTX_HEADER, graph_from_mtx_dir
 from flpq_data.queries.cfpq.converters.cfg import cfg_from_rsa
 from flpq_data.queries.cfpq.readwrite.cnf_template import cnf_template_from_text
 from flpq_data.queries.mcfpq.readwrite.mcfg import mcfg_from_text
+from flpq_data.queries.rpq.readwrite.regex import regex_from_text
 from flpq_data.queries.rpq.readwrite.rsa import rsa_from_text
 
 __all__ = [
@@ -91,7 +91,7 @@ def _query_terminals(path: pathlib.Path) -> set[str]:
         cfg = cfg_from_rsa(rsa)
         return {symbol.value for symbol in cfg.terminals}
     if path.suffix == ".re":
-        regex = Regex(text)
+        regex = regex_from_text(text)
         nfa = regex.to_epsilon_nfa()
         if nfa is None:
             return set()
