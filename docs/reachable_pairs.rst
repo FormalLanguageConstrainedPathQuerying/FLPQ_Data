@@ -1509,4 +1509,19 @@ Biological graphs from UniProt
    * - unigraph_9.cnf
      - not available
 
+Social Networks
+---------------
+
+:ref:`pokec`
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - 1.re
+     - 30622564
+
 .. reachable-pairs-tables:end

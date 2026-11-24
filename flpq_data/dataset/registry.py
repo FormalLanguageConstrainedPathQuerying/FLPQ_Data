@@ -102,7 +102,7 @@ def graph_names() -> list[str]:
     --------
     >>> from flpq_data import *
     >>> len(graph_names())
-    113
+    114
     >>> graph_names()[0]
     'airflow'
 

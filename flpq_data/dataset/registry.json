@@ -1469,6 +1469,23 @@
         }
       ]
     },
+    "pokec": {
+      "category": "social_networks",
+      "num_nodes": 1632803,
+      "num_edges": 30622564,
+      "size_mb": 257.685,
+      "sha256": "22155484c7132a4dcef736f7f2f615fe8c7e197f674561467a0430060352b1fb",
+      "queries": [
+        {
+          "class": "rpq",
+          "name": "1",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        }
+      ]
+    },
     "postgre": {
       "category": "c_alias_analysis",
       "num_nodes": 5203419,

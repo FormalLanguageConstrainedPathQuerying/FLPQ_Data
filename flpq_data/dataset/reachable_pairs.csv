@@ -102,6 +102,7 @@ pizza,nested_parentheses_subClassOf_type.cnf,rdf,cfpq,1356
 pizza,nested_parentheses_type.cnf,rdf,cfpq,20
 pluggy,prov_derivation.cnf,data_provenance,cfpq,880
 pmd,java_points_to.cnf,java_points_to,cfpq,60518
+pokec,1.re,social_networks,rpq,30622564
 postgre,c_alias.cnf,c_alias_analysis,cfpq,90661446
 povray,aa.cnf,context_sensitive_data_flow,cfpq,34599413
 povray_field_sensitive_alias,vf.cnf,field_sensitive_alias,cfpq,27219043
