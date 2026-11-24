@@ -162,7 +162,7 @@ setup command lives in :file:`docs/README.md`. Two policies matter:
   cross-reference under ``nitpicky = True`` — fails the build. Fix warnings;
   do not suppress them.
 - **Full link check.** ``sphinx-build -b linkcheck`` verifies every local
-  target and external URL (two documented exceptions in
+  target and external URL (the documented exceptions in
   :file:`docs/conf.py`); it exits non-zero on broken or timed-out links. It
   is network-bound and slow locally (rate-limited retries), so it runs in CI
   only — the "Check links" step of :file:`.github/workflows/docs.yml` — and
