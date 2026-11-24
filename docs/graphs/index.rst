@@ -121,7 +121,10 @@ may generate the same language and yield the same count. A cell reading
 "not available" means the value has not been computed yet; an empty cell
 means the grammar does not apply to that graph. Each table also has a
 ``Size (MB)`` column: the download size of the graph's archive, in
-megabytes.
+megabytes. A category table omits the ``Reachable pairs`` column when no
+single canonical grammar applies to the whole category (e.g. per-graph RPQ
+queries); the per-query counts then live in the per-graph tables of the
+:ref:`reachable_pairs` page.
 
 The canonical grammar behind each column is documented once on the
 respective category page, in its "Canonical grammars" section — a grammar
