@@ -37,7 +37,7 @@ def test_registry_file_shape():
 
 
 def test_graph_names_count_and_sorted():
-    assert len(graph_names()) == 113
+    assert len(graph_names()) == 114
     assert graph_names() == sorted(graph_names())
 
 

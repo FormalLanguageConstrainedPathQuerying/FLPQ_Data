@@ -50,6 +50,9 @@ query.
 
 .. applicable-graphs:begin
 
-No RPQ queries have been added to the graph catalog yet.
+Social Networks
+^^^^^^^^^^^^^^^
+
+* :ref:`pokec`
 
 .. applicable-graphs:end

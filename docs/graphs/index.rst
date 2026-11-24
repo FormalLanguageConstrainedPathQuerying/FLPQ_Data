@@ -152,6 +152,8 @@ it.
      - 4
    * - :ref:`graphs_biological_uniprot`
      - 10
+   * - :ref:`graphs_social_networks`
+     - 1
 
 .. toctree::
    :maxdepth: 1
@@ -164,3 +166,4 @@ it.
    data_provenance
    name_resolution
    biological_uniprot
+   social_networks

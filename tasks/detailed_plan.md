@@ -96,7 +96,12 @@ explicitly (it was de-facto only); `.github/ISSUE_TEMPLATE/new-data-template.md`
 **Code:** `flpq_data/dataset/reachable_pairs.csv` (via `utils/add_reachable_pairs.py`),
 `flpq_data/dataset/registry.json` (via `utils/generate_registry.py`)
 **Tests:** `tests/dataset/test_registry.py` — `test_graph_names_count_and_sorted` count
-113 → 114; the two real-repo check-mode tests must pass; full suite green.
+113 → 114; `tests/dataset/test_reachable_pairs.py` — the CSV-pinning values gain
+the pokec row (total 155 → 156, query-class set `{"cfpq"}` → `{"cfpq", "rpq"}`,
+the `rpq` filter returns the pokec row, `CATEGORIES` gains `social_networks: 1`,
+available counts 151 → 152); `flpq_data/dataset/registry.py` — the
+`graph_names()` doctest count 113 → 114; the two real-repo check-mode tests
+must pass; full suite green.
 **Docs:** new `docs/graphs/social_networks.rst` (category page), new
 `docs/graphs/data/pokec.rst` (per-graph page with a Queries section),
 `docs/graphs/index.rst` (Contents row + toctree entry), `docs/reachable_pairs.rst`
@@ -118,9 +123,12 @@ explicitly (it was de-facto only); `.github/ISSUE_TEMPLATE/new-data-template.md`
   download `.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/pokec.tar.gz>`_
   — must match `_URL_RE`; Source: SNAP soc-Pokec,
   `https://snap.stanford.edu/data/soc-Pokec.html`), Graph Statistics (1632803 / 30622564),
-  Edges Statistics (`friend` | 30622564), plus a new **Queries** section: one list-table
-  row per query — Query (`rpq/1`), the canonical regex from the archive's `query.re`
-  (`friend`), and the description from the archive's `queries/README.md`.
+  Edges Statistics (`friend` | 30622564), plus a new **Queries** section: a
+  2-column list-table (Query | Language) with one row per query — `rpq/1` and
+  the canonical regex from the archive's `query.re` (`friend`). No
+  reachable-pair count (it lives in the generated `docs/reachable_pairs.rst`
+  tables) and no description column (the yago2s `queries/README.md` carries no
+  per-query prose, so both pages share the same shape).
 - `docs/graphs/index.rst`: Contents row `:ref:`graphs_social_networks` | 1` (bumped to 2
   in S2) + `social_networks` toctree entry — appended, same order in both.
 - Regenerate, in order: `uv run python utils/reachable_pairs_tables.py --update` (adds the
@@ -287,7 +295,7 @@ convention-compliant names and re-uploads them (new SHA256s commented on
 ## Status
 
 - S0: [x]
-- S1: [ ]
+- S1: [x]
 - S2: [ ]
 - S3: [ ]
 - S4: [ ]
