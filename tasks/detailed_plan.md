@@ -91,7 +91,7 @@
      - <count | "not available">
 ```
 - Categories in `category_order`; graphs sorted; rows sorted by the CSV `grammar` filename (the extension makes the class self-describing).
-- Graph subheading is a `:ref:` targeting the graph name — all 113 per-graph pages carry a `.. _<graph>:` label (verified); underline = tildes, length of the heading line.
+- Graph subheading is a `:ref:` targeting the graph's **data page stem** (the only label all 113 pages carry: 91 pages are named after the graph, but 22 — all `provenance_*` and `name_resolution_*` — are labelled by page stem only, e.g. `.. _provenance_sampleproject:` for graph `sampleproject`; the category pages' tables already use page-stem refs). Underline = tildes, length of the heading line.
 - The "No reachable-pair counts have been computed for this category yet." fallback is kept for categories with no rows of any class.
 - The CFPQ count columns of the per-category graph tables are unchanged.
 
@@ -113,5 +113,5 @@
 - S2: [x]
 - S3: [x]
 - S4: [x]
-- S5: [ ]
+- S5: [x]
 - S6: [ ]

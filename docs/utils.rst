@@ -163,8 +163,9 @@ truth for the reference counts (:ref:`reachable_pairs`)::
 
    python utils/reachable_pairs_tables.py [--update]
 
-The tool covers two renderings: the per-category tables of
-``docs/reachable_pairs.rst`` (one section per graph category, between the
+The tool covers two renderings: the per-graph tables of
+``docs/reachable_pairs.rst`` (one section per graph category, one table
+per graph, every query class rendered, between the
 ``reachable-pairs-tables`` markers) and the count columns of the eight
 per-category graph tables in ``docs/graphs/*.rst``. The graph-to-category
 mapping is derived from the site itself: each category page's toctree lists
@@ -177,9 +178,9 @@ Behavior:
   plus CSV rows with an unknown ``query_class``, whose graph is unknown,
   whose category disagrees with the docs, or which has no count column in
   its category — and exits non-zero, so it can gate a commit. The
-  count-column check applies to CFPQ rows only: the graph tables render CFPQ
-  counts, and rows of other query classes are validated but not rendered (no
-  RPQ/MCFPQ counts exist yet).
+  count-column check applies to CFPQ rows only: the graph tables render
+  CFPQ counts only, while the other classes are rendered in the per-graph
+  tables of ``docs/reachable_pairs.rst``.
 - **``--update``.** Rewrites the reachable-pairs region and fixes the
   drifted cells in place; lines that need no change keep their exact text.
 

@@ -119,15 +119,33 @@ def test_render_tables_region(tmp_path):
     assert "Cat A\n-----" in region
     assert "Cat B\n-----" in region
 
-    # Rows sorted by (graph, grammar) within a section.
+    # One :ref: subheading per graph (targeting the data page), underlined
+    # with tildes.
+    assert ":ref:`g1`\n~~~~" in region
+    assert ":ref:`g2`\n~~~~" in region
+    assert ":ref:`g3`\n~~~~" in region
+
+    # Graphs sorted within a section; rows sorted by grammar file name.
     cat_a = region[region.index("Cat A") : region.index("Cat B")]
+    assert cat_a.index(":ref:`g1`") < cat_a.index(":ref:`g2`")
     assert cat_a.index("- a.cnf") < cat_a.index("- b.cnf")
-    assert cat_a.index("* - alpha") < cat_a.index("* - beta")
+    # The other category's graphs do not leak into this section.
+    assert "g3" not in cat_a
+
+
+def test_render_tables_region_per_graph_tables(tmp_path):
+    docs = make_docs(tmp_path)
+    region = render_tables_region(ROWS, docs)
+
+    # One table per graph with the Query | Reachable pairs header.
+    assert region.count(".. list-table::") == 3
+    assert region.count("* - Query") == 3
+    assert region.count("- Reachable pairs") == 3
 
     # A row without a computed value renders as "not available".
-    assert "not available" in cat_a
-    # The other category's rows do not leak into this section.
-    assert "gamma" not in cat_a
+    alpha = region[region.index(":ref:`g1`") : region.index(":ref:`g2`")]
+    assert "* - a.cnf\n     - 3" in alpha
+    assert "* - b.cnf\n     - not available" in alpha
 
 
 def test_render_tables_region_empty_category(tmp_path):
@@ -159,10 +177,16 @@ def test_load_rows_parses_query_class(tmp_path):
     assert [r["num_reachable_pairs"] for r in rows] == [42, None]
 
 
-def test_render_tables_region_ignores_other_classes(tmp_path):
+def test_render_tables_region_renders_all_classes(tmp_path):
     docs = make_docs(tmp_path)
     region = render_tables_region(ROWS + [RPQ_ROW], docs)
-    assert region == render_tables_region(ROWS, docs)
+
+    # The rpq row is rendered in alpha's table alongside the cfpq rows,
+    # sorted by grammar file name (the extension makes the class
+    # self-describing).
+    alpha = region[region.index(":ref:`g1`") : region.index(":ref:`g2`")]
+    assert alpha.index("- a.cnf") < alpha.index("- b.cnf") < alpha.index("- r.re")
+    assert "* - r.re\n     - 100" in alpha
 
 
 def test_update_reachable_pairs_page():
@@ -392,9 +416,12 @@ def test_update_category_columns_missing_header_column_is_a_problem():
     assert any("column b_col is missing from the table header" in p for p in problems)
 
 
-def test_update_category_columns_unknown_category_raises():
-    with pytest.raises(ValueError, match="GRAMMAR_COLUMNS"):
-        update_category_columns(CATEGORY_TABLE, ROWS, "cat_a", PAGES)
+def test_update_category_columns_unknown_category_is_a_noop():
+    # A category without registered count columns has nothing to sync:
+    # its per-query counts live in docs/reachable_pairs.rst.
+    updated, problems = update_category_columns(CATEGORY_TABLE, ROWS, "cat_a", PAGES)
+    assert updated == CATEGORY_TABLE
+    assert problems == []
 
 
 def test_update_category_columns_ignores_other_classes():
