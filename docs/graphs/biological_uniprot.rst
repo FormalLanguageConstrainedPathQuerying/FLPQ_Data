@@ -45,37 +45,37 @@ as in `"Subgraph queries by context-free grammars" <https://researchportal.helsi
      - 36468
      - 168344
      - 39888347
-     - 0.300
+     - 106.10
      - `unigraph_2.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_2.tar.gz>`_ 📥
    * - :ref:`unigraph_3`
      - 41333
      - 193866
      - 52471840
-     - 0.344
+     - 138.87
      - `unigraph_3.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_3.tar.gz>`_ 📥
    * - :ref:`unigraph_4`
      - 215481
      - 1346130
      - 808091802
-     - 2.25
+     - 2163.03
      - `unigraph_4.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_4.tar.gz>`_ 📥
    * - :ref:`unigraph_5`
      - 243839
      - 1818404
      - 2303590109
-     - 3.15
+     - 6007.86
      - `unigraph_5.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_5.tar.gz>`_ 📥
    * - :ref:`unigraph_6`
      - 286645
      - 1708910
      - 1722963921
-     - 2.94
+     - 4603.69
      - `unigraph_6.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_6.tar.gz>`_ 📥
    * - :ref:`unigraph_7`
      - 285577
      - 2073268
      - 2320964134
-     - 3.47
+     - 6098.27
      - `unigraph_7.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_7.tar.gz>`_ 📥
    * - :ref:`unigraph_8`
      - 449237

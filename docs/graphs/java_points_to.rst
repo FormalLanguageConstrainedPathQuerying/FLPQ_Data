@@ -99,13 +99,13 @@ are not stored (see :ref:`graphs`).
      - 41383
      - 40200
      - 21830
-     - 0.208
+     - 0.284
      - `eclipse.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/eclipse.tar.gz>`_ 📥
    * - :ref:`h2`
      - 44717
      - 56683
      - 92038
-     - 0.263
+     - 0.519
      - `h2.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/h2.tar.gz>`_ 📥
    * - :ref:`pmd`
      - 54444
@@ -117,61 +117,61 @@ are not stored (see :ref:`graphs`).
      - 58476
      - 62758
      - 52382
-     - 0.320
+     - 0.476
      - `xalan.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/xalan.tar.gz>`_ 📥
    * - :ref:`junit5`
      - 59818
      - 74685
      - 129598
-     - 0.453
+     - 0.861
      - `junit5.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/junit5.tar.gz>`_ 📥
    * - :ref:`batik`
      - 60175
      - 63089
      - 45968
-     - 0.310
+     - 0.454
      - `batik.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/batik.tar.gz>`_ 📥
    * - :ref:`fop`
      - 86183
      - 83016
      - 76615
-     - 0.417
+     - 0.670
      - `fop.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/fop.tar.gz>`_ 📥
    * - :ref:`tomcat`
      - 111327
      - 110884
      - 82424
-     - 0.563
+     - 0.832
      - `tomcat.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/tomcat.tar.gz>`_ 📥
    * - :ref:`guava`
      - 129562
      - 168116
      - 26384496
-     - 1.06
+     - 71.90
      - `guava.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/guava.tar.gz>`_ 📥
    * - :ref:`jackson`
      - 149404
      - 197678
      - 3108775
-     - 1.22
+     - 10.67
      - `jackson.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/jackson.tar.gz>`_ 📥
    * - :ref:`jython`
      - 191895
      - 260034
      - 561720
-     - 1.05
+     - 2.58
      - `jython.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/jython.tar.gz>`_ 📥
    * - :ref:`tradebeans`
      - 439693
      - 466969
      - 696316
-     - 2.33
+     - 4.30
      - `tradebeans.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/tradebeans.tar.gz>`_ 📥
    * - :ref:`tradesoap`
      - 440680
      - 468263
      - 698567
-     - 2.34
+     - 4.30
      - `tradesoap.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/tradesoap.tar.gz>`_ 📥
 
 Canonical grammars

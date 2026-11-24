@@ -33,7 +33,7 @@ scopes.
      - 54952
      - 46322
      - 14435
-     - 0.252
+     - 0.294
      - `jiaozi.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/jiaozi.tar.gz>`_ 📥
    * - :ref:`name_resolution_jsonpath`
      - 185421
@@ -45,7 +45,7 @@ scopes.
      - 1179205
      - 1017798
      - 971998
-     - 5.13
+     - 8.15
      - `shattered_pixel_dungeon.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/shattered_pixel_dungeon.tar.gz>`_ 📥
    * - :ref:`name_resolution_libgdx`
      - 2571363

@@ -76,7 +76,7 @@ Python projects, following the W3C PROV model (``Entity``, ``Activity``,
      - 826
      - 4247
      - 4408
-     - 0.011
+     - 0.023
      - `httpx.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/httpx.tar.gz>`_ 📥
    * - :ref:`provenance_click`
      - 944
