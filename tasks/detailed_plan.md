@@ -212,6 +212,32 @@ page fails the no-warnings build.
 - Commit: `docs(187-S4): changelog for the social_networks integration` with
   `Closes #183` as a standalone line.
 
+### S5: Refresh stale Size (MB) cells (discovered during S1)
+
+**Code:** none (docs only).
+**Tests:** none (docs only); the docs build must pass.
+**Docs:** the eight category pages whose `Size (MB)` cells `archive_sizes.py
+--update` (an S1 step) corrected: `biological_uniprot.rst`,
+`c_alias_analysis.rst`, `context_sensitive_data_flow.rst`,
+`data_provenance.rst`, `field_sensitive_alias.rst`, `java_points_to.rst`,
+`name_resolution.rst`, `rdf.rst`.
+
+**Spec:**
+- Discovery: S1's `uv run python utils/archive_sizes.py --update` rewrote Size
+  cells in those eight pages (e.g. `enzyme` 0.360 → 38.43 MB, `geospecies`
+  7.95 → 593.14 MB) — pre-existing drift, not caused by this task. The last
+  Size refresh was task 133; the archives grew afterward and the registry was
+  regenerated but the docs were not. `archive_sizes` is not a CI gate, so the
+  drift was never caught.
+- Verification (before committing): the changed lines are Size cells only; an
+  independent `curl -sI` HEAD of a drifted object (e.g. `enzyme.tar.gz`,
+  38,430,229 bytes) matches the corrected cell; the bundled `registry.json`
+  already carried the correct `size_mb` values (docs-only staleness).
+- Committed before S1 (the fix is ready and verified; keeping it out of S1
+  keeps the pokec commit scoped to pokec).
+- Commit: `fix(187-S5): refresh stale Size (MB) cells against the 6.0.0
+  archives`.
+
 ## Design Notes (discovered during implementation)
 
 ### Representation-file naming (the `query.re` incident)
@@ -241,8 +267,9 @@ convention-compliant names and re-uploads them (new SHA256s commented on
 
 ## Status
 
-- S0: [ ]
+- S0: [x]
 - S1: [ ]
 - S2: [ ]
 - S3: [ ]
 - S4: [ ]
+- S5: [x]

@@ -79,91 +79,91 @@ discovered for each program.
      - 1721418
      - 1510411
      - 92806768
-     - 9.05
+     - 364.20
      - `apache.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/apache.tar.gz>`_ 📥
    * - :ref:`init`
      - 2446224
      - 2112809
      - 3783769
-     - 12.84
+     - 31.76
      - `init.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/init.tar.gz>`_ 📥
    * - :ref:`mm`
      - 2538243
      - 2191079
      - 3990305
-     - 13.33
+     - 33.30
      - `mm.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/mm.tar.gz>`_ 📥
    * - :ref:`ipc`
      - 3401022
      - 2931498
      - 5249389
-     - 18.01
+     - 44.56
      - `ipc.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/ipc.tar.gz>`_ 📥
    * - :ref:`lib`
      - 3401355
      - 2931880
      - 5276303
-     - 18.01
+     - 44.68
      - `lib.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/lib.tar.gz>`_ 📥
    * - :ref:`block`
      - 3423234
      - 2951393
      - 5351409
-     - 18.14
+     - 45.20
      - `block.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/block.tar.gz>`_ 📥
    * - :ref:`arch`
      - 3448422
      - 2970242
      - 5339563
-     - 18.25
+     - 45.26
      - `arch.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/arch.tar.gz>`_ 📥
    * - :ref:`crypto`
      - 3464970
      - 2988387
      - 5428237
-     - 18.38
+     - 45.84
      - `crypto.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/crypto.tar.gz>`_ 📥
    * - :ref:`security`
      - 3479982
      - 3003326
      - 5593387
-     - 18.47
+     - 46.74
      - `security.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/security.tar.gz>`_ 📥
    * - :ref:`sound`
      - 3528861
      - 3049732
      - 6085269
-     - 18.77
+     - 49.41
      - `sound.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/sound.tar.gz>`_ 📥
    * - :ref:`net`
      - 4039470
      - 3500141
      - 8833403
-     - 21.66
+     - 65.47
      - `net.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/net.tar.gz>`_ 📥
    * - :ref:`fs`
      - 4177416
      - 3609373
      - 9646475
-     - 22.34
+     - 69.65
      - `fs.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/fs.tar.gz>`_ 📥
    * - :ref:`drivers`
      - 4273803
      - 3707769
      - 18825025
-     - 22.99
+     - 110.63
      - `drivers.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/drivers.tar.gz>`_ 📥
    * - :ref:`postgre`
      - 5203419
      - 4678543
      - 90661446
-     - 29.37
+     - 424.64
      - `postgre.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/postgre.tar.gz>`_ 📥
    * - :ref:`kernel`
      - 11254434
      - 9484213
      - 16747731
-     - 59.99
+     - 148.57
      - `kernel.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/kernel.tar.gz>`_ 📥
 
 Canonical grammars

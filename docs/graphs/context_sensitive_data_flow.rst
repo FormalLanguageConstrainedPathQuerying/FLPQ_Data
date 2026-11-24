@@ -74,25 +74,25 @@ families), as in `"Taming Transitive Redundancy for Context-Free Language Reacha
      - 346034
      - 581210
      - 34599413
-     - 2.45
+     - 90.66
      - `povray.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/povray.tar.gz>`_ 📥
    * - :ref:`cactus`
      - 359200
      - 580297
      - 47806209
-     - 2.74
+     - 123.50
      - `cactus.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/cactus.tar.gz>`_ 📥
    * - :ref:`omnetpp`
      - 463454
      - 958487
      - 8424500
-     - 6.42
+     - 28.88
      - `omnetpp.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/omnetpp.tar.gz>`_ 📥
    * - :ref:`perlbench`
      - 605864
      - 1114892
      - 297504186
-     - 4.64
+     - 728.83
      - `perlbench.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/perlbench.tar.gz>`_ 📥
 
 Canonical grammars
