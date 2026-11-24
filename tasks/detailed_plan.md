@@ -12,7 +12,7 @@
 
 **Tests:** no unit tests cover `docs/conf.py` (verified by grep); the link check itself is network-bound and CI-only (the "Check links" step of `.github/workflows/docs.yml`, see "Docs build and deploy" in `docs/developer.rst`). Local verification: confirm the new regex matches the eclass URL (both occurrences) and no other URL in the docs.
 
-**Docs:** `docs/developer.rst` — the "Full link check" bullet says "two documented exceptions in `docs/conf.py`"; the hardcoded count is a fact derivable from `conf.py` and goes stale with every added exception, so it is dropped (the bullet keeps the pointer to `conf.py` as the source of truth). No CHANGELOG entry: linkcheck config changes have never carried one (precedent: `docs(42-S6)`, `docs(43-S5)`).
+**Docs:** `docs/developer.rst` and `docs/README.md` — both say "two documented exceptions in `docs/conf.py`"; the hardcoded count is a fact derivable from `conf.py` and goes stale with every added exception, so it is dropped in both (the pointer to `conf.py` as the source of truth is kept). No CHANGELOG entry: linkcheck config changes have never carried one (precedent: `docs(42-S6)`, `docs(43-S5)`).
 
 **Spec:**
 - Append to `linkcheck_ignore` the capture-scoped regex
@@ -28,8 +28,9 @@
   of back-off and still got 429), both observed runs with dates, the validity
   verification (HTTP 200 from a residential connection, 2026-11-24), and the
   re-verify-before-removing instruction, matching the existing entries' style.
-- `docs/developer.rst`: "two documented exceptions" → "the documented
-  exceptions" (count dropped; `conf.py` is the source of truth).
+- `docs/developer.rst` and `docs/README.md`: "two documented exceptions" →
+  "the documented exceptions" (count dropped; `conf.py` is the source of
+  truth).
 
 ## Status
 
