@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `regex_to_rsa` and `rsa_to_regex` converters
+  (`flpq_data.queries.rpq.converters`): `regex_to_rsa` derives a single-box
+  regular RSM from a regular expression (the box's DFA is the minimized
+  epsilon-NFA, so the box language equals the regex language), and
+  `rsa_to_regex` performs the inverse for a single-box regular RSM,
+  returning the canonical regular expression of the box language (#184).
+  They are one-way derivation aids — the RSM remains independently
+  specifiable; the archive checker couples `.re` and `.rsm` files only at
+  terminal-set consistency and regularity.
+
 ### Changed
 
 - The `.re` regular expression format is now the dataset's canonical regular
