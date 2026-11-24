@@ -2,6 +2,7 @@ import csv
 import pathlib
 
 import add_reachable_pairs
+import pytest
 from add_reachable_pairs import add_rows, derive_rows, main, representation_file
 from archive_helpers import _partial_tree, _tarball, _valid_tree
 
@@ -48,6 +49,15 @@ def test_derive_rows_partial_archive(tmp_path):
             "num_reachable_pairs": "1",
         }
     ]
+
+
+def test_derive_rows_refuses_misnamed_representation(tmp_path):
+    tree = _valid_tree(tmp_path)
+    query = tree / "queries" / "cfpq" / "s"
+    (query / "s.cnf").rename(query / "other.cnf")
+
+    with pytest.raises(ValueError, match="named after the query directory"):
+        derive_rows(tree, "g", "cat")
 
 
 def test_representation_file_prefers_cnf_over_rsm(tmp_path):

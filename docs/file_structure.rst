@@ -31,9 +31,10 @@ fixed structure::
 - A query is a directory ``queries/<class>/<query>/`` holding every
   representation of the language — at least one file with a class extension
   (``.cnf`` / ``.rsm`` for CFPQ, ``.re`` / ``.rsm`` for RPQ, ``.mcfg`` for
-  MCFPQ) — plus exactly one ``results.mtx`` and nothing else. The same query
-  may be represented in several ways (e.g. a CFG and an RSM); all
-  representations must define the same language.
+  MCFPQ), each named after the query directory (e.g. ``queries/rpq/1/1.re``)
+  — plus exactly one ``results.mtx`` and nothing else. The same query may be
+  represented in several ways (e.g. a CFG and an RSM); all representations
+  must define the same language.
 - ``results.mtx`` is a Boolean pattern matrix with the same dimensions as
   the graph matrices: entry ``(i, j)`` is present iff some path from node
   ``i`` to node ``j`` satisfies the query. It depends on the language, not
