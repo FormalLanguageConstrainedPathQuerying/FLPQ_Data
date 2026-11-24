@@ -33,7 +33,7 @@ first::
 The link check verifies that all links in the documentation resolve (local
 targets against the filesystem, external URLs over HTTP). It runs in full —
 no URL classes are skipped by default; see ``linkcheck_ignore`` in
-``docs/conf.py`` for the two documented exceptions. The command exits
+``docs/conf.py`` for the documented exceptions. The command exits
 non-zero if any link is broken or times out; redirects are reported but do
 not fail the check. It is network-bound and slow locally (rate-limited
 retries), so it runs in CI only — the "Check links" step of
