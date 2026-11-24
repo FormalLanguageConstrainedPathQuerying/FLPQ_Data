@@ -153,7 +153,7 @@ it.
    * - :ref:`graphs_biological_uniprot`
      - 10
    * - :ref:`graphs_social_networks`
-     - 1
+     - 2
 
 .. toctree::
    :maxdepth: 1

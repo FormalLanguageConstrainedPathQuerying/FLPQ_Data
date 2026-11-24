@@ -2226,6 +2226,327 @@
         }
       ]
     },
+    "yago2s": {
+      "category": "social_networks",
+      "num_nodes": 25314540,
+      "num_edges": 77869864,
+      "size_mb": 405.979,
+      "sha256": "d6aa99fb273cf2a2abc90e32de82257474243481601778ea98f92ccf127eeca4",
+      "queries": [
+        {
+          "class": "rpq",
+          "name": "1",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "10",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "11",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "12",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "13",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "14",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "15",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "16",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "17",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "18",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "19",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "2",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "20",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "21",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "22",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "23",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "24",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "25",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "26",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "27",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "28",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "29",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "3",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "30",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "31",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "32",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "33",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "34",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "35",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "36",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "37",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "38",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "39",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "4",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "5",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "6",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "7",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "8",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        },
+        {
+          "class": "rpq",
+          "name": "9",
+          "representations": [
+            "re",
+            "rsm"
+          ]
+        }
+      ]
+    },
     "zulip": {
       "category": "data_provenance",
       "num_nodes": 59854,

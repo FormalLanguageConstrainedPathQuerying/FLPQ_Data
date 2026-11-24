@@ -75,7 +75,7 @@ def test_csv_exists():
 
 def test_total_count():
     rows = reachable_pairs()
-    assert len(rows) == 156
+    assert len(rows) == 195
 
 
 def test_all_rows_have_keys():
@@ -95,15 +95,14 @@ def test_query_class_values():
 
 def test_query_class_filter():
     assert len(reachable_pairs(query_class="cfpq")) == 155
-    assert reachable_pairs(query_class="rpq") == [
-        {
-            "graph": "pokec",
-            "grammar": "1.re",
-            "category": "social_networks",
-            "query_class": "rpq",
-            "num_reachable_pairs": 30622564,
-        }
-    ]
+    rpq = reachable_pairs(query_class="rpq")
+    assert len(rpq) == 40
+    assert {r["graph"] for r in rpq} == {"pokec", "yago2s"}
+    assert all(r["category"] == "social_networks" for r in rpq)
+    # Spot checks: the single pokec query and one yago2s query.
+    by_pair = {(r["graph"], r["grammar"]): r for r in rpq}
+    assert by_pair[("pokec", "1.re")]["num_reachable_pairs"] == 30622564
+    assert by_pair[("yago2s", "1.re")]["num_reachable_pairs"] == 4904
 
 
 CATEGORIES = {
@@ -115,7 +114,7 @@ CATEGORIES = {
     "java_points_to": 21,
     "name_resolution": 4,
     "rdf": 62,
-    "social_networks": 1,
+    "social_networks": 40,
 }
 
 
@@ -144,7 +143,7 @@ def test_available_and_unavailable():
     rows = reachable_pairs()
     available = [r for r in rows if r["num_reachable_pairs"] is not None]
     unavailable = [r for r in rows if r["num_reachable_pairs"] is None]
-    assert len(available) == 152
+    assert len(available) == 191
     assert len(unavailable) == 4
     # Spot checks: a computed pair and a stubbed one.
     by_pair = {(r["graph"], r["grammar"]): r for r in rows}

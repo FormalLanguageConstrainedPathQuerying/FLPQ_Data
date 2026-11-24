@@ -17,6 +17,7 @@ Queries are regular path queries over those relations.
    :hidden:
 
    data/pokec
+   data/yago2s
 
 .. list-table::
 
@@ -30,3 +31,8 @@ Queries are regular path queries over those relations.
      - 30622564
      - 257.68
      - `pokec.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/pokec.tar.gz>`_ 📥
+   * - :ref:`yago2s`
+     - 25314540
+     - 77869864
+     - 405.98
+     - `yago2s.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/yago2s.tar.gz>`_ 📥
