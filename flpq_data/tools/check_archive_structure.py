@@ -222,6 +222,11 @@ def _query_dir_problems(
             )
             continue
         has_representation = True
+        if path.stem != query_dir.name:
+            problems.append(
+                f"{rel}/{path.name}: representation files must be named after "
+                f"the query directory (expected {query_dir.name}{path.suffix})"
+            )
     if not has_representation:
         problems.append(f"{rel}/: no {cls} representation file ({' or '.join(exts)})")
     if not (query_dir / "results.mtx").is_file():

@@ -60,7 +60,7 @@ Every query directory ships one `results.mtx` with the constrained reachability 
 
 Two kinds of archives exist (both documented on the [File structure page](https://formallanguageconstrainedpathquerying.github.io/FLPQ_Data/file_structure.html)):
 
-- **Full archive** — a new graph: `<name>.tar.gz` unpacks to a self-contained directory with `README.md`, `graph/` (one Boolean MatrixMarket pattern file per stored edge label), and `queries/` (one directory per query in `cfpq/`, `rpq/`, or `mcfpq/`; each query directory holds every representation of the query — `.cnf`/`.rsm`, `.re`/`.rsm` (regular only), or `.mcfg` — plus one `results.mtx`).
+- **Full archive** — a new graph: `<name>.tar.gz` unpacks to a self-contained directory with `README.md`, `graph/` (one Boolean MatrixMarket pattern file per stored edge label), and `queries/` (one directory per query in `cfpq/`, `rpq/`, or `mcfpq/`; each query directory holds every representation of the query — `.cnf`/`.rsm`, `.re`/`.rsm` (regular only), or `.mcfg`, each named after the query directory (e.g. `queries/rpq/1/1.re`) — plus one `results.mtx`).
 - **Partial archive** — new queries for an existing graph: `<name>.tar.gz` unpacks to a directory named after that graph containing only `queries/` — the new query directories (same layout) plus a `README.md` fragment with one `## <class>/<query>` section per new query. Partial archives are merged into the existing graph archive by the maintainers.
 
 The query file formats — including the recursive state machine (`.rsm`) format — are documented on the [FLPQ design page](https://formallanguageconstrainedpathquerying.github.io/FLPQ_Data/flpq.html).

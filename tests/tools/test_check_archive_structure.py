@@ -149,6 +149,16 @@ def test_stray_file_in_query_dir(tmp_path):
     )
 
 
+def test_representation_not_named_after_query_dir(tmp_path):
+    tree = _valid_tree(tmp_path)
+    query = tree / "queries" / "cfpq" / "s"
+    (query / "s.cnf").rename(query / "other.cnf")
+
+    problems = validate_archive(tree)
+
+    assert any("must be named after the query directory" in p for p in problems)
+
+
 def test_results_mtx_wrong_dimensions(tmp_path):
     tree = _valid_tree(tmp_path)
     (tree / "queries" / "cfpq" / "s" / "results.mtx").write_text(
@@ -295,7 +305,7 @@ def test_rsm_inert_label_is_accepted(tmp_path):
 
 def test_unparseable_rsm(tmp_path):
     tree = _valid_tree(tmp_path)
-    (tree / "queries" / "cfpq" / "s" / "t.rsm").write_text("garbage")
+    (tree / "queries" / "cfpq" / "s" / "s.rsm").write_text("garbage")
 
     problems = validate_archive(tree)
 

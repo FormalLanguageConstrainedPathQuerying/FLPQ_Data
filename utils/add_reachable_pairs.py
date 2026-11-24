@@ -115,8 +115,10 @@ def derive_rows(root: pathlib.Path, graph: str, category: str) -> list[dict[str,
     Raises
     ------
     ValueError
-        If a query directory lacks a representation file or a parseable
-        ``results.mtx`` (only possible for an unvalidated tree).
+        If a query directory lacks a representation file, holds a
+        representation file not named after the query directory, or lacks a
+        parseable ``results.mtx`` (all only possible for an unvalidated
+        tree — the structure checker refuses such trees).
     """
     rows: list[dict[str, str]] = []
     queries_dir = root / "queries"
@@ -131,6 +133,13 @@ def derive_rows(root: pathlib.Path, graph: str, category: str) -> list[dict[str,
             if rep is None:
                 raise ValueError(
                     f"queries/{cls}/{query_dir.name}: no representation file"
+                )
+            expected = f"{query_dir.name}{rep.suffix}"
+            if rep.name != expected:
+                raise ValueError(
+                    f"queries/{cls}/{query_dir.name}/{rep.name}: representation "
+                    f"files must be named after the query directory "
+                    f"(expected {expected})"
                 )
             header = _mtx_header(query_dir / "results.mtx")
             if header is None:
