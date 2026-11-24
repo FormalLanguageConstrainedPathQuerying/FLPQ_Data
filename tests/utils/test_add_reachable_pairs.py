@@ -11,7 +11,7 @@ HEADER = ["graph", "grammar", "category", "query_class", "num_reachable_pairs"]
 
 def _write_csv(path: pathlib.Path, rows: list[list[str]]) -> None:
     with path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
+        writer = csv.writer(f, lineterminator="\n")
         writer.writerow(HEADER)
         writer.writerows(rows)
 
@@ -109,6 +109,23 @@ def test_add_rows_inserts_sorted(tmp_path):
         ["c", "q.cnf", "cat", "cfpq", "3"],
         ["d", "q.cnf", "cat", "cfpq", "2"],
     ]
+
+
+def test_add_rows_keeps_lf_line_endings(tmp_path):
+    csv_path = tmp_path / "r.csv"
+    _write_csv(csv_path, [["b", "q.cnf", "cat", "cfpq", "1"]])
+    row = {
+        "graph": "c",
+        "grammar": "q.cnf",
+        "category": "cat",
+        "query_class": "cfpq",
+        "num_reachable_pairs": "3",
+    }
+    problems = add_rows(csv_path, [row])
+    assert problems == []
+    # The bundled CSV is LF; csv.writer's default CRLF terminator would
+    # rewrite every line and bloat the diff.
+    assert b"\r" not in csv_path.read_bytes()
 
 
 def test_add_rows_refuses_duplicate(tmp_path):

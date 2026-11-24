@@ -238,6 +238,25 @@ page fails the no-warnings build.
 - Commit: `fix(187-S5): refresh stale Size (MB) cells against the 6.0.0
   archives`.
 
+### S6: Keep the reachable-pairs CSV on LF line endings (discovered during S1)
+
+**Code:** `utils/add_reachable_pairs.py` — `add_rows` writes the CSV through
+`csv.writer`, whose default line terminator is CRLF; the first production run
+(S1's `add-rows`) rewrote the whole bundled CSV (committed as LF) with CRLF
+line endings, turning a one-row append into a whole-file diff.
+**Tests:** `tests/utils/test_add_reachable_pairs.py` —
+`test_add_rows_keeps_lf_line_endings` (after `add_rows`, the file's bytes
+contain no `\r`); the `_write_csv` fixture helper gets the same
+`lineterminator="\n"` so fixtures mirror the bundled file.
+**Docs:** none.
+
+**Spec:**
+- `csv.writer(f, lineterminator="\n")` in `add_rows` (one line).
+- Restore the CSV to its committed LF state (`git checkout`), re-run S1's
+  `add-rows` after this fix so the landed row comes from the fixed tool.
+- Committed before S1 (S1's CSV output depends on the fix).
+- Commit: `fix(187-S6): keep the reachable-pairs CSV on LF line endings`.
+
 ## Design Notes (discovered during implementation)
 
 ### Representation-file naming (the `query.re` incident)
@@ -273,3 +292,4 @@ convention-compliant names and re-uploads them (new SHA256s commented on
 - S3: [ ]
 - S4: [ ]
 - S5: [x]
+- S6: [x]

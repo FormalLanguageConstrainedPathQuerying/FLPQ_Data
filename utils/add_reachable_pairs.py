@@ -203,7 +203,7 @@ def add_rows(csv_path: pathlib.Path, rows: list[dict[str, str]]) -> list[str]:
         existing + [list(row.values()) for row in rows], key=lambda r: (r[0], r[1])
     )
     with csv_path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
+        writer = csv.writer(f, lineterminator="\n")
         writer.writerow(header)
         writer.writerows(merged)
     return []
