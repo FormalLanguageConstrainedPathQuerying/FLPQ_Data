@@ -88,6 +88,15 @@ design decision for this class:
   under ``queries/rpq/`` (see :ref:`file_structure`); there are no standalone
   query or example archives. An
   RPQ may also be represented by a regular RSM (``.rsm``, see below).
+- **Conversion.** :obj:`regex_to_rsa
+  <flpq_data.queries.rpq.converters.rsa.regex_to_rsa>` derives a single-box
+  regular RSM from a regular expression, and :obj:`rsa_to_regex
+  <flpq_data.queries.rpq.converters.rsa.rsa_to_regex>` performs the inverse
+  for a single-box regular RSM. These are one-way derivation aids: the RSM
+  remains a first-class, independently specifiable representation — the
+  archive checker couples ``.re`` and ``.rsm`` files only at terminal-set
+  consistency and regularity, so an RSM that is not an exact copy of the
+  regex-derived one remains fully valid.
 - **Data status.** No real-world RPQ data exists yet — the templates are
   designed stubs. Real-world data will be provided later and enters the
   dataset via the graph archives (migration, task 48).

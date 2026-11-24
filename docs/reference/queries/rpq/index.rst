@@ -14,4 +14,5 @@ Regular queries
 .. toctree::
    :maxdepth: 1
 
+   rpq_converters
    rpq_readwrite
