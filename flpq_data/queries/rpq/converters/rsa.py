@@ -44,7 +44,7 @@ def regex_to_rsa(regex: Regex, *, box_name: str = "S") -> RSA:
     >>> cfg = cfg_from_rsa(rsa)
     >>> cfg.contains("aab")
     True
-    >>> cfg.contains("b")
+    >>> cfg.contains("a")
     False
 
     Returns
@@ -88,7 +88,7 @@ def rsa_to_regex(rsa: RSA) -> Regex:
     >>> from flpq_data import *
     >>> rsa = regex_to_rsa(regex_from_text("a* b"))
     >>> regex_to_text(rsa_to_regex(rsa))
-    '((a)* b)'
+    'a* b'
 
     Returns
     -------
