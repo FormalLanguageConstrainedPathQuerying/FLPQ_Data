@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The `.re` regular expression format is now the dataset's canonical regular
+  expression syntax instead of the raw pyformlang `Regex` text syntax (#184):
+  a symbol is a maximal run of non-metacharacters, concatenation is
+  whitespace, union is `|`, `*` and `+` are postfix Kleene star and Kleene
+  plus (`X+` is sugar for `X X*`), `$` is the empty word, and grouping is
+  parentheses. Previously `+` was pyformlang's union operator, so a
+  contributor writing the standard `X+` silently got the union language;
+  every existing dataset file parses to the same language as before.
+  `regex_to_text` now emits this canonical form with minimal parentheses
+  (idempotent, round-trips), and malformed expressions (unbalanced
+  parentheses, dangling operators) are rejected with a clear error.
+
 ## [6.1.2] - 2026-10-28
 
 ### Fixed

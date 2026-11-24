@@ -5,22 +5,50 @@ import pytest
 
 import flpq_data
 
-expression_1 = "abc|d*"
-expression_2 = "a (bc|d*)"
-
 
 @pytest.mark.parametrize(
     "expression, expected, not_expected",
     [
-        (expression_1, [["abc"], ["d", "d", "d"], []], [["a"], ["a", "d"]]),
+        # symbols and concatenation
+        ("friend", [["friend"]], [[]]),
+        ("a b c", [["a", "b", "c"]], [["a", "c"], ["a", "b"]]),
+        # union
+        ("abc|d*", [["abc"], ["d", "d", "d"], []], [["a"], ["a", "d"]]),
+        # union has the lowest precedence: a | b c == a | (b c)
+        ("a|b c", [["a"], ["b", "c"]], [["b"], ["c"], []]),
+        # star
+        ("a b*", [["a"], ["a", "b", "b"]], [["b"], []]),
+        # plus is Kleene-plus: a+ == a a*
+        ("a+", [["a"], ["a", "a", "a"]], [[]]),
+        ("(a|b)+", [["a"], ["b"], ["a", "b"]], [[]]),
+        # epsilon
+        ("$", [[]], [["a"]]),
+        ("$|a", [[], ["a"]], [["a", "a"]]),
+        ("a $", [["a"]], [[]]),
+        # grouping
+        ("(a|b)*", [[], ["a"], ["b"], ["a", "b"]], [["c"]]),
+        ("(a b)*", [[], ["a", "b"], ["a", "b", "a", "b"]], [["a"], ["b"]]),
+        # stacked postfix: a** == (a*)*
+        ("a**", [[], ["a"], ["a", "a"]], [["b"]]),
+        # the #183 yago2s query (Kleene-plus expanded by the contributor)
         (
-            expression_2,
-            [["a"], ["a", "bc"], ["a", "d", "d"]],
-            [[], ["bc"], ["a", "bc", "d"]],
+            "isMarriedTo livesIn isLocatedIn isLocatedIn* dealsWith dealsWith*",
+            [
+                ["isMarriedTo", "livesIn", "isLocatedIn", "dealsWith"],
+                [
+                    "isMarriedTo",
+                    "livesIn",
+                    "isLocatedIn",
+                    "isLocatedIn",
+                    "dealsWith",
+                    "dealsWith",
+                ],
+            ],
+            [["isMarriedTo", "livesIn", "dealsWith"]],
         ),
     ],
 )
-def test_cfg_from_text(expression, expected, not_expected):
+def test_regex_from_text_membership(expression, expected, not_expected):
     regex = flpq_data.regex_from_text(expression)
 
     for word in expected:
@@ -33,8 +61,20 @@ def test_cfg_from_text(expression, expected, not_expected):
 @pytest.mark.parametrize(
     "expression, expected",
     [
-        (expression_1, "(abc|(d)*)"),
-        (expression_2, "(a (bc|(d)*))"),
+        ("friend", "friend"),
+        ("a b c", "a b c"),
+        ("abc|d*", "abc | d*"),
+        ("a (bc|d*)", "a (bc | d*)"),
+        ("a|b c", "a | b c"),
+        ("(a|b)*", "(a | b)*"),
+        ("a+", "a a*"),
+        ("(a|b)+", "(a | b) (a | b)*"),
+        ("$", "$"),
+        ("$|a", "$ | a"),
+        ("a $", "a $"),
+        ("a**", "a**"),
+        ("(a|b)*c", "(a | b)* c"),
+        ("a (b|c d) e", "a (b | c d) e"),
     ],
 )
 def test_regex_to_text(expression, expected):
@@ -46,14 +86,64 @@ def test_regex_to_text(expression, expected):
 @pytest.mark.parametrize(
     "expression",
     [
-        expression_1,
-        expression_2,
+        "friend",
+        "a b c",
+        "abc|d*",
+        "a (bc|d*)",
+        "a|b c",
+        "(a|b)*",
+        "a+",
+        "(a|b)+",
+        "$",
+        "$|a",
+        "a $",
+        "a**",
+        "(a|b)*c",
+        "a (b|c d) e",
+        "isMarriedTo livesIn isLocatedIn isLocatedIn* dealsWith dealsWith*",
     ],
 )
-def test_regex_from_and_to_txt(expression):
+def test_round_trip(expression):
+    regex = flpq_data.regex_from_text(expression)
+    text = flpq_data.regex_to_text(regex)
+
+    # idempotence
+    assert flpq_data.regex_to_text(flpq_data.regex_from_text(text)) == text
+
+    # language preservation
+    for word in ([], ["a"], ["b"], ["c"], ["a", "b"], ["a", "a"], ["b", "c"]):
+        assert regex.accepts(word) == flpq_data.regex_from_text(text).accepts(word)
+
+
+@pytest.mark.parametrize(
+    "expression",
+    [
+        "",
+        "   ",
+        "(",
+        ")",
+        "a)",
+        "(a",
+        "|a",
+        "a|",
+        "a||b",
+        "*a",
+        "+a",
+        "a|*",
+        "a|+",
+        "(a|)",
+        "a (b",
+    ],
+)
+def test_regex_from_text_errors(expression):
+    with pytest.raises(ValueError, match=".*"):
+        flpq_data.regex_from_text(expression)
+
+
+def test_regex_from_and_to_txt():
     (fd, fname) = tempfile.mkstemp()
 
-    regex_1 = flpq_data.regex_from_text(expression)
+    regex_1 = flpq_data.regex_from_text("a (bc|d*)")
 
     path = flpq_data.regex_to_txt(regex_1, fname)
 
