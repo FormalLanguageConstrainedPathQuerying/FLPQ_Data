@@ -60,7 +60,10 @@ def regex_to_rsa(regex: Regex, *, box_name: str = "S") -> RSA:
         Lecture Notes in Computer Science, vol 2102.
         Springer, Berlin, Heidelberg. https://doi.org/10.1007/3-540-44585-4_18
     """
-    dfa = regex.to_epsilon_nfa().minimize()
+    nfa = regex.to_epsilon_nfa()
+    if nfa is None:
+        raise ValueError(f"Cannot build an epsilon NFA for {regex=}")
+    dfa = nfa.minimize()
     label = Symbol(box_name)
     rsa = RSA(labels={label}, initial_label=label, boxes={Box(dfa, label)})
 
