@@ -54,5 +54,6 @@ Social Networks
 ^^^^^^^^^^^^^^^
 
 * :ref:`pokec`
+* :ref:`yago2s`
 
 .. applicable-graphs:end

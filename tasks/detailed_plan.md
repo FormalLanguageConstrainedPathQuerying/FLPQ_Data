@@ -147,8 +147,12 @@ must pass; full suite green.
 **Code:** `flpq_data/dataset/reachable_pairs.csv` (39 rows, via
 `utils/add_reachable_pairs.py`), `flpq_data/dataset/registry.json` (via
 `utils/generate_registry.py`)
-**Tests:** `tests/dataset/test_registry.py` — count 114 → 115; the two real-repo
-check-mode tests; full suite green.
+**Tests:** `tests/dataset/test_registry.py` — count 114 → 115;
+`tests/dataset/test_reachable_pairs.py` — the CSV-pinning values gain the 39
+yago2s rows (total 156 → 195, the `rpq` filter returns 40 rows over
+`{pokec, yago2s}`, `CATEGORIES` `social_networks` 1 → 40, available counts
+152 → 191); `flpq_data/dataset/registry.py` — the `graph_names()` doctest
+114 → 115; the two real-repo check-mode tests; full suite green.
 **Docs:** `docs/graphs/social_networks.rst` (toctree entry + table row), new
 `docs/graphs/data/yago2s.rst` (per-graph page with a 39-query Queries section),
 `docs/graphs/index.rst` (Contents count 1 → 2), `docs/reachable_pairs.rst` (regenerated),
@@ -296,7 +300,7 @@ convention-compliant names and re-uploads them (new SHA256s commented on
 
 - S0: [x]
 - S1: [x]
-- S2: [ ]
+- S2: [x]
 - S3: [ ]
 - S4: [ ]
 - S5: [x]
