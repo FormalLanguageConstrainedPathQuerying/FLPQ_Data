@@ -51,6 +51,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   query class rendered, rows sorted by grammar file name) instead of one
   per-category table with CFPQ rows only (#184). `update_category_columns`
   now skips categories without registered count columns instead of raising.
+- The graph catalog's Contents section now documents when a category table
+  omits the `Reachable pairs` column: when no single canonical grammar
+  applies to the whole category (e.g. per-graph RPQ queries), the per-query
+  counts live in the per-graph tables of the reachable-pairs page (#184).
 
 ## [6.1.2] - 2026-10-28
 
