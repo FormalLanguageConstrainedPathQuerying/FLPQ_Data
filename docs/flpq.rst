@@ -11,13 +11,12 @@ FLPQ: Formal-Language-Constrained Path Querying
 Formal-language-constrained path querying (FLPQ) studies reachability in
 labeled directed graphs where a path from :math:`u` to :math:`v` counts only
 if its edge-label string belongs to a given formal language. FLPQ_Data
-currently provides data for context-free path queries (CFPQ); it is being
-extended to all classes of FLPQ: regular path queries (RPQ) and multiple
-context-free path queries (MCFPQ). This page records the design decisions —
+provides data for context-free path queries (CFPQ) and regular path queries
+(RPQ); it is being extended to multiple context-free path queries (MCFPQ).
+This page records the design decisions —
 the query-class taxonomy, the grammar formalisms and file formats, and the
-target structure of the site, the package, and the dataset. Implementation
-happens in follow-up tasks; until then the existing CFPQ data and interfaces
-remain unchanged.
+target structure of the site, the package, and the dataset. The RPQ
+extension reuses the existing CFPQ data and interfaces unchanged.
 
 Query classes
 -------------
@@ -32,7 +31,7 @@ Query classes
    * - RPQ
      - Regular
      - Regular expressions, NFA/DFA
-     - designed, no data
+     - current
    * - CFPQ
      - Context-free
      - CFG/CNF (incl. indexed grammars)
@@ -48,8 +47,8 @@ string of :math:`L` labels a path from :math:`u` to :math:`v`. The classes
 differ only in the language class used for the constraint and in the
 formalism that specifies it. The existing data — the :ref:`graphs <graphs>`
 catalog, the :ref:`query templates <cfpq_queries>`, and the
-:ref:`reachable pair counts <reachable_pairs>` — is CFPQ data; the shared
-graph catalog is reused by all classes.
+:ref:`reachable pair counts <reachable_pairs>` — is CFPQ and RPQ data; the
+shared graph catalog is reused by all classes.
 
 Regular path queries
 --------------------
@@ -71,19 +70,11 @@ design decision for this class:
 
   Precedence: postfix operators > concatenation > union. The same syntax is
   used for the EBNF-style RSM bodies (see :ref:`below <rsm_format>`).
-- **Templates.** As with CFG templates, an RPQ template is a named,
-  parameterized regular expression instantiated per graph from its stored
-  labels. The designed seed set consists of two canonical queries applicable
-  to every graph:
-
-  - ``reachability`` — :math:`(L_1 \,|\, \dots \,|\, L_n)^*` over all stored
-    labels :math:`L_1, \dots, L_n`: unrestricted reachability;
-  - ``label_star`` — :math:`L^*` for each stored label :math:`L`: the
-    per-label transitive closure.
-
-  Additional templates may be added later together with real-world data; the
-  stub pages in the :ref:`RPQ section <rpq_queries>`
-  document both templates.
+- **No named templates.** Unlike CFPQ, RPQ has no named, parameterized
+  templates: every query is a per-graph regular expression stored in the
+  graph archive. The two designed seed stubs (``reachability``,
+  ``label_star``) were retired when the first real-world RPQ data arrived
+  (the ``social_networks`` category).
 - **Placement.** Query files live inside the self-contained graph archive
   under ``queries/rpq/`` (see :ref:`file_structure`); there are no standalone
   query or example archives. An
@@ -97,9 +88,9 @@ design decision for this class:
   archive checker couples ``.re`` and ``.rsm`` files only at terminal-set
   consistency and regularity, so an RSM that is not an exact copy of the
   regex-derived one remains fully valid.
-- **Data status.** No real-world RPQ data exists yet — the templates are
-  designed stubs. Real-world data will be provided later and enters the
-  dataset via the graph archives (migration, task 48).
+- **Data status.** Real-world RPQ data exists: the ``social_networks``
+  category (``pokec``, ``yago2s``), entered via the graph archives
+  (migration, task 48).
 
 Recursive state machines
 ------------------------
@@ -355,7 +346,7 @@ the graph catalog stays shared.
    Dataset
    ├── Graphs           shared catalog (8 categories, 113 pages) — unchanged
    ├── CFPQ             grammar templates (4 + indexed grammars) | applicable graphs
-   ├── RPQ              query templates (regular expressions)    | applicable graphs
+   ├── RPQ              per-graph queries (regular expressions)  | applicable graphs
    ├── MCFPQ            grammar templates (MCFG)                 | applicable graphs
    └── Reachable pairs  per-graph tables; flat CSV download
 
