@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the initial box (previously the round-trip failed for any RSM whose
   initial box was not named `S`). The EBNF parser now rejects a `start:`
   line naming a box without a production.
+- `flpq-check-archive` now parses `.re` files with the canonical regular
+  expression syntax instead of the raw pyformlang `Regex` constructor
+  (#184), so `+` in a query file is Kleene-plus and malformed expressions
+  are reported as "cannot be parsed".
 
 ## [6.1.2] - 2026-10-28
 

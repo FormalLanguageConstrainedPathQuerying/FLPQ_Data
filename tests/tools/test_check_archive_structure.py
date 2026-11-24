@@ -339,6 +339,44 @@ def test_rpq_recursive_rsm_is_rejected(tmp_path):
     assert any("must be regular" in p for p in problems)
 
 
+def test_re_kleene_plus_passes_consistency(tmp_path):
+    tree = _valid_tree(tmp_path)
+    query = _query_dir(tree, "rpq", "p", ".re")
+    (query / "p.re").write_text("a+")
+    (query / "p.rsm").write_text("[box S]\nstart: 0\nfinal: 1\n0 --a--> 1\n1 --a--> 1")
+    (tree / "queries" / "README.md").write_text(
+        "# Queries for g\n\n## cfpq/s\n- Language: a*.\n\n## rpq/p\n- Language: a+.\n"
+    )
+
+    assert validate_archive(tree) == []
+
+
+def test_re_multi_char_symbol_passes_consistency(tmp_path):
+    tree = _valid_tree(tmp_path)
+    query = _query_dir(tree, "rpq", "p", ".re")
+    (query / "p.re").write_text("ab*")
+    (query / "p.rsm").write_text("[box S]\nstart: 0\nfinal: 0\n0 --ab--> 0")
+    (tree / "queries" / "README.md").write_text(
+        "# Queries for g\n\n## cfpq/s\n- Language: a*.\n"
+        "\n## rpq/p\n- Language: (ab)*.\n"
+    )
+
+    assert validate_archive(tree) == []
+
+
+def test_unparseable_re(tmp_path):
+    tree = _valid_tree(tmp_path)
+    query = _query_dir(tree, "rpq", "p", ".re")
+    (query / "p.re").write_text("(a")
+    (tree / "queries" / "README.md").write_text(
+        "# Queries for g\n\n## cfpq/s\n- Language: a*.\n\n## rpq/p\n- Language: a*.\n"
+    )
+
+    problems = validate_archive(tree)
+
+    assert any("cannot be parsed as a rpq query" in p for p in problems)
+
+
 def test_unparseable_mcfg(tmp_path):
     tree = _valid_tree(tmp_path)
     query = _query_dir(tree, "mcfpq", "m", ".mcfg")
