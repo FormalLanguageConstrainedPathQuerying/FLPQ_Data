@@ -338,13 +338,15 @@ Site structure
 
 The Dataset section has one sub-section per query class next to the shared
 graph catalog: each class reuses the existing layout — an index page with its
-templates and its "Applicable graphs" list, and one page per template — while
-the graph catalog stays shared.
+"Applicable graphs" list, plus one page per named template where the class
+has them — while the graph catalog stays shared. RPQ has no named templates:
+its queries are per-graph regular expressions documented on the per-graph
+pages.
 
 .. code-block:: text
 
    Dataset
-   ├── Graphs           shared catalog (8 categories, 113 pages) — unchanged
+   ├── Graphs           shared catalog (9 categories, 115 pages)
    ├── CFPQ             grammar templates (4 + indexed grammars) | applicable graphs
    ├── RPQ              per-graph queries (regular expressions)  | applicable graphs
    ├── MCFPQ            grammar templates (MCFG)                 | applicable graphs

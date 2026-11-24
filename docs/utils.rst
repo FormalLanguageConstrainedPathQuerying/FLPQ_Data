@@ -53,8 +53,8 @@ in sync with the stored archives::
    python utils/archive_sizes.py [--update]
 
 The tool covers every list-table with a ``Download`` column in
-``docs/graphs/*.rst`` and ``docs/old_graphs/index.rst`` — currently the eight
-per-category tables (113 archives at the ``6.0.0/graph/`` prefix) and the
+``docs/graphs/*.rst`` and ``docs/old_graphs/index.rst`` — currently the nine
+per-category tables (115 archives at the ``6.0.0/graph/`` prefix) and the
 old-graphs table (54 archives at the ``4.0.0/graph/`` prefix). For every
 referenced archive it issues an S3 ``HEAD`` request and compares the
 ``Content-Length`` with the table cell, formatted in MB (three decimals below
