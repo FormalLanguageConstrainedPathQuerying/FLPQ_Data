@@ -357,7 +357,7 @@ the graph catalog stays shared.
    ├── CFPQ             grammar templates (4 + indexed grammars) | applicable graphs
    ├── RPQ              query templates (regular expressions)    | applicable graphs
    ├── MCFPQ            grammar templates (MCFG)                 | applicable graphs
-   └── Reachable pairs  per-category tables; flat CSV download
+   └── Reachable pairs  per-graph tables; flat CSV download
 
 There is no separate benchmarks section: benchmarking data and results are
 not part of the dataset site. The per-class "applicable graphs" lists are
@@ -372,14 +372,14 @@ Reachable pair counts
 
 The single flat table currently rendered on the
 :ref:`reachable pairs <reachable_pairs>` page is removed; it is too large to
-scan. The page renders one table per graph category instead (columns:
-Graph, Grammar, Reachable pairs), so every table stays small. The flat
-table survives as a downloadable CSV — the single source of truth for
-automatic processing — which gains a ``category`` and a ``query_class``
-column so it is self-describing. A generator script in ``utils/`` (following the pattern of
-``utils/archive_sizes.py``) renders both the per-category tables and the
-count columns of the category pages from that CSV, so no count is
-hand-maintained in two places.
+scan. The page renders one table per graph instead (columns: Query,
+Reachable pairs; one row per query, grouped by category), so every table
+stays small. The flat table survives as a downloadable CSV — the single
+source of truth for automatic processing — which gains a ``category`` and a
+``query_class`` column so it is self-describing. A generator script in
+``utils/`` (following the pattern of ``utils/archive_sizes.py``) renders
+both the per-graph tables and the count columns of the category pages from
+that CSV, so no count is hand-maintained in two places.
 
 Package structure
 -----------------

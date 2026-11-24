@@ -13,7 +13,9 @@ Reference counts of reachable vertex pairs for every graph x grammar pair
 in the dataset. A pair :math:`(u, v)` is reachable if there exists a path
 from :math:`u` to :math:`v` labeled by a string in the language of the
 grammar's start symbol. The sections below follow the graph categories of
-the :ref:`Graphs <graphs>` catalog.
+the :ref:`Graphs <graphs>` catalog; within a category, each graph gets its
+own table with one row per query (the grammar file name makes the query
+class self-describing).
 
 .. note::
 
@@ -46,554 +48,1465 @@ yet available).
 C alias analysis
 ----------------
 
+:ref:`apache`
+~~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :align: left
 
-   * - Graph
-     - Grammar
+   * - Query
      - Reachable pairs
-   * - apache
-     - c_alias.cnf
+   * - c_alias.cnf
      - 92806768
-   * - arch
-     - c_alias.cnf
+
+:ref:`arch`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 5339563
-   * - block
-     - c_alias.cnf
+
+:ref:`block`
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 5351409
-   * - bzip
-     - c_alias.cnf
+
+:ref:`bzip`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 315
-   * - crypto
-     - c_alias.cnf
+
+:ref:`crypto`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 5428237
-   * - drivers
-     - c_alias.cnf
+
+:ref:`drivers`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 18825025
-   * - fs
-     - c_alias.cnf
+
+:ref:`fs`
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 9646475
-   * - gzip
-     - c_alias.cnf
+
+:ref:`gzip`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 1458
-   * - init
-     - c_alias.cnf
+
+:ref:`init`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 3783769
-   * - ipc
-     - c_alias.cnf
+
+:ref:`ipc`
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 5249389
-   * - kernel
-     - c_alias.cnf
+
+:ref:`kernel`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 16747731
-   * - lib
-     - c_alias.cnf
+
+:ref:`lib`
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 5276303
-   * - ls
-     - c_alias.cnf
+
+:ref:`ls`
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 854
-   * - mm
-     - c_alias.cnf
+
+:ref:`mm`
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 3990305
-   * - net
-     - c_alias.cnf
+
+:ref:`net`
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 8833403
-   * - postgre
-     - c_alias.cnf
+
+:ref:`postgre`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 90661446
-   * - pr
-     - c_alias.cnf
+
+:ref:`pr`
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 385
-   * - security
-     - c_alias.cnf
+
+:ref:`security`
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 5593387
-   * - sound
-     - c_alias.cnf
+
+:ref:`sound`
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 6085269
-   * - wc
-     - c_alias.cnf
+
+:ref:`wc`
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - c_alias.cnf
      - 156
 
 RDF
 ---
 
+:ref:`atom`
+~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :align: left
 
-   * - Graph
-     - Grammar
+   * - Query
      - Reachable pairs
-   * - atom
-     - nested_parentheses_subClassOf.cnf
+   * - nested_parentheses_subClassOf.cnf
      - 2
-   * - atom
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 6
-   * - atom
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 4
-   * - biomedical
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`biomedical`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 43
-   * - biomedical
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 47
-   * - biomedical
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 4
-   * - core
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`core`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 143
-   * - core
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 204
-   * - core
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 61
-   * - eclass
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`eclass`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 90988
-   * - eclass
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 90994
-   * - eclass
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 6
-   * - enzyme
-     - nested_parentheses_broaderTransitive.cnf
+
+:ref:`enzyme`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_broaderTransitive.cnf
      - 14267542
-   * - enzyme
-     - nested_parentheses_subClassOf.cnf
+   * - nested_parentheses_subClassOf.cnf
      - 394
-   * - enzyme
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 396
-   * - enzyme
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 3
-   * - foaf
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`foaf`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 7
-   * - foaf
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 36
-   * - foaf
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 29
-   * - funding
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`funding`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 27
-   * - funding
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 58
-   * - funding
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 31
-   * - generations
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`generations`
+~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 0
-   * - generations
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 12
-   * - generations
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 12
-   * - geospecies
-     - nested_parentheses_broaderTransitive.cnf
+
+:ref:`geospecies`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_broaderTransitive.cnf
      - 226669749
-   * - geospecies
-     - nested_parentheses_subClassOf.cnf
+   * - nested_parentheses_subClassOf.cnf
      - 0
-   * - geospecies
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 85
-   * - geospecies
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 85
-   * - go
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`go`
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 640305
-   * - go
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 640316
-   * - go
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 9
-   * - go_hierarchy
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`go_hierarchy`
+~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 588976
-   * - go_hierarchy
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 588976
-   * - go_hierarchy
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 0
-   * - pathways
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`pathways`
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 883
-   * - pathways
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 884
-   * - pathways
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 2
-   * - people
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`people`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 24
-   * - people
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 51
-   * - people
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 29
-   * - pizza
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`pizza`
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 1334
-   * - pizza
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 1356
-   * - pizza
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 20
-   * - skos
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`skos`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 1
-   * - skos
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 30
-   * - skos
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 29
-   * - taxonomy
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`taxonomy`
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 151703
-   * - taxonomy
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 151706
-   * - taxonomy
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 4
-   * - taxonomy_hierarchy
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`taxonomy_hierarchy`
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 5351657
-   * - taxonomy_hierarchy
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 5351657
-   * - taxonomy_hierarchy
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 0
-   * - travel
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`travel`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 33
-   * - travel
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 52
-   * - travel
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 19
-   * - univ
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`univ`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 17
-   * - univ
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 25
-   * - univ
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 6
-   * - wine
-     - nested_parentheses_subClassOf.cnf
+
+:ref:`wine`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - nested_parentheses_subClassOf.cnf
      - 499
-   * - wine
-     - nested_parentheses_subClassOf_type.cnf
+   * - nested_parentheses_subClassOf_type.cnf
      - 565
-   * - wine
-     - nested_parentheses_type.cnf
+   * - nested_parentheses_type.cnf
      - 65
 
 Java points-to graphs
 ---------------------
 
+:ref:`avrora`
+~~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :align: left
 
-   * - Graph
-     - Grammar
+   * - Query
      - Reachable pairs
-   * - avrora
-     - java_points_to.cnf
+   * - java_points_to.cnf
      - 21532
-   * - batik
-     - java_points_to.cnf
+
+:ref:`batik`
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 45968
-   * - commons_io
-     - java_points_to.cnf
+
+:ref:`commons_io`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 24020
-   * - commons_lang3
-     - java_points_to.cnf
+
+:ref:`commons_lang3`
+~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 27553
-   * - eclipse
-     - java_points_to.cnf
+
+:ref:`eclipse`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 21830
-   * - fop
-     - java_points_to.cnf
+
+:ref:`fop`
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 76615
-   * - gson
-     - java_points_to.cnf
+
+:ref:`gson`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 56325
-   * - guava
-     - java_points_to.cnf
+
+:ref:`guava`
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 26384496
-   * - h2
-     - java_points_to.cnf
+
+:ref:`h2`
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 92038
-   * - jackson
-     - java_points_to.cnf
+
+:ref:`jackson`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 3108775
-   * - junit5
-     - java_points_to.cnf
+
+:ref:`junit5`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 129598
-   * - jython
-     - java_points_to.cnf
+
+:ref:`jython`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 561720
-   * - luindex
-     - java_points_to.cnf
+
+:ref:`luindex`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 9677
-   * - lusearch
-     - java_points_to.cnf
+
+:ref:`lusearch`
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 9242
-   * - mockito
-     - java_points_to.cnf
+
+:ref:`mockito`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 16169
-   * - pmd
-     - java_points_to.cnf
+
+:ref:`pmd`
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 60518
-   * - sunflow
-     - java_points_to.cnf
+
+:ref:`sunflow`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 16354
-   * - tomcat
-     - java_points_to.cnf
+
+:ref:`tomcat`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 82424
-   * - tradebeans
-     - java_points_to.cnf
+
+:ref:`tradebeans`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 696316
-   * - tradesoap
-     - java_points_to.cnf
+
+:ref:`tradesoap`
+~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 698567
-   * - xalan
-     - java_points_to.cnf
+
+:ref:`xalan`
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - java_points_to.cnf
      - 52382
 
 Field-Sensitive Alias
 ---------------------
 
+:ref:`cactus_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :align: left
 
-   * - Graph
-     - Grammar
+   * - Query
      - Reachable pairs
-   * - cactus_field_sensitive_alias
-     - vf.cnf
+   * - vf.cnf
      - 37625324
-   * - imagick_field_sensitive_alias
-     - vf.cnf
+
+:ref:`imagick_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - vf.cnf
      - 369956094
-   * - leela_field_sensitive_alias
-     - vf.cnf
+
+:ref:`leela_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - vf.cnf
      - 3968276
-   * - nab_field_sensitive_alias
-     - vf.cnf
+
+:ref:`nab_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - vf.cnf
      - 262566
-   * - omnetpp_field_sensitive_alias
-     - vf.cnf
+
+:ref:`omnetpp_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - vf.cnf
      - 158255766
-   * - parest_field_sensitive_alias
-     - vf.cnf
+
+:ref:`parest_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - vf.cnf
      - 49415038
-   * - perlbench_field_sensitive_alias
-     - vf.cnf
+
+:ref:`perlbench_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - vf.cnf
      - 851737865
-   * - povray_field_sensitive_alias
-     - vf.cnf
+
+:ref:`povray_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - vf.cnf
      - 27219043
-   * - x264_field_sensitive_alias
-     - vf.cnf
+
+:ref:`x264_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - vf.cnf
      - 5246565
-   * - xz_field_sensitive_alias
-     - vf.cnf
+
+:ref:`xz_field_sensitive_alias`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - vf.cnf
      - 205164
 
 Context-Sensitive Data-Flow
 ---------------------------
 
+:ref:`cactus`
+~~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :align: left
 
-   * - Graph
-     - Grammar
+   * - Query
      - Reachable pairs
-   * - cactus
-     - aa.cnf
+   * - aa.cnf
      - 47806209
-   * - imagick
-     - aa.cnf
+
+:ref:`imagick`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - aa.cnf
      - 12687034
-   * - leela
-     - aa.cnf
+
+:ref:`leela`
+~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - aa.cnf
      - 662466
-   * - nab
-     - aa.cnf
+
+:ref:`nab`
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - aa.cnf
      - 739646
-   * - omnetpp
-     - aa.cnf
+
+:ref:`omnetpp`
+~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - aa.cnf
      - 8424500
-   * - parest
-     - aa.cnf
+
+:ref:`parest`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - aa.cnf
      - 1342540
-   * - perlbench
-     - aa.cnf
+
+:ref:`perlbench`
+~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - aa.cnf
      - 297504186
-   * - povray
-     - aa.cnf
+
+:ref:`povray`
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - aa.cnf
      - 34599413
-   * - x264
-     - aa.cnf
+
+:ref:`x264`
+~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - aa.cnf
      - 20259480
-   * - xz
-     - aa.cnf
+
+:ref:`xz`
+~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - aa.cnf
      - 358834
 
 Data Provenance
 ---------------
 
+:ref:`provenance_airflow`
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :align: left
 
-   * - Graph
-     - Grammar
+   * - Query
      - Reachable pairs
-   * - airflow
-     - prov_derivation.cnf
+   * - prov_derivation.cnf
      - 91350
-   * - celery
-     - prov_derivation.cnf
+
+:ref:`provenance_celery`
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 25306
-   * - click
-     - prov_derivation.cnf
+
+:ref:`provenance_click`
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 2710
-   * - django
-     - prov_derivation.cnf
+
+:ref:`provenance_django`
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 615946
-   * - fastapi
-     - prov_derivation.cnf
+
+:ref:`provenance_fastapi`
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 8814
-   * - flask
-     - prov_derivation.cnf
+
+:ref:`provenance_flask`
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 8062
-   * - httpx
-     - prov_derivation.cnf
+
+:ref:`provenance_httpx`
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 4408
-   * - itsdangerous
-     - prov_derivation.cnf
+
+:ref:`provenance_itsdangerous`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 2912
-   * - jinja
-     - prov_derivation.cnf
+
+:ref:`provenance_jinja`
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 7436
-   * - pandas
-     - prov_derivation.cnf
+
+:ref:`provenance_pandas`
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 154646
-   * - pluggy
-     - prov_derivation.cnf
+
+:ref:`provenance_pluggy`
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 880
-   * - requests
-     - prov_derivation.cnf
+
+:ref:`provenance_requests`
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 2524
-   * - sampleproject
-     - prov_derivation.cnf
+
+:ref:`provenance_sampleproject`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 342
-   * - scikit-learn
-     - prov_derivation.cnf
+
+:ref:`provenance_scikit_learn`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 217728
-   * - sphinx
-     - prov_derivation.cnf
+
+:ref:`provenance_sphinx`
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 304084
-   * - superset
-     - prov_derivation.cnf
+
+:ref:`provenance_superset`
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 97460
-   * - wikipedia-provenance
-     - prov_derivation.cnf
+
+:ref:`provenance_wikipedia_provenance`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 1732
-   * - zulip
-     - prov_derivation.cnf
+
+:ref:`provenance_zulip`
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - prov_derivation.cnf
      - 209908
 
 Name Resolution
 ---------------
 
+:ref:`name_resolution_jiaozi`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :align: left
 
-   * - Graph
-     - Grammar
+   * - Query
      - Reachable pairs
-   * - jiaozi
-     - name_resolution.cnf
+   * - name_resolution.cnf
      - 14435
-   * - jsonpath
-     - name_resolution.cnf
+
+:ref:`name_resolution_jsonpath`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - name_resolution.cnf
      - 59764
-   * - libgdx
-     - name_resolution.cnf
+
+:ref:`name_resolution_libgdx`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - name_resolution.cnf
      - not available
-   * - shattered_pixel_dungeon
-     - name_resolution.cnf
+
+:ref:`name_resolution_shattered_pixel_dungeon`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - name_resolution.cnf
      - 971998
 
 Biological graphs from UniProt
 ------------------------------
 
+:ref:`unigraph_1`
+~~~~~~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :align: left
 
-   * - Graph
-     - Grammar
+   * - Query
      - Reachable pairs
-   * - unigraph_1
-     - unigraph_1.cnf
+   * - unigraph_1.cnf
      - 376578
-   * - unigraph_10
-     - unigraph_10.cnf
+
+:ref:`unigraph_10`
+~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - unigraph_10.cnf
      - not available
-   * - unigraph_2
-     - unigraph_2.cnf
+
+:ref:`unigraph_2`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - unigraph_2.cnf
      - 39888347
-   * - unigraph_3
-     - unigraph_3.cnf
+
+:ref:`unigraph_3`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - unigraph_3.cnf
      - 52471840
-   * - unigraph_4
-     - unigraph_4.cnf
+
+:ref:`unigraph_4`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - unigraph_4.cnf
      - 808091802
-   * - unigraph_5
-     - unigraph_5.cnf
+
+:ref:`unigraph_5`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - unigraph_5.cnf
      - 2303590109
-   * - unigraph_6
-     - unigraph_6.cnf
+
+:ref:`unigraph_6`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - unigraph_6.cnf
      - 1722963921
-   * - unigraph_7
-     - unigraph_7.cnf
+
+:ref:`unigraph_7`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - unigraph_7.cnf
      - 2320964134
-   * - unigraph_8
-     - unigraph_8.cnf
+
+:ref:`unigraph_8`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - unigraph_8.cnf
      - not available
-   * - unigraph_9
-     - unigraph_9.cnf
+
+:ref:`unigraph_9`
+~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :align: left
+
+   * - Query
+     - Reachable pairs
+   * - unigraph_9.cnf
      - not available
 
 .. reachable-pairs-tables:end

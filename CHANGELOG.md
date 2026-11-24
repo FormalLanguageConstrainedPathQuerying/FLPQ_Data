@@ -46,6 +46,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   expression syntax instead of the raw pyformlang `Regex` constructor
   (#184), so `+` in a query file is Kleene-plus and malformed expressions
   are reported as "cannot be parsed".
+- The reachable-pairs tables of `docs/reachable_pairs.rst` are now
+  per-graph: each graph gets its own table with one row per query (every
+  query class rendered, rows sorted by grammar file name) instead of one
+  per-category table with CFPQ rows only (#184). `update_category_columns`
+  now skips categories without registered count columns instead of raising.
 
 ## [6.1.2] - 2026-10-28
 

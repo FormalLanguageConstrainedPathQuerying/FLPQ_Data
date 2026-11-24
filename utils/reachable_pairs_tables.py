@@ -6,13 +6,14 @@ automatic processing); each row carries a ``query_class`` (``cfpq``,
 ``rpq``, or ``mcfpq`` — the names of the ``queries/<class>/`` directories
 in the graph archives). Two renderings are derived from it:
 
-- the per-category tables of ``docs/reachable_pairs.rst`` (one section per
-  graph category, between the ``reachable-pairs-tables`` markers);
+- the per-graph tables of ``docs/reachable_pairs.rst`` (one section per
+  graph category, one table per graph, every query class rendered, between
+  the ``reachable-pairs-tables`` markers);
 - the count columns of the eight per-category graph tables in
   ``docs/graphs/*.rst``.
 
-The graph tables render CFPQ counts only; rows of other query classes are
-validated but not rendered (no RPQ/MCFPQ counts exist yet).
+The graph tables render CFPQ counts only; the other classes are rendered
+in the per-graph tables of ``docs/reachable_pairs.rst``.
 
 This tool keeps both renderings accurate:
 
@@ -237,11 +238,12 @@ def load_rows(csv_path: pathlib.Path) -> list[dict]:
     return rows
 
 
-def _rendered_rows(rows: list[dict]) -> list[dict]:
-    """Returns the rows the current site renders.
+def _cfpq_rows(rows: list[dict]) -> list[dict]:
+    """Returns the CFPQ rows.
 
-    The graph tables render CFPQ counts only; RPQ/MCFPQ counts do not exist
-    yet.
+    The graph tables render CFPQ counts only; rows of other query classes
+    are validated but not rendered there (their counts live in the
+    per-graph tables of ``docs/reachable_pairs.rst``).
     """
     return [r for r in rows if r["query_class"] == "cfpq"]
 
@@ -257,18 +259,22 @@ def _section_title(docs_dir: pathlib.Path, category: str) -> str:
 
 
 def render_tables_region(rows: list[dict], docs_dir: pathlib.Path) -> str:
-    """Renders the per-category table sections of reachable_pairs.rst.
+    """Renders the per-category, per-graph table sections of reachable_pairs.rst.
 
     One section per category in :func:`category_order` order, titled like
-    the category page; each section is a list-table with the header
-    Graph | Grammar | Reachable pairs and that category's rows sorted by
-    (graph, grammar). A row without a computed value renders as
+    the category page; within a section, one subheading per graph (a
+    ``:ref:`` targeting the graph's data page) followed by a list-table
+    with the header Query | Reachable pairs and that graph's rows sorted
+    by grammar file name (the extension makes the query class
+    self-describing). A row without a computed value renders as
     ``not available``.
 
     Parameters
     ----------
     rows : list[dict]
-        The CSV rows (see :func:`load_rows`).
+        The CSV rows (see :func:`load_rows`); every row's graph must be
+        listed in the docs (guaranteed by :func:`_validation_problems` in
+        the CLI flow).
     docs_dir : pathlib.Path
         The docs directory (for the category order and titles).
 
@@ -277,38 +283,42 @@ def render_tables_region(rows: list[dict], docs_dir: pathlib.Path) -> str:
     region : str
         The section text without the marker lines.
     """
+    graph_page = {graph: page for page, graph in page_to_graph(docs_dir).items()}
     sections: list[str] = []
     for category in category_order(docs_dir):
         title = _section_title(docs_dir, category)
-        cat_rows = sorted(
-            (r for r in _rendered_rows(rows) if r["category"] == category),
-            key=lambda r: (r["graph"], r["grammar"]),
-        )
+        cat_rows = [r for r in rows if r["category"] == category]
         lines = [title, "-" * len(title), ""]
         if not cat_rows:
             lines.append("No reachable-pair counts have been computed for this")
             lines.append("category yet.")
         else:
-            lines += [
-                ".. list-table::",
-                "   :header-rows: 1",
-                "   :align: left",
-                "",
-                "   * - Graph",
-                "     - Grammar",
-                "     - Reachable pairs",
-            ]
+            by_graph: dict[str, list[dict]] = {}
             for row in cat_rows:
-                value = (
-                    NOT_AVAILABLE
-                    if row["num_reachable_pairs"] is None
-                    else str(row["num_reachable_pairs"])
-                )
+                by_graph.setdefault(row["graph"], []).append(row)
+            for i, graph in enumerate(sorted(by_graph)):
+                if i:
+                    lines.append("")
+                heading = f":ref:`{graph_page[graph]}`"
+                lines += [heading, "~" * len(heading), ""]
                 lines += [
-                    f"   * - {row['graph']}",
-                    f"     - {row['grammar']}",
-                    f"     - {value}",
+                    ".. list-table::",
+                    "   :header-rows: 1",
+                    "   :align: left",
+                    "",
+                    "   * - Query",
+                    "     - Reachable pairs",
                 ]
+                for row in sorted(by_graph[graph], key=lambda r: r["grammar"]):
+                    value = (
+                        NOT_AVAILABLE
+                        if row["num_reachable_pairs"] is None
+                        else str(row["num_reachable_pairs"])
+                    )
+                    lines += [
+                        f"   * - {row['grammar']}",
+                        f"     - {value}",
+                    ]
         sections.append("\n".join(lines))
     return "\n\n".join(sections)
 
@@ -413,7 +423,9 @@ def update_category_columns(
     page via ``page_to_graph``) and each count column, the cell is set to
     the CSV value, to ``not available`` when the pair exists with no value
     yet, or to empty when the grammar does not apply to that graph. Lines
-    that need no change keep their exact text.
+    that need no change keep their exact text. A category without
+    registered count columns (absent from ``GRAMMAR_COLUMNS``) has nothing
+    to sync and is returned unchanged with no problems.
 
     Parameters
     ----------
@@ -444,13 +456,12 @@ def update_category_columns(
         count columns.
     """
     if columns is None:
-        try:
-            columns = GRAMMAR_COLUMNS[category]
-        except KeyError as err:
-            raise ValueError(
-                f"no count columns registered for category {category!r}; "
-                "add them to GRAMMAR_COLUMNS"
-            ) from err
+        columns = GRAMMAR_COLUMNS.get(category)
+        if columns is None:
+            # Nothing to sync: the category's graph table has no count
+            # columns (its per-query counts live in
+            # docs/reachable_pairs.rst).
+            return text, []
     wanted = {header for header, _ in columns}
     tables = [t for t in iter_graph_tables(text) if wanted & set(header_columns(t))]
     if len(tables) != 1:
@@ -463,8 +474,7 @@ def update_category_columns(
     col_index = {name: i for i, name in enumerate(header)}
 
     by_pair: dict[tuple[str, str], Optional[int]] = {
-        (r["graph"], r["grammar"]): r["num_reachable_pairs"]
-        for r in _rendered_rows(rows)
+        (r["graph"], r["grammar"]): r["num_reachable_pairs"] for r in _cfpq_rows(rows)
     }
     missing = object()
 
@@ -535,9 +545,10 @@ def _validation_problems(rows: list[dict], site_map: dict[str, str]) -> list[str
     """Returns the CSV rows the site cannot account for.
 
     Every row must have a known ``query_class`` and a graph that the docs
-    list in the row's category. The count-column check applies to the rows
-    the site renders (CFPQ) only; other classes have no rendering yet, so
-    their grammar files are not expected in ``GRAMMAR_COLUMNS``.
+    list in the row's category. The count-column check applies to the CFPQ
+    rows only (the graph tables render CFPQ counts only); the other classes
+    are rendered in the per-graph tables of ``docs/reachable_pairs.rst``,
+    which need no per-category registration.
     """
     problems: list[str] = []
     for row in rows:
@@ -557,7 +568,7 @@ def _validation_problems(rows: list[dict], site_map: dict[str, str]) -> list[str
                 f"CSV says {row['graph']} is in {row['category']}, "
                 f"the docs say {expected}"
             )
-    for row in _rendered_rows(rows):
+    for row in _cfpq_rows(rows):
         columns = GRAMMAR_COLUMNS.get(row["category"])
         if columns is None:
             problems.append(
@@ -585,8 +596,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Check or update the reachable-pairs tables (the per-category "
-            "sections of docs/reachable_pairs.rst and the count columns of "
+            "Check or update the reachable-pairs tables (the per-graph "
+            "tables of docs/reachable_pairs.rst and the count columns of "
             "docs/graphs/*.rst) against the CSV."
         )
     )
@@ -654,7 +665,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     problems = []
     if updated_page != page_text:
         problems.append(
-            f"{REACHABLE_PAIRS_PAGE.relative_to(MAIN_FOLDER)}: the per-category "
+            f"{REACHABLE_PAIRS_PAGE.relative_to(MAIN_FOLDER)}: the per-graph "
             "tables are out of sync with the CSV"
         )
     for path, _, cell_problems in category_updates:
