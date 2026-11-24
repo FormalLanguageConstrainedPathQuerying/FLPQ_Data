@@ -302,6 +302,6 @@ convention-compliant names and re-uploads them (new SHA256s commented on
 - S1: [x]
 - S2: [x]
 - S3: [x]
-- S4: [ ]
+- S4: [x]
 - S5: [x]
 - S6: [x]

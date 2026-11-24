@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   They are one-way derivation aids — the RSM remains independently
   specifiable; the archive checker couples `.re` and `.rsm` files only at
   terminal-set consistency and regularity.
+- The `social_networks` graph category with two real-world graphs — the
+  first RPQ data in the dataset (#183, #187): `pokec` (1,632,803 nodes,
+  30,622,564 edges, 1 RPQ query) and `yago2s` (25,314,540 nodes, 77,869,864
+  edges, 39 RPQ queries). Both ship their queries as per-graph regular
+  expressions under `queries/rpq/` inside the graph archives.
 
 ### Changed
 
@@ -55,6 +60,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   omits the `Reachable pairs` column: when no single canonical grammar
   applies to the whole category (e.g. per-graph RPQ queries), the per-query
   counts live in the per-graph tables of the reachable-pairs page (#184).
+- The RPQ documentation describes per-graph queries instead of named
+  templates: an RPQ query is a regular expression in the dataset's canonical
+  syntax, stored per graph inside the graph archive under `queries/rpq/`
+  (#187).
+- `flpq-check-archive` now rejects query representation files not named
+  after their query directory (e.g. `queries/rpq/1/query.re` must be
+  `queries/rpq/1/1.re`); the convention was de-facto only before, and
+  misnamed files broke the CSV's `(graph, grammar)` uniqueness and the
+  per-query tables (#187).
+
+### Removed
+
+- The RPQ stub template pages (`reachability`, `label_star`) and the
+  "Query templates" section of the RPQ query page; the stubs are replaced
+  by the per-graph queries of the `social_networks` category (#187).
 
 ## [6.1.2] - 2026-10-28
 
