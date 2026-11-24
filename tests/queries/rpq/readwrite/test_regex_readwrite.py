@@ -1,4 +1,5 @@
 import os
+import re
 import tempfile
 
 import pytest
@@ -116,27 +117,28 @@ def test_round_trip(expression):
 
 
 @pytest.mark.parametrize(
-    "expression",
+    "expression, message",
     [
-        "",
-        "   ",
-        "(",
-        ")",
-        "a)",
-        "(a",
-        "|a",
-        "a|",
-        "a||b",
-        "*a",
-        "+a",
-        "a|*",
-        "a|+",
-        "(a|)",
-        "a (b",
+        ("", "the regular expression is empty"),
+        ("   ", "the regular expression is empty"),
+        ("(", "unexpected end of the expression"),
+        (")", "unexpected ')' with no term before it"),
+        ("a)", "unexpected ')' at the end of the expression"),
+        ("(a", "unclosed '(' in the expression"),
+        ("|a", "dangling '|' with no term before it"),
+        ("(|a)", "dangling '|' with no term before it"),
+        ("a|", "dangling '|' with no term after it"),
+        ("a||b", "consecutive '|' operators"),
+        ("*a", "dangling '*' with no operand before it"),
+        ("+a", "dangling '+' with no operand before it"),
+        ("a|*", "dangling '*' with no operand before it"),
+        ("a|+", "dangling '+' with no operand before it"),
+        ("(a|)", "dangling '|' with no term after it"),
+        ("a (b", "unclosed '(' in the expression"),
     ],
 )
-def test_regex_from_text_errors(expression):
-    with pytest.raises(ValueError, match=".*"):
+def test_regex_from_text_errors(expression, message):
+    with pytest.raises(ValueError, match=re.escape(message)):
         flpq_data.regex_from_text(expression)
 
 

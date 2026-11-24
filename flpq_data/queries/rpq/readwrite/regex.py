@@ -91,6 +91,8 @@ class _RegexParser:
             self._advance()
             if self._peek() in (None, ")"):
                 raise ValueError("dangling '|' with no term after it")
+            if self._peek() == "|":
+                raise ValueError("consecutive '|' operators")
             regex = regex.union(self._parse_term())
         return regex
 
@@ -103,7 +105,7 @@ class _RegexParser:
             if token is None:
                 raise ValueError("unexpected end of the expression")
             if token == "|":
-                raise ValueError("consecutive '|' operators")
+                raise ValueError("dangling '|' with no term before it")
             raise ValueError(f"unexpected {token!r} with no term before it")
         regex = factors[0]
         for factor in factors[1:]:
@@ -134,7 +136,7 @@ class _RegexParser:
         if token == "$":
             self._advance()
             return Regex("$")
-        if token in ("|", "*", "+", ")"):
+        if token in ("*", "+"):
             raise ValueError(f"dangling {token!r} with no operand before it")
         self._advance()
         return Regex(token)
