@@ -106,15 +106,24 @@ linkcheck_user_agent = (
     "(https://github.com/FormalLanguageConstrainedPathQuerying/FLPQ_Data)"
 )
 
-# linkcheck: skip exactly these two hosts. Both answer 403 to datacenter
-# clients (verified 2026-09: a browser User-Agent still gets 403, so the
-# blocking is IP-based) while the pages remain valid for human readers —
-# dl.acm.org hosts cited papers, dacapobench.sourceforge.net is the source
-# of the avrora graph. Re-verify with a residential connection before
-# removing an entry; every other URL is checked in full.
+# linkcheck: skip exactly these URLs. The first two are whole hosts that
+# answer 403 to datacenter clients (verified 2026-09: a browser User-Agent
+# still gets 403, so the blocking is IP-based) while the pages remain valid
+# for human readers — dl.acm.org hosts cited papers,
+# dacapobench.sourceforge.net is the source of the avrora graph. The third
+# pins one frozen Wayback Machine capture (timestamp 20160309143952) of the
+# removed eclass original: web.archive.org rate-limits datacenter IPs (429 /
+# connection refused) even with the descriptive User-Agent, sequential
+# workers, 5 retries, and the 120 s 429 back-off (verified 2026-11-14: the
+# master docs run exhausted ~4.5 min of back-off and still got 429;
+# 2026-11-24: a feature-branch run got a connection refusal), while the
+# capture remains valid for human readers (HTTP 200 from a residential
+# connection, verified 2026-11-24). Re-verify with a residential connection
+# before removing an entry; every other URL is checked in full.
 linkcheck_ignore = [
     r"https?://dl\.acm\.org/.*",
     r"https?://dacapobench\.sourceforge\.net.*",
+    r"https?://web\.archive\.org/web/20160309143952/http://ebusiness-unibw\.org/.*",
 ]
 
 # linkcheck: check URLs sequentially. Wikipedia rate-limits parallel requests
