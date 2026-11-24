@@ -57,9 +57,20 @@ Regular path queries
 RPQ constraints are regular languages over the graph's edge labels. The
 design decision for this class:
 
-- **Format.** An RPQ query is a regular expression in the pyformlang
-  ``Regex`` text syntax, stored as a ``.re`` file and read by
-  :obj:`regex_from_text <flpq_data.queries.rpq.readwrite.regex.regex_from_text>`.
+- **Format.** An RPQ query is a regular expression in the dataset's
+  canonical regular expression syntax, stored as a ``.re`` file and read by
+  :obj:`regex_from_text <flpq_data.queries.rpq.readwrite.regex.regex_from_text>`:
+
+  - a **symbol** is a maximal run of characters outside the metacharacter
+    set (an edge label or a nonterminal);
+  - **concatenation** is whitespace, **union** is ``|``, **grouping** is
+    parentheses;
+  - ``*`` and ``+`` are postfix Kleene star and Kleene plus (``X+`` is
+    sugar for ``X X*``);
+  - ``$`` is the empty word (epsilon).
+
+  Precedence: postfix operators > concatenation > union. The same syntax is
+  used for the EBNF-style RSM bodies (see :ref:`below <rsm_format>`).
 - **Templates.** As with CFG templates, an RPQ template is a named,
   parameterized regular expression instantiated per graph from its stored
   labels. The designed seed set consists of two canonical queries applicable
@@ -103,6 +114,8 @@ it to a CFG (each box state becomes a nonterminal, each transition a
 production). An RSM is therefore a valid alternative representation of a
 CFPQ query — and of an RPQ when it is regular: no box transition is labelled
 by a nonterminal.
+
+.. _rsm_format:
 
 Format
 ^^^^^^

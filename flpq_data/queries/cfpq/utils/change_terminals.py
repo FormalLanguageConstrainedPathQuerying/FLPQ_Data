@@ -115,7 +115,7 @@ def change_terminals_in_regex(regex: Regex, mapping: Dict[str, str]) -> Regex:
     >>> regex = regex_from_text("a (bc|d*)")
     >>> new_regex = change_terminals_in_regex(regex, {"a": "b", "b": "c"})
     >>> regex_to_text(new_regex)
-    '(b (cc|(d)*))'
+    'b (cc | d*)'
 
     Returns
     -------
