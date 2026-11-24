@@ -123,7 +123,10 @@ Format
 A ``.rsm`` file uses one of two description styles, selected automatically by
 :obj:`rsa_from_text <flpq_data.queries.rpq.readwrite.rsa.rsa_from_text>`:
 
-- **EBNF style** — one production per line; each production becomes one box::
+- **EBNF style** — one production per line; each production becomes one
+  box. The body ``E`` follows the canonical regular expression syntax of
+  the RPQ format (above), over terminals and nonterminals alike; an empty
+  body is the empty word (epsilon)::
 
     start: S
     S -> a* b S c
@@ -148,7 +151,11 @@ In both styles an optional ``start: <N>`` line names the start box (``S`` by
 default). Boxes are deterministic — a repeated ``(state, label)`` transition
 is an error. :obj:`rsa_to_text
 <flpq_data.queries.rpq.readwrite.rsa.rsa_to_text>` emits the EBNF style as the
-canonical form, so a transition-system file round-trips to EBNF-style text.
+canonical form — each body is the canonical regular expression of the box's
+language, and a ``start:`` line when the initial box is not the default
+``S`` — so a transition-system file round-trips to EBNF-style text and
+``rsa_from_text(rsa_to_text(rsa))`` preserves the language of every box and
+the initial box.
 
 Placement
 ^^^^^^^^^

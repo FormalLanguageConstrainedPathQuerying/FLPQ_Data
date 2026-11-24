@@ -1,4 +1,7 @@
+from typing import cast
+
 import pytest
+from pyformlang.cfg import Terminal
 
 import flpq_data
 
@@ -44,9 +47,9 @@ def test_rsa_from_text(grammar, expected):
 @pytest.mark.parametrize(
     "grammar, expected",
     [
-        (grammar_1, {"S -> ($.(a.b))"}),
-        (grammar_2, {"S -> ($.a)"}),
-        (grammar_3, {"S -> ($.(a|b))", "S -> ($.(b|a))"}),
+        (grammar_1, {"S -> ($ (a b))"}),
+        (grammar_2, {"S -> ($ a)"}),
+        (grammar_3, {"S -> ($ (a|b))", "S -> ($ (b|a))"}),
         (grammar_4, {"S -> $"}),
     ],
 )
@@ -56,6 +59,64 @@ def test_rsa_to_text(grammar, expected):
     actual = set(flpq_data.rsa_to_text(rsa).splitlines())
 
     assert actual.issubset(expected)
+
+
+def test_ebnf_body_plus_is_kleene_plus():
+    rsa = flpq_data.rsa_from_text("S -> a+")
+    cfg = flpq_data.cfg_from_rsa(rsa)
+
+    assert cfg.contains(cast("list[Terminal]", "a"))
+    assert cfg.contains(cast("list[Terminal]", "aaa"))
+    assert not cfg.contains(cast("list[Terminal]", ""))
+
+
+def test_empty_production_has_no_phantom_terminal():
+    rsa = flpq_data.rsa_from_text("S ->")
+    cfg = flpq_data.cfg_from_rsa(rsa)
+
+    assert cfg.contains(cast("list[Terminal]", ""))
+    assert cfg.terminals == set()
+
+
+def test_round_trip_non_default_start_box():
+    rsa = flpq_data.rsa_from_text("start: B\nB -> x\nS -> y")
+    canonical = flpq_data.rsa_to_text(rsa)
+
+    assert canonical.startswith("start: B")
+    rsa_2 = flpq_data.rsa_from_text(canonical)
+    assert rsa_2.initial_label.value == "B"
+
+
+def test_ebnf_undefined_start_box_raises():
+    with pytest.raises(ValueError, match="Start box"):
+        flpq_data.rsa_from_text("start: X\nS -> a")
+
+
+@pytest.mark.parametrize(
+    "grammar",
+    [
+        "S -> a*",
+        "S -> a+",
+        "S ->",
+        "S -> a | b",
+        "S -> (a | b)*",
+        "S -> a b c",
+        "S -> a* b S c",
+        "S -> (a S* b S*)*",
+        "S -> a+ | $",
+    ],
+)
+def test_rsa_to_text_round_trip_preserves_languages(grammar):
+    rsa = flpq_data.rsa_from_text(grammar)
+    canonical = flpq_data.rsa_to_text(rsa)
+    rsa_2 = flpq_data.rsa_from_text(canonical)
+
+    words = ["", "a", "b", "c", "aa", "ab", "abc", "aab", "aabb", "aaaa"]
+    for label in rsa.labels:
+        box_1 = rsa.get_box(label)
+        box_2 = rsa_2.get_box(label)
+        for word in words:
+            assert box_1.dfa.accepts(word) == box_2.dfa.accepts(word)
 
 
 @pytest.mark.parametrize(

@@ -14,12 +14,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a symbol is a maximal run of non-metacharacters, concatenation is
   whitespace, union is `|`, `*` and `+` are postfix Kleene star and Kleene
   plus (`X+` is sugar for `X X*`), `$` is the empty word, and grouping is
-  parentheses. Previously `+` was pyformlang's union operator, so a
-  contributor writing the standard `X+` silently got the union language;
+  parentheses. Previously `+` was pyformlang's union operator, so the
+  standard `X+` (Kleene-plus) was silently parsed as `X ∪ ε`;
   every existing dataset file parses to the same language as before.
   `regex_to_text` now emits this canonical form with minimal parentheses
   (idempotent, round-trips), and malformed expressions (unbalanced
   parentheses, dangling operators) are rejected with a clear error.
+- The EBNF-style RSM bodies (`.rsm` files) now follow the same canonical
+  regular expression syntax (#184): `+` is Kleene-plus (previously
+  pyformlang's union operator, so `B -> (x | y)+` silently meant
+  `(x | y) ∪ ε`), and an empty production is the empty word instead of the
+  phantom `epsilon` terminal. `rsa_to_text` now emits canonical bodies and
+  a `start:` line when the initial box is not the default `S`, so
+  `rsa_from_text(rsa_to_text(rsa))` preserves the language of every box and
+  the initial box (previously the round-trip failed for any RSM whose
+  initial box was not named `S`). The EBNF parser now rejects a `start:`
+  line naming a box without a production.
 
 ## [6.1.2] - 2026-10-28
 

@@ -6,16 +6,16 @@ import re
 from dataclasses import dataclass, field
 from typing import Optional, Union
 
-from pyformlang.cfg import Epsilon
 from pyformlang.finite_automaton import (
     EpsilonNFA,
     NondeterministicTransitionFunction,
     Symbol,
 )
 from pyformlang.finite_automaton.finite_automaton import to_state, to_symbol
-from pyformlang.regular_expression import Regex
 from pyformlang.rsa import Box
 from pyformlang.rsa import RecursiveAutomaton as RSA
+
+from flpq_data.queries.rpq.readwrite.regex import regex_from_text
 
 __all__ = [
     "rsa_from_text",
@@ -29,6 +29,9 @@ _START_RE = re.compile(r"^start:\s*(\S+)$")
 _FINAL_RE = re.compile(r"^final:\s*(.+)$")
 _TRANSITION_RE = re.compile(r"^(\S+)\s*--(.+?)-->\s*(\S+)$")
 
+#: The default name of the start box when no ``start:`` line is given.
+_DEFAULT_START = "S"
+
 
 def rsa_from_text(text: str, *, start_symbol: Symbol = Symbol("S")) -> RSA:
     """Create a Recursive State Automaton [1]_ from text.
@@ -36,8 +39,11 @@ def rsa_from_text(text: str, *, start_symbol: Symbol = Symbol("S")) -> RSA:
     The text uses one of two description styles, selected automatically:
 
     - EBNF style: one production per line, ``N -> E``, where ``E`` is a
-      regular expression over terminals and nonterminals; each production
-      becomes one box.
+      regular expression over terminals and nonterminals in the canonical
+      regular expression syntax of :func:`regex_from_text
+      <flpq_data.queries.rpq.readwrite.regex.regex_from_text>`; each
+      production becomes one box. An empty body is the empty word
+      (epsilon).
     - Transition-system style: explicit boxes as labelled graphs with start
       and final states (a ``[box <name>]`` section header selects this
       style).
@@ -59,6 +65,20 @@ def rsa_from_text(text: str, *, start_symbol: Symbol = Symbol("S")) -> RSA:
     >>> rsa = rsa_from_text("S -> a*")
     >>> cfg_to_text(cfg_from_rsa(rsa))
     'S -> \\nS -> a S'
+
+    ``+`` is Kleene-plus and an empty production is the empty word:
+
+    >>> rsa = rsa_from_text("S -> a+")
+    >>> cfg = cfg_from_rsa(rsa)
+    >>> cfg.contains("")
+    False
+    >>> cfg.contains("aa")
+    True
+    >>> rsa = rsa_from_text("S ->")
+    >>> cfg_from_rsa(rsa).contains("")
+    True
+    >>> cfg_from_rsa(rsa).terminals
+    set()
 
     >>> rsa = rsa_from_text(
     ...     "start: S\\n"
@@ -109,17 +129,20 @@ def rsa_from_text(text: str, *, start_symbol: Symbol = Symbol("S")) -> RSA:
         labels.add(to_symbol(head))
 
         if body == "":
-            body = Epsilon().to_text()
+            body = "$"
 
         if head in productions:
             productions[head] += " | " + body
         else:
             productions[head] = body
 
+    if start_symbol.value not in productions:
+        raise ValueError(f"Start box {start_symbol.value} is not defined")
+
     boxes = set()
 
     for head, body in productions.items():
-        nfa = Regex(body).to_epsilon_nfa()
+        nfa = regex_from_text(body).to_epsilon_nfa()
         if nfa is None:
             raise ValueError(f"Cannot build an epsilon NFA for {body=}")
         boxes.add(Box(nfa.minimize(), to_symbol(head)))
@@ -261,8 +284,26 @@ def _rsa_from_transition_system(text: str, start_symbol: Symbol) -> RSA:
     return rsa
 
 
+def _box_body(box: Box) -> str:
+    """The canonical regex body of a box (the language of its DFA).
+
+    pyformlang's ``to_regex()`` emits ``.`` for concatenation and ``$`` for
+    the empty word; the dot is an ordinary symbol character in the canonical
+    syntax, so it is replaced with whitespace (concatenation). Box names and
+    labels must therefore not contain ``.``.
+    """
+    return str(box.dfa.to_regex()).replace(".", " ")
+
+
 def rsa_to_text(rsa: RSA) -> str:
     """Turns a Recursive State Automaton [1]_ into its text representation.
+
+    The output uses the EBNF style with the productions sorted (the initial
+    box first, then alphabetically); each body is the canonical regular
+    expression of the box's language. A ``start: <N>`` line is emitted when
+    the initial box is not the default ``S``, so
+    ``rsa_from_text(rsa_to_text(rsa))`` preserves the language of every box
+    and the initial box.
 
     Parameters
     ----------
@@ -295,13 +336,18 @@ def rsa_to_text(rsa: RSA) -> str:
         box = rsa.get_box(symbol)
         if box is None:
             raise ValueError(f"RSA has no box for label {symbol.value}")
-        productions.append(f"{box.label.value} -> {box.dfa.to_regex()}")
+        productions.append(f"{box.label.value} -> {_box_body(box)}")
 
     productions.sort(
         key=lambda s: (s.split(" -> ")[0] != rsa.initial_label.value, s),
     )
 
-    text = "\n".join(productions)
+    lines = []
+    if rsa.initial_label.value != _DEFAULT_START:
+        lines.append(f"start: {rsa.initial_label.value}")
+    lines.extend(productions)
+
+    text = "\n".join(lines)
 
     logging.info(f"Turn {rsa=} into {text=}")
 
