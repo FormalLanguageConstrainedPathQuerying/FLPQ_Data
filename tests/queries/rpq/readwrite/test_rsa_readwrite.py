@@ -115,6 +115,7 @@ def test_rsa_to_text_round_trip_preserves_languages(grammar):
     for label in rsa.labels:
         box_1 = rsa.get_box(label)
         box_2 = rsa_2.get_box(label)
+        assert box_1 is not None and box_2 is not None
         for word in words:
             assert box_1.dfa.accepts(word) == box_2.dfa.accepts(word)
 
