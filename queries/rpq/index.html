@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RPQ &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>RPQ &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=10584ae1"></script>
+    <script src="../../_static/documentation_options.js?v=ee8dae47"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,12 +50,12 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'queries/rpq/index';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="../../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Label Star" href="data/label_star.html" />
+    <link rel="next" title="MCFPQ" href="../mcfpq/index.html" />
     <link rel="prev" title="Indexed Grammars" href="../cfpq/indexed_grammars.html" />
 <!-- Dataset metadata -->
 <script type="application/ld+json">
@@ -161,8 +161,8 @@
       
     
     
-    <img src="../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -385,11 +385,7 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../graphs/index.html">Graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cfpq/index.html">CFPQ</a></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">RPQ</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="data/label_star.html">Label Star</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data/reachability.html">Reachability</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">RPQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../mcfpq/index.html">MCFPQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reachable_pairs.html">Reachable Pair Counts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contributing_data.html">Contributing data</a></li>
@@ -458,49 +454,30 @@
 <span id="rpq-queries"></span><h1>RPQ<a class="headerlink" href="#rpq" title="Link to this heading">#</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>6.1.2</p>
+<dd class="field-odd"><p>6.2.0</p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Nov 24, 2026</p>
+<dd class="field-even"><p>Nov 25, 2026</p>
 </dd>
 </dl>
 <p>Regular path queries (RPQ) constrain the paths of a labeled graph by a
-regular language. A query is specified by a regular expression template
-instantiated per graph from its stored labels; an RPQ may also be represented
-by a regular RSM. The graph catalog is shared across all query classes — the
-“Applicable graphs” list below cross-links the per-graph pages without
-duplicating them.</p>
-<div class="toctree-wrapper compound">
-</div>
-<section id="query-templates">
-<h2>Query templates<a class="headerlink" href="#query-templates" title="Link to this heading">#</a></h2>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Template</p></th>
-<th class="head"><p>Class</p></th>
-<th class="head"><p>Kind</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="data/reachability.html#reachability"><span class="std std-ref">Reachability</span></a></p></td>
-<td><p>Regular</p></td>
-<td><p>General</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="data/label_star.html#label-star"><span class="std std-ref">Label Star</span></a></p></td>
-<td><p>Regular</p></td>
-<td><p>General</p></td>
-</tr>
-</tbody>
-</table>
-<p>Both templates are designed stubs: no real-world RPQ data exists yet. When the
-data is provided, a query lives inside the self-contained graph archive under
-<code class="docutils literal notranslate"><span class="pre">queries/rpq/</span></code> (see <a class="reference internal" href="../../file_structure.html#file-structure"><span class="std std-ref">File structure</span></a>).</p>
-</section>
+regular language. Unlike CFPQ, RPQ has no named, parameterized templates: an
+RPQ query is a regular expression in the dataset’s canonical syntax, stored
+per graph inside the self-contained graph archive under <code class="docutils literal notranslate"><span class="pre">queries/rpq/</span></code> (see
+<a class="reference internal" href="../../file_structure.html#file-structure"><span class="std std-ref">File structure</span></a>); an RPQ may also be represented by a regular RSM. The
+graph catalog is shared across all query classes — the “Applicable graphs”
+list below cross-links the per-graph pages without duplicating them.</p>
 <section id="applicable-graphs">
 <h2>Applicable graphs<a class="headerlink" href="#applicable-graphs" title="Link to this heading">#</a></h2>
 <p>Graphs from the shared <a class="reference internal" href="../../graphs/index.html#graphs"><span class="std std-ref">catalog</span></a> that carry at least one RPQ
 query.</p>
-<p>No RPQ queries have been added to the graph catalog yet.</p>
+<section id="social-networks">
+<h3>Social Networks<a class="headerlink" href="#social-networks" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../graphs/data/pokec.html#pokec"><span class="std std-ref">pokec</span></a></p></li>
+<li><p><a class="reference internal" href="../../graphs/data/yago2s.html#yago2s"><span class="std std-ref">yago2s</span></a></p></li>
+</ul>
+</section>
 </section>
 </section>
 
@@ -527,8 +504,10 @@ query.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#query-templates">Query templates</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applicable-graphs">Applicable graphs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applicable-graphs">Applicable graphs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#social-networks">Social Networks</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

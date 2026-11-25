@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>flpq_data.graphs.readwrite.mtx &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>flpq_data.graphs.readwrite.mtx &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../_static/documentation_options.js?v=10584ae1"></script>
+    <script src="../../../_static/documentation_options.js?v=ee8dae47"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,7 +50,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/graphs/generated/flpq_data.graphs.readwrite.mtx';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="../../../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -161,8 +161,8 @@
       
     
     
-    <img src="../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -483,11 +483,17 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_dir" title="flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_edges_from_mtx_dir</span></code></a>(path)</p></td>
 <td><p>Yields the edges of a directory of MatrixMarket files as a stream.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#flpq_data.graphs.readwrite.mtx.label_to_filename" title="flpq_data.graphs.readwrite.mtx.label_to_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_to_filename</span></code></a>(label)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_file" title="flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_edges_from_mtx_file</span></code></a>(path)</p></td>
+<td><p>Yields the entries of one Boolean MatrixMarket file as a stream.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#flpq_data.graphs.readwrite.mtx.label_to_filename" title="flpq_data.graphs.readwrite.mtx.label_to_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_to_filename</span></code></a>(label)</p></td>
 <td><p>Returns the canonical MatrixMarket file name of an edge label.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#flpq_data.graphs.readwrite.mtx.mtx_dir_from_edges" title="flpq_data.graphs.readwrite.mtx.mtx_dir_from_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mtx_dir_from_edges</span></code></a>(edges, path, *[, dimension])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#flpq_data.graphs.readwrite.mtx.mtx_dir_from_edges" title="flpq_data.graphs.readwrite.mtx.mtx_dir_from_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mtx_dir_from_edges</span></code></a>(edges, path, *[, dimension])</p></td>
 <td><p>Writes an edge stream to a directory of MatrixMarket files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#flpq_data.graphs.readwrite.mtx.mtx_file_header" title="flpq_data.graphs.readwrite.mtx.mtx_file_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mtx_file_header</span></code></a>(path)</p></td>
+<td><p>The <code class="docutils literal notranslate"><span class="pre">(rows,</span> <span class="pre">cols,</span> <span class="pre">nnz)</span></code> declared by one Boolean MatrixMarket file.</p></td>
 </tr>
 </tbody>
 </table>
@@ -651,6 +657,49 @@ the declared nnz.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_file">
+<span class="sig-name descname"><span class="pre">iter_edges_from_mtx_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.15)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.15)"><span class="pre">Iterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/flpq_data/graphs/readwrite/mtx.html#iter_edges_from_mtx_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_file" title="Link to this definition">#</a></dt>
+<dd><p>Yields the entries of one Boolean MatrixMarket file as a stream.</p>
+<p>The file must follow the dataset format: a two-line header
+(<code class="docutils literal notranslate"><span class="pre">%%MatrixMarket</span> <span class="pre">matrix</span> <span class="pre">coordinate</span> <span class="pre">pattern</span> <span class="pre">general</span></code> /
+<code class="docutils literal notranslate"><span class="pre">%%GraphBLAS</span> <span class="pre">type</span> <span class="pre">bool</span></code>), a dimension line (<code class="docutils literal notranslate"><span class="pre">rows</span> <span class="pre">cols</span> <span class="pre">nnz</span></code>), and one
+<code class="docutils literal notranslate"><span class="pre">u</span> <span class="pre">v</span></code> entry per line (0-based indices, no values). The file is read line
+by line, so the memory stays O(1) in the number of entries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path</strong><span class="classifier">Union[Path, str]</span></dt><dd><p>The path to the MatrixMarket file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>entries</strong><span class="classifier">Iterator[Tuple[int, int]]</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">(u,</span> <span class="pre">v)</span></code> entry tuples in file order.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the file has an unexpected header, a malformed entry line, or its
+entry count differs from the declared nnz.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span><span class="o">,</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">())</span> <span class="o">/</span> <span class="s2">"a.mtx"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">"</span><span class="si">%%</span><span class="s2">MatrixMarket matrix coordinate pattern general</span><span class="se">\n</span><span class="s2">"</span>
+<span class="gp">... </span>    <span class="s2">"</span><span class="si">%%</span><span class="s2">GraphBLAS type bool</span><span class="se">\n</span><span class="s2">3 3 2</span><span class="se">\n</span><span class="s2">0 1</span><span class="se">\n</span><span class="s2">1 2</span><span class="se">\n</span><span class="s2">"</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iter_edges_from_mtx_file</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+<span class="go">[(0, 1), (1, 2)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="flpq_data.graphs.readwrite.mtx.label_to_filename">
 <span class="sig-name descname"><span class="pre">label_to_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../_modules/flpq_data/graphs/readwrite/mtx.html#label_to_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flpq_data.graphs.readwrite.mtx.label_to_filename" title="Link to this definition">#</a></dt>
 <dd><p>Returns the canonical MatrixMarket file name of an edge label.</p>
@@ -731,6 +780,44 @@ plus one.</p>
 </div>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="flpq_data.graphs.readwrite.mtx.mtx_file_header">
+<span class="sig-name descname"><span class="pre">mtx_file_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.15)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/flpq_data/graphs/readwrite/mtx.html#mtx_file_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flpq_data.graphs.readwrite.mtx.mtx_file_header" title="Link to this definition">#</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">(rows,</span> <span class="pre">cols,</span> <span class="pre">nnz)</span></code> declared by one Boolean MatrixMarket file.</p>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> when the file does not follow the dataset format (the
+two-line header and a dimension line of three integers). Streams — only
+the first lines are read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path</strong><span class="classifier">Union[Path, str]</span></dt><dd><p>The path to the MatrixMarket file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>header</strong><span class="classifier">Optional[Tuple[int, int, int]]</span></dt><dd><p>The declared <code class="docutils literal notranslate"><span class="pre">(rows,</span> <span class="pre">cols,</span> <span class="pre">nnz)</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the header does not
+match the dataset format.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span><span class="o">,</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">())</span> <span class="o">/</span> <span class="s2">"a.mtx"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">"</span><span class="si">%%</span><span class="s2">MatrixMarket matrix coordinate pattern general</span><span class="se">\n</span><span class="s2">"</span>
+<span class="gp">... </span>    <span class="s2">"</span><span class="si">%%</span><span class="s2">GraphBLAS type bool</span><span class="se">\n</span><span class="s2">3 3 2</span><span class="se">\n</span><span class="s2">0 1</span><span class="se">\n</span><span class="s2">1 2</span><span class="se">\n</span><span class="s2">"</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mtx_file_header</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="go">(3, 3, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"</span><span class="si">%%</span><span class="s2">MatrixMarket matrix coordinate real</span><span class="se">\n</span><span class="s2">1 1 0</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mtx_file_header</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 
 
@@ -760,8 +847,10 @@ plus one.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flpq_data.graphs.readwrite.mtx.graph_from_mtx_dir"><code class="docutils literal notranslate"><span class="pre">graph_from_mtx_dir()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flpq_data.graphs.readwrite.mtx.graph_to_mtx_dir"><code class="docutils literal notranslate"><span class="pre">graph_to_mtx_dir()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_dir"><code class="docutils literal notranslate"><span class="pre">iter_edges_from_mtx_dir()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_file"><code class="docutils literal notranslate"><span class="pre">iter_edges_from_mtx_file()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flpq_data.graphs.readwrite.mtx.label_to_filename"><code class="docutils literal notranslate"><span class="pre">label_to_filename()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flpq_data.graphs.readwrite.mtx.mtx_dir_from_edges"><code class="docutils literal notranslate"><span class="pre">mtx_dir_from_edges()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flpq_data.graphs.readwrite.mtx.mtx_file_header"><code class="docutils literal notranslate"><span class="pre">mtx_file_header()</span></code></a></li>
 </ul>
   </nav></div>
 

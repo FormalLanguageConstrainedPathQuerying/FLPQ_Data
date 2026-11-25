@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>flpq_data.tools.check_archive_structure &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>flpq_data.tools.check_archive_structure &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../_static/documentation_options.js?v=10584ae1"></script>
+    <script src="../../../_static/documentation_options.js?v=ee8dae47"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/flpq_data/tools/check_archive_structure';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="../../../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -158,8 +158,8 @@
       
     
     
-    <img src="../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -456,13 +456,17 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.regular_expression</span><span class="w"> </span><span class="kn">import</span> <span class="n">Regex</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.rsa</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecursiveAutomaton</span> <span class="k">as</span> <span class="n">RSA</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">flpq_data.graphs.readwrite.mtx</span><span class="w"> </span><span class="kn">import</span> <span class="n">_MTX_HEADER</span><span class="p">,</span> <span class="n">graph_from_mtx_dir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flpq_data.graphs.readwrite.mtx</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">iter_edges_from_mtx_dir</span><span class="p">,</span>
+    <span class="n">iter_edges_from_mtx_file</span><span class="p">,</span>
+    <span class="n">mtx_file_header</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">flpq_data.queries.cfpq.converters.cfg</span><span class="w"> </span><span class="kn">import</span> <span class="n">cfg_from_rsa</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">flpq_data.queries.cfpq.readwrite.cnf_template</span><span class="w"> </span><span class="kn">import</span> <span class="n">cnf_template_from_text</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">flpq_data.queries.mcfpq.readwrite.mcfg</span><span class="w"> </span><span class="kn">import</span> <span class="n">mcfg_from_text</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flpq_data.queries.rpq.readwrite.regex</span><span class="w"> </span><span class="kn">import</span> <span class="n">regex_from_text</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">flpq_data.queries.rpq.readwrite.rsa</span><span class="w"> </span><span class="kn">import</span> <span class="n">rsa_from_text</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -520,7 +524,7 @@
         <span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg_from_rsa</span><span class="p">(</span><span class="n">rsa</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">symbol</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">terminals</span><span class="p">}</span>
     <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">".re"</span><span class="p">:</span>
-        <span class="n">regex</span> <span class="o">=</span> <span class="n">Regex</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">regex_from_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="n">nfa</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">to_epsilon_nfa</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">nfa</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
@@ -651,6 +655,11 @@
             <span class="p">)</span>
             <span class="k">continue</span>
         <span class="n">has_representation</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">stem</span> <span class="o">!=</span> <span class="n">query_dir</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: representation files must be named after "</span>
+                <span class="sa">f</span><span class="s2">"the query directory (expected </span><span class="si">{</span><span class="n">query_dir</span><span class="o">.</span><span class="n">name</span><span class="si">}{</span><span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="si">}</span><span class="s2">)"</span>
+            <span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">has_representation</span><span class="p">:</span>
         <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">/: no </span><span class="si">{</span><span class="bp">cls</span><span class="si">}</span><span class="s2"> representation file (</span><span class="si">{</span><span class="s1">' or '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exts</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">query_dir</span> <span class="o">/</span> <span class="s2">"results.mtx"</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
@@ -658,46 +667,11 @@
     <span class="k">return</span> <span class="n">problems</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_mtx_header</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">"""The (rows, cols, nnz) declared by one Boolean MatrixMarket file.</span>
-
-<span class="sd">    Returns None when the file does not follow the dataset format (the</span>
-<span class="sd">    two-line header and a dimension line). Streams — only the first lines</span>
-<span class="sd">    are read.</span>
-<span class="sd">    """</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">!=</span> <span class="n">_MTX_HEADER</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="k">return</span> <span class="kc">None</span>
-            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">!=</span> <span class="n">_MTX_HEADER</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="k">return</span> <span class="kc">None</span>
-            <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">None</span>
-    <span class="k">return</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_mtx_entries</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Yields the (tail, head) entry pairs of one Boolean MatrixMarket file,</span>
-<span class="sd">    streaming line by line (O(1) memory).</span>
-
-<span class="sd">    Raises ValueError on a malformed entry line.</span>
-<span class="sd">    """</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>  <span class="c1"># the two header lines and the dimension line</span>
-            <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
-                <span class="k">continue</span>
-            <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-            <span class="k">yield</span> <span class="nb">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
-
 <span class="k">def</span><span class="w"> </span><span class="nf">_graph_dimensions</span><span class="p">(</span><span class="n">graph_dir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">"""The declared dimensions of every parseable graph label matrix."""</span>
     <span class="n">dimensions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">mtx_file</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">graph_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.mtx"</span><span class="p">)):</span>
-        <span class="n">header</span> <span class="o">=</span> <span class="n">_mtx_header</span><span class="p">(</span><span class="n">mtx_file</span><span class="p">)</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">mtx_file_header</span><span class="p">(</span><span class="n">mtx_file</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dimensions</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">header</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="k">return</span> <span class="n">dimensions</span>
@@ -707,14 +681,12 @@
 <span class="w">    </span><span class="sd">"""Check that edge endpoints fit the declared matrix dimensions."""</span>
     <span class="n">problems</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">mtx_file</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">graph_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.mtx"</span><span class="p">)):</span>
-        <span class="n">header</span> <span class="o">=</span> <span class="n">_mtx_header</span><span class="p">(</span><span class="n">mtx_file</span><span class="p">)</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">mtx_file_header</span><span class="p">(</span><span class="n">mtx_file</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">continue</span>  <span class="c1"># a format problem graph_from_mtx_dir already reports</span>
-        <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span> <span class="o">=</span> <span class="n">header</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">continue</span>  <span class="c1"># a format problem the streaming format check already reports</span>
+        <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">header</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">_mtx_entries</span><span class="p">(</span><span class="n">mtx_file</span><span class="p">):</span>
-                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">iter_edges_from_mtx_file</span><span class="p">(</span><span class="n">mtx_file</span><span class="p">):</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tail</span> <span class="o">&lt;</span> <span class="n">rows</span> <span class="ow">or</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">head</span> <span class="o">&lt;</span> <span class="n">cols</span><span class="p">:</span>
                     <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">"graph/</span><span class="si">{</span><span class="n">mtx_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: edge (</span><span class="si">{</span><span class="n">tail</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">head</span><span class="si">}</span><span class="s2">) is outside "</span>
@@ -722,9 +694,7 @@
                     <span class="p">)</span>
                     <span class="k">break</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="k">continue</span>  <span class="c1"># a format problem graph_from_mtx_dir already reports</span>
-        <span class="k">if</span> <span class="n">count</span> <span class="o">!=</span> <span class="n">nnz</span><span class="p">:</span>
-            <span class="k">continue</span>  <span class="c1"># a format problem graph_from_mtx_dir already reports</span>
+            <span class="k">continue</span>  <span class="c1"># a format problem the streaming format check already reports</span>
     <span class="n">dimensions</span> <span class="o">=</span> <span class="n">_graph_dimensions</span><span class="p">(</span><span class="n">graph_dir</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dimensions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -883,38 +853,31 @@
                 <span class="k">continue</span>
             <span class="n">results</span> <span class="o">=</span> <span class="n">query_dir</span> <span class="o">/</span> <span class="s2">"results.mtx"</span>
             <span class="n">rel</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"queries/</span><span class="si">{</span><span class="bp">cls</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">query_dir</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/results.mtx"</span>
-            <span class="n">header</span> <span class="o">=</span> <span class="n">_mtx_header</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">mtx_file_header</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">: cannot be parsed as a Boolean MatrixMarket file"</span>
                 <span class="p">)</span>
                 <span class="k">continue</span>
-            <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span> <span class="o">=</span> <span class="n">header</span>
+            <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">header</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">:</span>
                 <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">: must be a </span><span class="si">{</span><span class="n">expected</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">expected</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> matrix "</span>
                     <span class="sa">f</span><span class="s2">"(the graph declares </span><span class="si">{</span><span class="n">expected</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">expected</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span>
                 <span class="p">)</span>
                 <span class="k">continue</span>
-            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">_mtx_entries</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
-                    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">iter_edges_from_mtx_file</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">tail</span> <span class="o">&lt;</span> <span class="n">rows</span> <span class="ow">or</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">head</span> <span class="o">&lt;</span> <span class="n">cols</span><span class="p">:</span>
                         <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                             <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">: entry (</span><span class="si">{</span><span class="n">tail</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">head</span><span class="si">}</span><span class="s2">) is outside the "</span>
                             <span class="sa">f</span><span class="s2">"declared </span><span class="si">{</span><span class="n">rows</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">cols</span><span class="si">}</span><span class="s2"> matrix"</span>
                         <span class="p">)</span>
-                        <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
                         <span class="k">break</span>
             <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
                 <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">: cannot be parsed as a Boolean MatrixMarket file"</span>
                 <span class="p">)</span>
-                <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">done</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">!=</span> <span class="n">nnz</span><span class="p">:</span>
-                <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">: declares </span><span class="si">{</span><span class="n">nnz</span><span class="si">}</span><span class="s2"> entries but has </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">problems</span>
 
 
@@ -1030,7 +993,10 @@
     <span class="k">if</span> <span class="n">problems</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">problems</span>  <span class="c1"># the deeper checks are meaningless without the skeleton</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">graph_from_mtx_dir</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"graph"</span><span class="p">)</span>
+        <span class="c1"># Fully consume the stream so the per-file nnz check fires; the</span>
+        <span class="c1"># edges themselves are discarded (only the parse errors matter).</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">iter_edges_from_mtx_dir</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"graph"</span><span class="p">):</span>
+            <span class="k">pass</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
         <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"graph/: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">problems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_mtx_range_problems</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"graph"</span><span class="p">))</span>

@@ -2,11 +2,11 @@
 #
 # Release
 #
-# :   6.1.2
+# :   6.2.0
 #
 # Date
 #
-# :   Nov 24, 2026
+# :   Nov 25, 2026
 #
 # This guide can help you start working with FLPQ_Data.
 #

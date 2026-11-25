@@ -1,0 +1,1019 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>yago2s &#8212; FLPQ_Data 6.2.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d9aafeaa" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/copybutton.css?v=b2a5787b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/about.css?v=48cf5573" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=fdb814aa" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../../_static/documentation_options.js?v=ee8dae47"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'graphs/data/yago2s';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within FLPQ_Data 6.2.0 documentation"
+          href="../../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CFPQ" href="../../queries/cfpq/index.html" />
+    <link rel="prev" title="pokec" href="pokec.html" />
+<!-- Dataset metadata -->
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org/",
+        "@type": "Dataset",
+        "name": "FLPQ_Data",
+        "description": "Dataset contains graphs and grammars for Formal Language constrained Path-Querying algorithms evaluation.",
+        "keywords": [
+            "GRAPHS",
+            "GRAMMARS",
+            "FORMAL-LANGUAGE",
+            "PATH-QUERY"
+        ],
+        "creator": [
+            {
+                "@type": "Organization",
+                "url": "https://spbu.ru/",
+                "name": "Saint Petersburg State University"
+            }
+        ],
+        "license": "https://www.apache.org/licenses/LICENSE-2.0",
+        "hasPart": [
+            {
+                "@type": "Dataset",
+                "name": "Geospecies knowledge database",
+                "description": "Graph related to taxonomic hierarchy and geographical information of animal species",
+                "license": "http://creativecommons.org/licenses/by-sa/3.0/us/"
+            },
+            {
+                "@type": "Dataset",
+                "name": "UniProt databases",
+                "description": "Core and supporting datasets from UniProt protein sequences databases",
+                "license": "http://creativecommons.org/licenses/by/4.0/"
+            }
+        ]
+    }
+</script>
+<!-- End of the dataset metadata -->
+
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../flpq.html">
+    FLPQ: Formal-Language-Constrained Path Querying
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../dataset.html">
+    Dataset
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../project.html">
+    Project
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/FormalLanguageConstrainedPathQuerying/FLPQ_Data" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/flpq-data/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-box fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../flpq.html">
+    FLPQ: Formal-Language-Constrained Path Querying
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../dataset.html">
+    Dataset
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../project.html">
+    Project
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/FormalLanguageConstrainedPathQuerying/FLPQ_Data" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fab fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/flpq-data/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-box fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Graphs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../c_alias_analysis.html">C alias analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rdf.html">RDF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../java_points_to.html">Java points-to graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../field_sensitive_alias.html">Field-Sensitive Alias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../context_sensitive_data_flow.html">Context-Sensitive Data-Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_provenance.html">Data Provenance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../name_resolution.html">Name Resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../biological_uniprot.html">Biological graphs from UniProt</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../social_networks.html">Social Networks</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pokec.html">pokec</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">yago2s</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../queries/cfpq/index.html">CFPQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../queries/rpq/index.html">RPQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../queries/mcfpq/index.html">MCFPQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reachable_pairs.html">Reachable Pair Counts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing_data.html">Contributing data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../file_structure.html">File structure</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../dataset.html" class="nav-link">Dataset</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Graphs</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../social_networks.html" class="nav-link">Social Networks</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">yago2s</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="yago2s">
+<span id="id1"></span><h1><a class="toc-backref" href="#id3" role="doc-backlink">yago2s</a><a class="headerlink" href="#yago2s" title="Link to this heading">#</a></h1>
+<nav class="contents" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#yago2s" id="id3">yago2s</a></p>
+<ul>
+<li><p><a class="reference internal" href="#info" id="id4">Info</a></p></li>
+<li><p><a class="reference internal" href="#graph-statistics" id="id5">Graph Statistics</a></p></li>
+<li><p><a class="reference internal" href="#edges-statistics" id="id6">Edges Statistics</a></p></li>
+<li><p><a class="reference internal" href="#queries" id="id7">Queries</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="info">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Info</a><a class="headerlink" href="#info" title="Link to this heading">#</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Full Name</p></td>
+<td><p>yago2s</p></td>
+</tr>
+<tr class="row-odd"><td><p>Direct download</p></td>
+<td><p><a class="reference external" href="https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/yago2s.tar.gz">.tar.gz</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Source</p></td>
+<td><p><a class="reference external" href="https://yago-knowledge.org/downloads/yago-2s">YAGO2s</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="graph-statistics">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Graph Statistics</a><a class="headerlink" href="#graph-statistics" title="Link to this heading">#</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Num Nodes</p></th>
+<th class="head"><p>Num Edges</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>25314540</p></td>
+<td><p>77869864</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="edges-statistics">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Edges Statistics</a><a class="headerlink" href="#edges-statistics" title="Link to this heading">#</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Edge Label</p></th>
+<th class="head"><p>Num Edge Label</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>linksTo</p></td>
+<td><p>38041748</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasLongitude</p></td>
+<td><p>7466181</p></td>
+</tr>
+<tr class="row-even"><td><p>hasLatitude</p></td>
+<td><p>7460415</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasGeonamesEntityId</p></td>
+<td><p>7267069</p></td>
+</tr>
+<tr class="row-even"><td><p>isPreferredMeaningOf</p></td>
+<td><p>2970027</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasWikipediaArticleLength</p></td>
+<td><p>2886875</p></td>
+</tr>
+<tr class="row-even"><td><p>hasWikipediaUrl</p></td>
+<td><p>2886312</p></td>
+</tr>
+<tr class="row-odd"><td><p>isLocatedIn</p></td>
+<td><p>1250704</p></td>
+</tr>
+<tr class="row-even"><td><p>hasGender</p></td>
+<td><p>923364</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasFamilyName</p></td>
+<td><p>838669</p></td>
+</tr>
+<tr class="row-even"><td><p>hasGivenName</p></td>
+<td><p>827681</p></td>
+</tr>
+<tr class="row-odd"><td><p>wasBornOnDate</p></td>
+<td><p>805590</p></td>
+</tr>
+<tr class="row-even"><td><p>wasCreatedOnDate</p></td>
+<td><p>722610</p></td>
+</tr>
+<tr class="row-odd"><td><p>isAffiliatedTo</p></td>
+<td><p>493085</p></td>
+</tr>
+<tr class="row-even"><td><p>playsFor</p></td>
+<td><p>409703</p></td>
+</tr>
+<tr class="row-odd"><td><p>diedOnDate</p></td>
+<td><p>361932</p></td>
+</tr>
+<tr class="row-even"><td><p>created</p></td>
+<td><p>277069</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasNumberOfPeople</p></td>
+<td><p>230745</p></td>
+</tr>
+<tr class="row-even"><td><p>hasWebsite</p></td>
+<td><p>226391</p></td>
+</tr>
+<tr class="row-odd"><td><p>wasBornIn</p></td>
+<td><p>189199</p></td>
+</tr>
+<tr class="row-even"><td><p>hasArea</p></td>
+<td><p>129920</p></td>
+</tr>
+<tr class="row-odd"><td><p>actedIn</p></td>
+<td><p>127502</p></td>
+</tr>
+<tr class="row-even"><td><p>hasWordnetDomain</p></td>
+<td><p>87104</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasWonPrize</p></td>
+<td><p>72829</p></td>
+</tr>
+<tr class="row-even"><td><p>hasGloss</p></td>
+<td><p>69598</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasSynsetId</p></td>
+<td><p>68862</p></td>
+</tr>
+<tr class="row-even"><td><p>hasDuration</p></td>
+<td><p>54741</p></td>
+</tr>
+<tr class="row-odd"><td><p>diedIn</p></td>
+<td><p>54171</p></td>
+</tr>
+<tr class="row-even"><td><p>hasHeight</p></td>
+<td><p>50863</p></td>
+</tr>
+<tr class="row-odd"><td><p>isCitizenOf</p></td>
+<td><p>46015</p></td>
+</tr>
+<tr class="row-even"><td><p>wasDestroyedOnDate</p></td>
+<td><p>43975</p></td>
+</tr>
+<tr class="row-odd"><td><p>directed</p></td>
+<td><p>41777</p></td>
+</tr>
+<tr class="row-even"><td><p>hasPopulationDensity</p></td>
+<td><p>39408</p></td>
+</tr>
+<tr class="row-odd"><td><p>livesIn</p></td>
+<td><p>33610</p></td>
+</tr>
+<tr class="row-even"><td><p>isConnectedTo</p></td>
+<td><p>33581</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasMusicalRole</p></td>
+<td><p>32681</p></td>
+</tr>
+<tr class="row-even"><td><p>graduatedFrom</p></td>
+<td><p>30388</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasMotto</p></td>
+<td><p>27642</p></td>
+</tr>
+<tr class="row-even"><td><p>happenedOnDate</p></td>
+<td><p>27408</p></td>
+</tr>
+<tr class="row-odd"><td><p>owns</p></td>
+<td><p>26540</p></td>
+</tr>
+<tr class="row-even"><td><p>influences</p></td>
+<td><p>25819</p></td>
+</tr>
+<tr class="row-odd"><td><p>isMarriedTo</p></td>
+<td><p>25304</p></td>
+</tr>
+<tr class="row-even"><td><p>wroteMusicFor</p></td>
+<td><p>24273</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasWeight</p></td>
+<td><p>21256</p></td>
+</tr>
+<tr class="row-even"><td><p>hasChild</p></td>
+<td><p>17320</p></td>
+</tr>
+<tr class="row-odd"><td><p>participatedIn</p></td>
+<td><p>16809</p></td>
+</tr>
+<tr class="row-even"><td><p>hasPages</p></td>
+<td><p>15616</p></td>
+</tr>
+<tr class="row-odd"><td><p>happenedIn</p></td>
+<td><p>12500</p></td>
+</tr>
+<tr class="row-even"><td><p>hasISBN</p></td>
+<td><p>10917</p></td>
+</tr>
+<tr class="row-odd"><td><p>isLeaderOf</p></td>
+<td><p>10695</p></td>
+</tr>
+<tr class="row-even"><td><p>hasLength</p></td>
+<td><p>9010</p></td>
+</tr>
+<tr class="row-odd"><td><p>holdsPoliticalPosition</p></td>
+<td><p>6018</p></td>
+</tr>
+<tr class="row-even"><td><p>edited</p></td>
+<td><p>5946</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasAirportCode</p></td>
+<td><p>5714</p></td>
+</tr>
+<tr class="row-even"><td><p>worksAt</p></td>
+<td><p>5134</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasRevenue</p></td>
+<td><p>4114</p></td>
+</tr>
+<tr class="row-even"><td><p>isPoliticianOf</p></td>
+<td><p>3751</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasAcademicAdvisor</p></td>
+<td><p>3238</p></td>
+</tr>
+<tr class="row-even"><td><p>hasThreeLetterLanguageCode</p></td>
+<td><p>2574</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasCapital</p></td>
+<td><p>1937</p></td>
+</tr>
+<tr class="row-even"><td><p>hasOfficialLanguage</p></td>
+<td><p>964</p></td>
+</tr>
+<tr class="row-odd"><td><p>dealsWith</p></td>
+<td><p>945</p></td>
+</tr>
+<tr class="row-even"><td><p>hasBudget</p></td>
+<td><p>717</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasGeonamesClassId</p></td>
+<td><p>672</p></td>
+</tr>
+<tr class="row-even"><td><p>hasCurrency</p></td>
+<td><p>640</p></td>
+</tr>
+<tr class="row-odd"><td><p>exports</p></td>
+<td><p>579</p></td>
+</tr>
+<tr class="row-even"><td><p>isKnownFor</p></td>
+<td><p>500</p></td>
+</tr>
+<tr class="row-odd"><td><p>isInterestedIn</p></td>
+<td><p>464</p></td>
+</tr>
+<tr class="row-even"><td><p>imports</p></td>
+<td><p>391</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasTLD</p></td>
+<td><p>270</p></td>
+</tr>
+<tr class="row-even"><td><p>hasGDP</p></td>
+<td><p>241</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasExport</p></td>
+<td><p>175</p></td>
+</tr>
+<tr class="row-even"><td><p>hasExpenses</p></td>
+<td><p>174</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasImport</p></td>
+<td><p>172</p></td>
+</tr>
+<tr class="row-even"><td><p>hasLanguageCode</p></td>
+<td><p>156</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasInflation</p></td>
+<td><p>155</p></td>
+</tr>
+<tr class="row-even"><td><p>hasUnemployment</p></td>
+<td><p>145</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasEconomicGrowth</p></td>
+<td><p>141</p></td>
+</tr>
+<tr class="row-even"><td><p>hasGini</p></td>
+<td><p>130</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasNumber</p></td>
+<td><p>104</p></td>
+</tr>
+<tr class="row-even"><td><p>hasPoverty</p></td>
+<td><p>84</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasConfidence</p></td>
+<td><p>80</p></td>
+</tr>
+<tr class="row-even"><td><p>hasImdb</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-odd"><td><p>occursSince</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-even"><td><p>startedOnDate</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-odd"><td><p>occursUntil</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-even"><td><p>endedOnDate</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>hasNumberOfThings</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="queries">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Queries</a><a class="headerlink" href="#queries" title="Link to this heading">#</a></h2>
+<table class="docutils align-left">
+<thead>
+<tr class="row-odd"><th class="head"><p>Query</p></th>
+<th class="head"><p>Language</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isMarriedTo</span> <span class="pre">livesIn</span> <span class="pre">isLocatedIn</span> <span class="pre">isLocatedIn*</span> <span class="pre">dealsWith</span> <span class="pre">dealsWith*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">happenedIn</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">created</span> <span class="pre">created*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">happenedIn</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">owns</span> <span class="pre">owns*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">happenedIn</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">participatedIn</span> <span class="pre">participatedIn*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">happenedIn</span> <span class="pre">dealsWith</span> <span class="pre">dealsWith*</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/6</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isCitizenOf</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">created</span> <span class="pre">created*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/7</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isCitizenOf</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">owns</span> <span class="pre">owns*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isCitizenOf</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">participatedIn</span> <span class="pre">participatedIn*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isCitizenOf</span> <span class="pre">dealsWith</span> <span class="pre">dealsWith*</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/10</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isLocatedIn</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">created</span> <span class="pre">created*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/11</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isLocatedIn</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">owns</span> <span class="pre">owns*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/12</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isLocatedIn</span> <span class="pre">dealsWith</span> <span class="pre">dealsWith*</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/13</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isPoliticianOf</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">created</span> <span class="pre">created*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/14</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isPoliticianOf</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">owns</span> <span class="pre">owns*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/15</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isPoliticianOf</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">participatedIn</span> <span class="pre">participatedIn*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">wasBornIn</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">created</span> <span class="pre">created*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/17</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">wasBornIn</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">owns</span> <span class="pre">owns*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/18</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">wasBornIn</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span> <span class="pre">participatedIn</span> <span class="pre">participatedIn*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/19</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">wasBornIn</span> <span class="pre">dealsWith</span> <span class="pre">dealsWith*</span> <span class="pre">hasCapital</span> <span class="pre">hasCapital*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/20</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">created</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/21</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">created</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/22</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">created</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/23</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">created</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/24</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hasChild</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/25</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hasChild</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/26</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hasChild</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/27</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hasChild</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/28</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">influences</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/29</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">influences</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/30</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">influences</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/31</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">influences</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/32</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isKnownFor</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/33</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isKnownFor</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/34</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isKnownFor</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/35</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isKnownFor</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/36</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isMarriedTo</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/37</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isMarriedTo</span> <span class="pre">influences</span> <span class="pre">influences*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/38</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isMarriedTo</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rpq/39</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo</span> <span class="pre">isMarriedTo*</span> <span class="pre">hasChild</span> <span class="pre">hasChild*</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#info">Info</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-statistics">Graph Statistics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#edges-statistics">Edges Statistics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#queries">Queries</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2019-2026, vdshk.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

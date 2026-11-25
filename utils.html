@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Maintainer tools &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>Maintainer tools &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=10584ae1"></script>
+    <script src="_static/documentation_options.js?v=ee8dae47"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,7 +50,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'utils';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -160,8 +160,8 @@
       
     
     
-    <img src="_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -451,10 +451,10 @@
 <span id="utils"></span><h1>Maintainer tools<a class="headerlink" href="#maintainer-tools" title="Link to this heading">#</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>6.1.2</p>
+<dd class="field-odd"><p>6.2.0</p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Nov 24, 2026</p>
+<dd class="field-even"><p>Nov 25, 2026</p>
 </dd>
 </dl>
 <p>The <code class="docutils literal notranslate"><span class="pre">utils/</span></code> directory contains maintainer scripts for managing the dataset
@@ -496,8 +496,8 @@ in sync with the stored archives:</p>
 </pre></div>
 </div>
 <p>The tool covers every list-table with a <code class="docutils literal notranslate"><span class="pre">Download</span></code> column in
-<code class="docutils literal notranslate"><span class="pre">docs/graphs/*.rst</span></code> and <code class="docutils literal notranslate"><span class="pre">docs/old_graphs/index.rst</span></code> — currently the eight
-per-category tables (113 archives at the <code class="docutils literal notranslate"><span class="pre">6.0.0/graph/</span></code> prefix) and the
+<code class="docutils literal notranslate"><span class="pre">docs/graphs/*.rst</span></code> and <code class="docutils literal notranslate"><span class="pre">docs/old_graphs/index.rst</span></code> — currently the nine
+per-category tables (115 archives at the <code class="docutils literal notranslate"><span class="pre">6.0.0/graph/</span></code> prefix) and the
 old-graphs table (54 archives at the <code class="docutils literal notranslate"><span class="pre">4.0.0/graph/</span></code> prefix). For every
 referenced archive it issues an S3 <code class="docutils literal notranslate"><span class="pre">HEAD</span></code> request and compares the
 <code class="docutils literal notranslate"><span class="pre">Content-Length</span></code> with the table cell, formatted in MB (three decimals below
@@ -591,8 +591,9 @@ truth for the reference counts (<a class="reference internal" href="reachable_pa
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">utils</span><span class="o">/</span><span class="n">reachable_pairs_tables</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">--</span><span class="n">update</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>The tool covers two renderings: the per-category tables of
-<code class="docutils literal notranslate"><span class="pre">docs/reachable_pairs.rst</span></code> (one section per graph category, between the
+<p>The tool covers two renderings: the per-graph tables of
+<code class="docutils literal notranslate"><span class="pre">docs/reachable_pairs.rst</span></code> (one section per graph category, one table
+per graph, every query class rendered, between the
 <code class="docutils literal notranslate"><span class="pre">reachable-pairs-tables</span></code> markers) and the count columns of the eight
 per-category graph tables in <code class="docutils literal notranslate"><span class="pre">docs/graphs/*.rst</span></code>. The graph-to-category
 mapping is derived from the site itself: each category page’s toctree lists
@@ -604,9 +605,9 @@ graph name (page titles are not reliable).</p>
 plus CSV rows with an unknown <code class="docutils literal notranslate"><span class="pre">query_class</span></code>, whose graph is unknown,
 whose category disagrees with the docs, or which has no count column in
 its category — and exits non-zero, so it can gate a commit. The
-count-column check applies to CFPQ rows only: the graph tables render CFPQ
-counts, and rows of other query classes are validated but not rendered (no
-RPQ/MCFPQ counts exist yet).</p></li>
+count-column check applies to CFPQ rows only: the graph tables render
+CFPQ counts only, while the other classes are rendered in the per-graph
+tables of <code class="docutils literal notranslate"><span class="pre">docs/reachable_pairs.rst</span></code>.</p></li>
 <li><p><strong>``–update``.</strong> Rewrites the reachable-pairs region and fixes the
 drifted cells in place; lines that need no change keep their exact text.</p></li>
 </ul>
@@ -709,6 +710,32 @@ re-run.</p></li>
 side effects, and <code class="docutils literal notranslate"><span class="pre">--limit</span> <span class="pre">N</span></code> to migrate only the first N items (for
 testing).</p>
 </section>
+<section id="sync-the-plan-comment">
+<span id="sync-plan-comment"></span><h2>Sync the plan comment<a class="headerlink" href="#sync-the-plan-comment" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">utils/sync_plan_comment.py</span></code> mirrors the detailed plan onto the task
+issue:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">utils</span><span class="o">/</span><span class="n">sync_plan_comment</span><span class="o">.</span><span class="n">py</span> <span class="n">ISSUE</span> <span class="p">[</span><span class="o">--</span><span class="n">check</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The detailed plan lives in <code class="docutils literal notranslate"><span class="pre">tasks/detailed_plan.md</span></code> — the single source
+of truth. The task issue carries a mirror: a comment whose first line is
+the <code class="docutils literal notranslate"><span class="pre">&lt;!--</span> <span class="pre">detailed-plan</span> <span class="pre">--&gt;</span></code> marker. The tool finds that comment (the
+last one, if several exist) and replaces its body with the marker plus the
+current file content.</p>
+<p>Behavior:</p>
+<ul class="simple">
+<li><p><strong>Pure mirror.</strong> The comment is derived from the file, never edited by
+hand; re-running the tool is idempotent.</p></li>
+<li><p><strong>``–check``.</strong> Verifies the mirror instead of writing it: exits 0 when
+the comment is in sync, 1 on drift. The comparison ignores trailing
+newlines because the GitHub API stores comment bodies with one extra
+trailing newline.</p></li>
+<li><p><strong>Marker discovery.</strong> Comments are matched by their first line; the
+marker is the first line of the comment the plan is posted as.</p></li>
+<li><p><strong>Transport.</strong> The tool shells out to <code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">api</span></code> and requires an
+authenticated <code class="docutils literal notranslate"><span class="pre">gh</span></code>; it never stores credentials.</p></li>
+</ul>
+</section>
 </section>
 
 
@@ -743,6 +770,7 @@ testing).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applicable-graphs">Applicable graphs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-registry">Graph registry</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#migrate-from-google-drive">Migrate from Google Drive</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sync-the-plan-comment">Sync the plan comment</a></li>
 </ul>
   </nav></div>
 

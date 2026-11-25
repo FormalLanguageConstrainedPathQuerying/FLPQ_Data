@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>flpq_data.queries.cfpq.utils.change_terminals &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>flpq_data.queries.cfpq.utils.change_terminals &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../../_static/documentation_options.js?v=10584ae1"></script>
+    <script src="../../../../_static/documentation_options.js?v=ee8dae47"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,7 +50,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/queries/cfpq/generated/flpq_data.queries.cfpq.utils.change_terminals';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="../../../../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -161,8 +161,8 @@
       
     
     
-    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -597,7 +597,7 @@ in Chomsky normal form.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">regex</span> <span class="o">=</span> <span class="n">regex_from_text</span><span class="p">(</span><span class="s2">"a (bc|d*)"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">new_regex</span> <span class="o">=</span> <span class="n">change_terminals_in_regex</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">:</span> <span class="s2">"c"</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">regex_to_text</span><span class="p">(</span><span class="n">new_regex</span><span class="p">)</span>
-<span class="go">'(b (cc|(d)*))'</span>
+<span class="go">'b (cc | d*)'</span>
 </pre></div>
 </div>
 </dd></dl>

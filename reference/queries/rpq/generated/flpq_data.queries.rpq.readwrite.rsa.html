@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>flpq_data.queries.rpq.readwrite.rsa &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>flpq_data.queries.rpq.readwrite.rsa &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../../_static/documentation_options.js?v=10584ae1"></script>
+    <script src="../../../../_static/documentation_options.js?v=ee8dae47"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,7 +50,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference/queries/rpq/generated/flpq_data.queries.rpq.readwrite.rsa';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="../../../../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -161,8 +161,8 @@
       
     
     
-    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -388,6 +388,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../index.html">Queries</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../cfpq/index.html">Context-free queries</a></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../index.html">Regular queries</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../rpq_converters.html">Grammar converters</a></li>
 <li class="toctree-l3 current active"><a class="reference internal" href="../rpq_readwrite.html">Reading and writing grammars</a></li>
 </ul>
 </details></li>
@@ -491,8 +492,10 @@
 <p>The text uses one of two description styles, selected automatically:</p>
 <ul class="simple">
 <li><p>EBNF style: one production per line, <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">-&gt;</span> <span class="pre">E</span></code>, where <code class="docutils literal notranslate"><span class="pre">E</span></code> is a
-regular expression over terminals and nonterminals; each production
-becomes one box.</p></li>
+regular expression over terminals and nonterminals in the canonical
+regular expression syntax of <a class="reference internal" href="flpq_data.queries.rpq.readwrite.regex.html#flpq_data.queries.rpq.readwrite.regex.regex_from_text" title="flpq_data.queries.rpq.readwrite.regex.regex_from_text"><code class="xref py py-func docutils literal notranslate"><span class="pre">regex_from_text</span></code></a>; each
+production becomes one box. An empty body is the empty word
+(epsilon).</p></li>
 <li><p>Transition-system style: explicit boxes as labelled graphs with start
 and final states (a <code class="docutils literal notranslate"><span class="pre">[box</span> <span class="pre">&lt;name&gt;]</span></code> section header selects this
 style).</p></li>
@@ -532,6 +535,20 @@ Springer, Berlin, Heidelberg. <a class="reference external" href="https://doi.or
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">rsa_from_text</span><span class="p">(</span><span class="s2">"S -&gt; a*"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cfg_to_text</span><span class="p">(</span><span class="n">cfg_from_rsa</span><span class="p">(</span><span class="n">rsa</span><span class="p">))</span>
 <span class="go">'S -&gt; \nS -&gt; a S'</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">+</span></code> is Kleene-plus and an empty production is the empty word:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">rsa_from_text</span><span class="p">(</span><span class="s2">"S -&gt; a+"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg_from_rsa</span><span class="p">(</span><span class="n">rsa</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">"aa"</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">rsa_from_text</span><span class="p">(</span><span class="s2">"S -&gt;"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cfg_from_rsa</span><span class="p">(</span><span class="n">rsa</span><span class="p">)</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cfg_from_rsa</span><span class="p">(</span><span class="n">rsa</span><span class="p">)</span><span class="o">.</span><span class="n">terminals</span>
+<span class="go">set()</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rsa</span> <span class="o">=</span> <span class="n">rsa_from_text</span><span class="p">(</span>
@@ -596,6 +613,12 @@ Springer, Berlin, Heidelberg. <a class="reference external" href="https://doi.or
 <dt class="sig sig-object py" id="flpq_data.queries.rpq.readwrite.rsa.rsa_to_text">
 <span class="sig-name descname"><span class="pre">rsa_to_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pyformlang.readthedocs.io/en/latest/modules/rsa.html#pyformlang.rsa.RecursiveAutomaton" title="(in pyformlang v0.1.3)"><span class="pre">RecursiveAutomaton</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../../_modules/flpq_data/queries/rpq/readwrite/rsa.html#rsa_to_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flpq_data.queries.rpq.readwrite.rsa.rsa_to_text" title="Link to this definition">#</a></dt>
 <dd><p>Turns a Recursive State Automaton <a class="reference internal" href="#rf41ace3143c9-1" id="id8">[1]</a> into its text representation.</p>
+<p>The output uses the EBNF style with the productions sorted (the initial
+box first, then alphabetically); each body is the canonical regular
+expression of the box’s language. A <code class="docutils literal notranslate"><span class="pre">start:</span> <span class="pre">&lt;N&gt;</span></code> line is emitted when
+the initial box is not the default <code class="docutils literal notranslate"><span class="pre">S</span></code>, so
+<code class="docutils literal notranslate"><span class="pre">rsa_from_text(rsa_to_text(rsa))</span></code> preserves the language of every box
+and the initial box.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">

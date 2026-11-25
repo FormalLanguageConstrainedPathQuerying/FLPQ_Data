@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>FLPQ: Formal-Language-Constrained Path Querying &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>FLPQ: Formal-Language-Constrained Path Querying &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=10584ae1"></script>
+    <script src="_static/documentation_options.js?v=ee8dae47"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,7 +51,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'flpq';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -162,8 +162,8 @@
       
     
     
-    <img src="_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -443,22 +443,21 @@
 <span id="flpq"></span><h1>FLPQ: Formal-Language-Constrained Path Querying<a class="headerlink" href="#flpq-formal-language-constrained-path-querying" title="Link to this heading">#</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>6.1.2</p>
+<dd class="field-odd"><p>6.2.0</p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Nov 24, 2026</p>
+<dd class="field-even"><p>Nov 25, 2026</p>
 </dd>
 </dl>
 <p>Formal-language-constrained path querying (FLPQ) studies reachability in
 labeled directed graphs where a path from <span class="math notranslate nohighlight">\(u\)</span> to <span class="math notranslate nohighlight">\(v\)</span> counts only
 if its edge-label string belongs to a given formal language. FLPQ_Data
-currently provides data for context-free path queries (CFPQ); it is being
-extended to all classes of FLPQ: regular path queries (RPQ) and multiple
-context-free path queries (MCFPQ). This page records the design decisions —
+provides data for context-free path queries (CFPQ) and regular path queries
+(RPQ); it is being extended to multiple context-free path queries (MCFPQ).
+This page records the design decisions —
 the query-class taxonomy, the grammar formalisms and file formats, and the
-target structure of the site, the package, and the dataset. Implementation
-happens in follow-up tasks; until then the existing CFPQ data and interfaces
-remain unchanged.</p>
+target structure of the site, the package, and the dataset. The RPQ
+extension reuses the existing CFPQ data and interfaces unchanged.</p>
 <section id="query-classes">
 <h2>Query classes<a class="headerlink" href="#query-classes" title="Link to this heading">#</a></h2>
 <table class="docutils align-default">
@@ -473,7 +472,7 @@ remain unchanged.</p>
 <tr class="row-even"><td><p>RPQ</p></td>
 <td><p>Regular</p></td>
 <td><p>Regular expressions, NFA/DFA</p></td>
-<td><p>designed, no data</p></td>
+<td><p>current</p></td>
 </tr>
 <tr class="row-odd"><td><p>CFPQ</p></td>
 <td><p>Context-free</p></td>
@@ -493,38 +492,48 @@ string of <span class="math notranslate nohighlight">\(L\)</span> labels a path 
 differ only in the language class used for the constraint and in the
 formalism that specifies it. The existing data — the <a class="reference internal" href="graphs/index.html#graphs"><span class="std std-ref">graphs</span></a>
 catalog, the <a class="reference internal" href="queries/cfpq/index.html#cfpq-queries"><span class="std std-ref">query templates</span></a>, and the
-<a class="reference internal" href="reachable_pairs.html#reachable-pairs"><span class="std std-ref">reachable pair counts</span></a> — is CFPQ data; the shared
-graph catalog is reused by all classes.</p>
+<a class="reference internal" href="reachable_pairs.html#reachable-pairs"><span class="std std-ref">reachable pair counts</span></a> — is CFPQ and RPQ data; the
+shared graph catalog is reused by all classes.</p>
 </section>
 <section id="regular-path-queries">
 <h2>Regular path queries<a class="headerlink" href="#regular-path-queries" title="Link to this heading">#</a></h2>
 <p>RPQ constraints are regular languages over the graph’s edge labels. The
 design decision for this class:</p>
 <ul>
-<li><p><strong>Format.</strong> An RPQ query is a regular expression in the pyformlang
-<code class="docutils literal notranslate"><span class="pre">Regex</span></code> text syntax, stored as a <code class="docutils literal notranslate"><span class="pre">.re</span></code> file and read by
-<a class="reference internal" href="reference/queries/rpq/generated/flpq_data.queries.rpq.readwrite.regex.html#flpq_data.queries.rpq.readwrite.regex.regex_from_text" title="flpq_data.queries.rpq.readwrite.regex.regex_from_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regex_from_text</span></code></a>.</p></li>
-<li><p><strong>Templates.</strong> As with CFG templates, an RPQ template is a named,
-parameterized regular expression instantiated per graph from its stored
-labels. The designed seed set consists of two canonical queries applicable
-to every graph:</p>
+<li><p><strong>Format.</strong> An RPQ query is a regular expression in the dataset’s
+canonical regular expression syntax, stored as a <code class="docutils literal notranslate"><span class="pre">.re</span></code> file and read by
+<a class="reference internal" href="reference/queries/rpq/generated/flpq_data.queries.rpq.readwrite.regex.html#flpq_data.queries.rpq.readwrite.regex.regex_from_text" title="flpq_data.queries.rpq.readwrite.regex.regex_from_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regex_from_text</span></code></a>:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">reachability</span></code> — <span class="math notranslate nohighlight">\((L_1 \,|\, \dots \,|\, L_n)^*\)</span> over all stored
-labels <span class="math notranslate nohighlight">\(L_1, \dots, L_n\)</span>: unrestricted reachability;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">label_star</span></code> — <span class="math notranslate nohighlight">\(L^*\)</span> for each stored label <span class="math notranslate nohighlight">\(L\)</span>: the
-per-label transitive closure.</p></li>
+<li><p>a <strong>symbol</strong> is a maximal run of characters outside the metacharacter
+set (an edge label or a nonterminal);</p></li>
+<li><p><strong>concatenation</strong> is whitespace, <strong>union</strong> is <code class="docutils literal notranslate"><span class="pre">|</span></code>, <strong>grouping</strong> is
+parentheses;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> and <code class="docutils literal notranslate"><span class="pre">+</span></code> are postfix Kleene star and Kleene plus (<code class="docutils literal notranslate"><span class="pre">X+</span></code> is
+sugar for <code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">X*</span></code>);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">$</span></code> is the empty word (epsilon).</p></li>
 </ul>
-<p>Additional templates may be added later together with real-world data; the
-stub pages in the <a class="reference internal" href="queries/rpq/index.html#rpq-queries"><span class="std std-ref">RPQ section</span></a>
-document both templates.</p>
+<p>Precedence: postfix operators &gt; concatenation &gt; union. The same syntax is
+used for the EBNF-style RSM bodies (see <a class="reference internal" href="#rsm-format"><span class="std std-ref">below</span></a>).</p>
 </li>
+<li><p><strong>No named templates.</strong> Unlike CFPQ, RPQ has no named, parameterized
+templates: every query is a per-graph regular expression stored in the
+graph archive. The two designed seed stubs (<code class="docutils literal notranslate"><span class="pre">reachability</span></code>,
+<code class="docutils literal notranslate"><span class="pre">label_star</span></code>) were retired when the first real-world RPQ data arrived
+(the <code class="docutils literal notranslate"><span class="pre">social_networks</span></code> category).</p></li>
 <li><p><strong>Placement.</strong> Query files live inside the self-contained graph archive
 under <code class="docutils literal notranslate"><span class="pre">queries/rpq/</span></code> (see <a class="reference internal" href="file_structure.html#file-structure"><span class="std std-ref">File structure</span></a>); there are no standalone
 query or example archives. An
 RPQ may also be represented by a regular RSM (<code class="docutils literal notranslate"><span class="pre">.rsm</span></code>, see below).</p></li>
-<li><p><strong>Data status.</strong> No real-world RPQ data exists yet — the templates are
-designed stubs. Real-world data will be provided later and enters the
-dataset via the graph archives (migration, task 48).</p></li>
+<li><p><strong>Conversion.</strong> <a class="reference internal" href="reference/queries/rpq/generated/flpq_data.queries.rpq.converters.rsa.html#flpq_data.queries.rpq.converters.rsa.regex_to_rsa" title="flpq_data.queries.rpq.converters.rsa.regex_to_rsa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regex_to_rsa</span></code></a> derives a single-box
+regular RSM from a regular expression, and <a class="reference internal" href="reference/queries/rpq/generated/flpq_data.queries.rpq.converters.rsa.html#flpq_data.queries.rpq.converters.rsa.rsa_to_regex" title="flpq_data.queries.rpq.converters.rsa.rsa_to_regex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsa_to_regex</span></code></a> performs the inverse
+for a single-box regular RSM. These are one-way derivation aids: the RSM
+remains a first-class, independently specifiable representation — the
+archive checker couples <code class="docutils literal notranslate"><span class="pre">.re</span></code> and <code class="docutils literal notranslate"><span class="pre">.rsm</span></code> files only at terminal-set
+consistency and regularity, so an RSM that is not an exact copy of the
+regex-derived one remains fully valid.</p></li>
+<li><p><strong>Data status.</strong> Real-world RPQ data exists: the <code class="docutils literal notranslate"><span class="pre">social_networks</span></code>
+category (<code class="docutils literal notranslate"><span class="pre">pokec</span></code>, <code class="docutils literal notranslate"><span class="pre">yago2s</span></code>), entered via the graph archives
+(migration, task 48).</p></li>
 </ul>
 </section>
 <section id="recursive-state-machines">
@@ -547,11 +556,14 @@ production). An RSM is therefore a valid alternative representation of a
 CFPQ query — and of an RPQ when it is regular: no box transition is labelled
 by a nonterminal.</p>
 <section id="format">
-<h3>Format<a class="headerlink" href="#format" title="Link to this heading">#</a></h3>
+<span id="rsm-format"></span><h3>Format<a class="headerlink" href="#format" title="Link to this heading">#</a></h3>
 <p>A <code class="docutils literal notranslate"><span class="pre">.rsm</span></code> file uses one of two description styles, selected automatically by
 <a class="reference internal" href="reference/queries/rpq/generated/flpq_data.queries.rpq.readwrite.rsa.html#flpq_data.queries.rpq.readwrite.rsa.rsa_from_text" title="flpq_data.queries.rpq.readwrite.rsa.rsa_from_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsa_from_text</span></code></a>:</p>
 <ul>
-<li><p><strong>EBNF style</strong> — one production per line; each production becomes one box:</p>
+<li><p><strong>EBNF style</strong> — one production per line; each production becomes one
+box. The body <code class="docutils literal notranslate"><span class="pre">E</span></code> follows the canonical regular expression syntax of
+the RPQ format (above), over terminals and nonterminals alike; an empty
+body is the empty word (epsilon):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">start</span><span class="p">:</span> <span class="n">S</span>
 <span class="n">S</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="o">*</span> <span class="n">b</span> <span class="n">S</span> <span class="n">c</span>
 <span class="n">B</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">x</span> <span class="o">|</span> <span class="n">y</span><span class="p">)</span><span class="o">+</span>
@@ -578,7 +590,11 @@ and final states (a <code class="docutils literal notranslate"><span class="pre"
 <p>In both styles an optional <code class="docutils literal notranslate"><span class="pre">start:</span> <span class="pre">&lt;N&gt;</span></code> line names the start box (<code class="docutils literal notranslate"><span class="pre">S</span></code> by
 default). Boxes are deterministic — a repeated <code class="docutils literal notranslate"><span class="pre">(state,</span> <span class="pre">label)</span></code> transition
 is an error. <a class="reference internal" href="reference/queries/rpq/generated/flpq_data.queries.rpq.readwrite.rsa.html#flpq_data.queries.rpq.readwrite.rsa.rsa_to_text" title="flpq_data.queries.rpq.readwrite.rsa.rsa_to_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsa_to_text</span></code></a> emits the EBNF style as the
-canonical form, so a transition-system file round-trips to EBNF-style text.</p>
+canonical form — each body is the canonical regular expression of the box’s
+language, and a <code class="docutils literal notranslate"><span class="pre">start:</span></code> line when the initial box is not the default
+<code class="docutils literal notranslate"><span class="pre">S</span></code> — so a transition-system file round-trips to EBNF-style text and
+<code class="docutils literal notranslate"><span class="pre">rsa_from_text(rsa_to_text(rsa))</span></code> preserves the language of every box and
+the initial box.</p>
 </section>
 <section id="placement">
 <h3>Placement<a class="headerlink" href="#placement" title="Link to this heading">#</a></h3>
@@ -757,14 +773,16 @@ converter is a follow-up task.</p>
 <h2>Site structure<a class="headerlink" href="#site-structure" title="Link to this heading">#</a></h2>
 <p>The Dataset section has one sub-section per query class next to the shared
 graph catalog: each class reuses the existing layout — an index page with its
-templates and its “Applicable graphs” list, and one page per template — while
-the graph catalog stays shared.</p>
+“Applicable graphs” list, plus one page per named template where the class
+has them — while the graph catalog stays shared. RPQ has no named templates:
+its queries are per-graph regular expressions documented on the per-graph
+pages.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dataset
-├── Graphs           shared catalog (8 categories, 113 pages) — unchanged
+├── Graphs           shared catalog (9 categories, 115 pages)
 ├── CFPQ             grammar templates (4 + indexed grammars) | applicable graphs
-├── RPQ              query templates (regular expressions)    | applicable graphs
+├── RPQ              per-graph queries (regular expressions)  | applicable graphs
 ├── MCFPQ            grammar templates (MCFG)                 | applicable graphs
-└── Reachable pairs  per-category tables; flat CSV download
+└── Reachable pairs  per-graph tables; flat CSV download
 </pre></div>
 </div>
 <p>There is no separate benchmarks section: benchmarking data and results are
@@ -778,14 +796,14 @@ change.</p>
 <h3>Reachable pair counts<a class="headerlink" href="#reachable-pair-counts" title="Link to this heading">#</a></h3>
 <p>The single flat table currently rendered on the
 <a class="reference internal" href="reachable_pairs.html#reachable-pairs"><span class="std std-ref">reachable pairs</span></a> page is removed; it is too large to
-scan. The page renders one table per graph category instead (columns:
-Graph, Grammar, Reachable pairs), so every table stays small. The flat
-table survives as a downloadable CSV — the single source of truth for
-automatic processing — which gains a <code class="docutils literal notranslate"><span class="pre">category</span></code> and a <code class="docutils literal notranslate"><span class="pre">query_class</span></code>
-column so it is self-describing. A generator script in <code class="docutils literal notranslate"><span class="pre">utils/</span></code> (following the pattern of
-<code class="docutils literal notranslate"><span class="pre">utils/archive_sizes.py</span></code>) renders both the per-category tables and the
-count columns of the category pages from that CSV, so no count is
-hand-maintained in two places.</p>
+scan. The page renders one table per graph instead (columns: Query,
+Reachable pairs; one row per query, grouped by category), so every table
+stays small. The flat table survives as a downloadable CSV — the single
+source of truth for automatic processing — which gains a <code class="docutils literal notranslate"><span class="pre">category</span></code> and a
+<code class="docutils literal notranslate"><span class="pre">query_class</span></code> column so it is self-describing. A generator script in
+<code class="docutils literal notranslate"><span class="pre">utils/</span></code> (following the pattern of <code class="docutils literal notranslate"><span class="pre">utils/archive_sizes.py</span></code>) renders
+both the per-graph tables and the count columns of the category pages from
+that CSV, so no count is hand-maintained in two places.</p>
 </section>
 </section>
 <section id="package-structure">

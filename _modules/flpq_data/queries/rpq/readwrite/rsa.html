@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>flpq_data.queries.rpq.readwrite.rsa &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>flpq_data.queries.rpq.readwrite.rsa &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../../../_static/documentation_options.js?v=10584ae1"></script>
+    <script src="../../../../../_static/documentation_options.js?v=ee8dae47"></script>
     <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/flpq_data/queries/rpq/readwrite/rsa';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="../../../../../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../../../../../about.html" />
     <link rel="index" title="Index" href="../../../../../genindex.html" />
@@ -158,8 +158,8 @@
       
     
     
-    <img src="../../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="../../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="../../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -435,16 +435,16 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.cfg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Epsilon</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.finite_automaton</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">EpsilonNFA</span><span class="p">,</span>
     <span class="n">NondeterministicTransitionFunction</span><span class="p">,</span>
     <span class="n">Symbol</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.finite_automaton.finite_automaton</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_state</span><span class="p">,</span> <span class="n">to_symbol</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.regular_expression</span><span class="w"> </span><span class="kn">import</span> <span class="n">Regex</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.rsa</span><span class="w"> </span><span class="kn">import</span> <span class="n">Box</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.rsa</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecursiveAutomaton</span> <span class="k">as</span> <span class="n">RSA</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">flpq_data.queries.rpq.readwrite.regex</span><span class="w"> </span><span class="kn">import</span> <span class="n">regex_from_text</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"rsa_from_text"</span><span class="p">,</span>
@@ -458,6 +458,9 @@
 <span class="n">_FINAL_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^final:\s*(.+)$"</span><span class="p">)</span>
 <span class="n">_TRANSITION_RE</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^(\S+)\s*--(.+?)--&gt;\s*(\S+)$"</span><span class="p">)</span>
 
+<span class="c1">#: The default name of the start box when no ``start:`` line is given.</span>
+<span class="n">_DEFAULT_START</span> <span class="o">=</span> <span class="s2">"S"</span>
+
 
 <div class="viewcode-block" id="rsa_from_text">
 <a class="viewcode-back" href="../../../../../reference/queries/rpq/generated/flpq_data.queries.rpq.readwrite.rsa.html#flpq_data.queries.rpq.readwrite.rsa.rsa_from_text">[docs]</a>
@@ -467,8 +470,11 @@
 <span class="sd">    The text uses one of two description styles, selected automatically:</span>
 
 <span class="sd">    - EBNF style: one production per line, ``N -&gt; E``, where ``E`` is a</span>
-<span class="sd">      regular expression over terminals and nonterminals; each production</span>
-<span class="sd">      becomes one box.</span>
+<span class="sd">      regular expression over terminals and nonterminals in the canonical</span>
+<span class="sd">      regular expression syntax of :func:`regex_from_text</span>
+<span class="sd">      &lt;flpq_data.queries.rpq.readwrite.regex.regex_from_text&gt;`; each</span>
+<span class="sd">      production becomes one box. An empty body is the empty word</span>
+<span class="sd">      (epsilon).</span>
 <span class="sd">    - Transition-system style: explicit boxes as labelled graphs with start</span>
 <span class="sd">      and final states (a ``[box &lt;name&gt;]`` section header selects this</span>
 <span class="sd">      style).</span>
@@ -490,6 +496,20 @@
 <span class="sd">    &gt;&gt;&gt; rsa = rsa_from_text("S -&gt; a*")</span>
 <span class="sd">    &gt;&gt;&gt; cfg_to_text(cfg_from_rsa(rsa))</span>
 <span class="sd">    'S -&gt; \\nS -&gt; a S'</span>
+
+<span class="sd">    ``+`` is Kleene-plus and an empty production is the empty word:</span>
+
+<span class="sd">    &gt;&gt;&gt; rsa = rsa_from_text("S -&gt; a+")</span>
+<span class="sd">    &gt;&gt;&gt; cfg = cfg_from_rsa(rsa)</span>
+<span class="sd">    &gt;&gt;&gt; cfg.contains("")</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; cfg.contains("aa")</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; rsa = rsa_from_text("S -&gt;")</span>
+<span class="sd">    &gt;&gt;&gt; cfg_from_rsa(rsa).contains("")</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; cfg_from_rsa(rsa).terminals</span>
+<span class="sd">    set()</span>
 
 <span class="sd">    &gt;&gt;&gt; rsa = rsa_from_text(</span>
 <span class="sd">    ...     "start: S\\n"</span>
@@ -540,17 +560,20 @@
         <span class="n">labels</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">to_symbol</span><span class="p">(</span><span class="n">head</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">body</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
-            <span class="n">body</span> <span class="o">=</span> <span class="n">Epsilon</span><span class="p">()</span><span class="o">.</span><span class="n">to_text</span><span class="p">()</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="s2">"$"</span>
 
         <span class="k">if</span> <span class="n">head</span> <span class="ow">in</span> <span class="n">productions</span><span class="p">:</span>
             <span class="n">productions</span><span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">" | "</span> <span class="o">+</span> <span class="n">body</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">productions</span><span class="p">[</span><span class="n">head</span><span class="p">]</span> <span class="o">=</span> <span class="n">body</span>
 
+    <span class="k">if</span> <span class="n">start_symbol</span><span class="o">.</span><span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">productions</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Start box </span><span class="si">{</span><span class="n">start_symbol</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> is not defined"</span><span class="p">)</span>
+
     <span class="n">boxes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">head</span><span class="p">,</span> <span class="n">body</span> <span class="ow">in</span> <span class="n">productions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">nfa</span> <span class="o">=</span> <span class="n">Regex</span><span class="p">(</span><span class="n">body</span><span class="p">)</span><span class="o">.</span><span class="n">to_epsilon_nfa</span><span class="p">()</span>
+        <span class="n">nfa</span> <span class="o">=</span> <span class="n">regex_from_text</span><span class="p">(</span><span class="n">body</span><span class="p">)</span><span class="o">.</span><span class="n">to_epsilon_nfa</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">nfa</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Cannot build an epsilon NFA for </span><span class="si">{</span><span class="n">body</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">boxes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Box</span><span class="p">(</span><span class="n">nfa</span><span class="o">.</span><span class="n">minimize</span><span class="p">(),</span> <span class="n">to_symbol</span><span class="p">(</span><span class="n">head</span><span class="p">)))</span>
@@ -693,10 +716,28 @@
     <span class="k">return</span> <span class="n">rsa</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_box_body</span><span class="p">(</span><span class="n">box</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The canonical regex body of a box (the language of its DFA).</span>
+
+<span class="sd">    pyformlang's ``to_regex()`` emits ``.`` for concatenation and ``$`` for</span>
+<span class="sd">    the empty word; the dot is an ordinary symbol character in the canonical</span>
+<span class="sd">    syntax, so it is replaced with whitespace (concatenation). Box names and</span>
+<span class="sd">    labels must therefore not contain ``.``.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">dfa</span><span class="o">.</span><span class="n">to_regex</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="s2">" "</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="rsa_to_text">
 <a class="viewcode-back" href="../../../../../reference/queries/rpq/generated/flpq_data.queries.rpq.readwrite.rsa.html#flpq_data.queries.rpq.readwrite.rsa.rsa_to_text">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rsa_to_text</span><span class="p">(</span><span class="n">rsa</span><span class="p">:</span> <span class="n">RSA</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Turns a Recursive State Automaton [1]_ into its text representation.</span>
+
+<span class="sd">    The output uses the EBNF style with the productions sorted (the initial</span>
+<span class="sd">    box first, then alphabetically); each body is the canonical regular</span>
+<span class="sd">    expression of the box's language. A ``start: &lt;N&gt;`` line is emitted when</span>
+<span class="sd">    the initial box is not the default ``S``, so</span>
+<span class="sd">    ``rsa_from_text(rsa_to_text(rsa))`` preserves the language of every box</span>
+<span class="sd">    and the initial box.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -729,13 +770,18 @@
         <span class="n">box</span> <span class="o">=</span> <span class="n">rsa</span><span class="o">.</span><span class="n">get_box</span><span class="p">(</span><span class="n">symbol</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"RSA has no box for label </span><span class="si">{</span><span class="n">symbol</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="n">productions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">dfa</span><span class="o">.</span><span class="n">to_regex</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">productions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">_box_body</span><span class="p">(</span><span class="n">box</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">productions</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
         <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" -&gt; "</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">rsa</span><span class="o">.</span><span class="n">initial_label</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">s</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="n">text</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">productions</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">rsa</span><span class="o">.</span><span class="n">initial_label</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="n">_DEFAULT_START</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"start: </span><span class="si">{</span><span class="n">rsa</span><span class="o">.</span><span class="n">initial_label</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">productions</span><span class="p">)</span>
+
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Turn </span><span class="si">{</span><span class="n">rsa</span><span class="si">=}</span><span class="s2"> into </span><span class="si">{</span><span class="n">text</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
 

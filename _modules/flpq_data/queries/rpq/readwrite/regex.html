@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>flpq_data.queries.rpq.readwrite.regex &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>flpq_data.queries.rpq.readwrite.regex &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../../../_static/documentation_options.js?v=10584ae1"></script>
+    <script src="../../../../../_static/documentation_options.js?v=ee8dae47"></script>
     <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/flpq_data/queries/rpq/readwrite/regex';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="../../../../../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../../../../../about.html" />
     <link rel="index" title="Index" href="../../../../../genindex.html" />
@@ -158,8 +158,8 @@
       
     
     
-    <img src="../../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="../../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="../../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -431,9 +431,10 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.regular_expression</span><span class="w"> </span><span class="kn">import</span> <span class="n">Regex</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyformlang.regular_expression.regex_objects</span><span class="w"> </span><span class="kn">import</span> <span class="n">Epsilon</span><span class="p">,</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Symbol</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"regex_from_text"</span><span class="p">,</span>
@@ -442,11 +443,198 @@
     <span class="s2">"regex_to_txt"</span><span class="p">,</span>
 <span class="p">]</span>
 
+<span class="c1">#: The metacharacters of the canonical syntax; every other character is part</span>
+<span class="c1">#: of a symbol.</span>
+<span class="n">_METACHARACTERS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="s2">"|*+()$"</span><span class="p">)</span>
+
+<span class="c1">#: Precedence levels of the canonical syntax (higher binds tighter); they</span>
+<span class="c1">#: drive the printer's parentheses.</span>
+<span class="n">_PRECEDENCE_UNION</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">_PRECEDENCE_CONCAT</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">_PRECEDENCE_ATOM</span> <span class="o">=</span> <span class="mi">2</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Splits text into tokens: symbols and single metacharacters.</span>
+
+<span class="sd">    A symbol is a maximal run of characters outside the metacharacter set;</span>
+<span class="sd">    whitespace separates tokens and is not a token itself.</span>
+<span class="sd">    """</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">char</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">_METACHARACTERS</span><span class="p">:</span>
+            <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">continue</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">text</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span> <span class="ow">and</span> <span class="n">text</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_METACHARACTERS</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">j</span>
+    <span class="k">return</span> <span class="n">tokens</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_RegexParser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Recursive-descent parser of the canonical syntax into a Regex.</span>
+
+<span class="sd">    Grammar (precedence: postfix &gt; concatenation &gt; union)::</span>
+
+<span class="sd">        expr   := term ('|' term)*</span>
+<span class="sd">        term   := factor+</span>
+<span class="sd">        factor := atom postfix*</span>
+<span class="sd">        atom   := SYMBOL | '$' | '(' expr ')'</span>
+<span class="sd">        postfix:= '*' | '+'</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tokens</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tokens</span> <span class="o">=</span> <span class="n">tokens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_peek</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tokens</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokens</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_pos</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_advance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pos</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">token</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Regex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Parses the whole token stream and returns the Regex."""</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_expr</span><span class="p">()</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unexpected </span><span class="si">{</span><span class="n">token</span><span class="si">!r}</span><span class="s2"> at the end of the expression"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">regex</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_expr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Regex</span><span class="p">:</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_term</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"|"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_advance</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">")"</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"dangling '|' with no term after it"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"|"</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"consecutive '|' operators"</span><span class="p">)</span>
+            <span class="n">regex</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parse_term</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">regex</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_term</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Regex</span><span class="p">:</span>
+        <span class="n">factors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Regex</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">"|"</span><span class="p">,</span> <span class="s2">")"</span><span class="p">):</span>
+            <span class="n">factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parse_factor</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">factors</span><span class="p">:</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"unexpected end of the expression"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">"|"</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"dangling '|' with no term before it"</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unexpected </span><span class="si">{</span><span class="n">token</span><span class="si">!r}</span><span class="s2"> with no term before it"</span><span class="p">)</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">factors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="n">factors</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">regex</span> <span class="o">=</span> <span class="n">regex</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">regex</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Regex</span><span class="p">:</span>
+        <span class="n">atom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_atom</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"*"</span><span class="p">,</span> <span class="s2">"+"</span><span class="p">):</span>
+            <span class="n">operator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_advance</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">operator</span> <span class="o">==</span> <span class="s2">"*"</span><span class="p">:</span>
+                <span class="n">atom</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">kleene_star</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">atom</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">kleene_star</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">atom</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_atom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Regex</span><span class="p">:</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"unexpected end of the expression"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">"("</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_advance</span><span class="p">()</span>
+            <span class="n">inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_expr</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_peek</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">")"</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"unclosed '(' in the expression"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_advance</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">inner</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s2">"$"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_advance</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">Regex</span><span class="p">(</span><span class="s2">"$"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"*"</span><span class="p">,</span> <span class="s2">"+"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"dangling </span><span class="si">{</span><span class="n">token</span><span class="si">!r}</span><span class="s2"> with no operand before it"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_advance</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Regex</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_head</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Regex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The AST node's top operator (always set for a parsed Regex)."""</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">head</span>
+    <span class="k">assert</span> <span class="n">head</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">head</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_sons</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Regex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Regex</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""The AST node's children (always set for a parsed Regex)."""</span>
+    <span class="n">sons</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">sons</span>
+    <span class="k">assert</span> <span class="n">sons</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">sons</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_node_precedence</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Regex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The precedence of a Regex AST node's top operator."""</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">_head</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="p">(</span><span class="n">Symbol</span><span class="p">,</span> <span class="n">Epsilon</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">_PRECEDENCE_ATOM</span>
+    <span class="k">if</span> <span class="n">head</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="s2">"Union"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_PRECEDENCE_UNION</span>
+    <span class="k">if</span> <span class="n">head</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="s2">"Concatenation"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_PRECEDENCE_CONCAT</span>
+    <span class="k">return</span> <span class="n">_PRECEDENCE_ATOM</span>  <span class="c1"># Kleene star</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_body</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Regex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Prints one AST node without outer parentheses."""</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">_head</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">Epsilon</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">"$"</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">Symbol</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">sons</span> <span class="o">=</span> <span class="n">_sons</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">head</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="s2">"Kleene Star"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_print_node</span><span class="p">(</span><span class="n">sons</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_PRECEDENCE_ATOM</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"*"</span>
+    <span class="k">if</span> <span class="n">head</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="s2">"Concatenation"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_print_node</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">_PRECEDENCE_CONCAT</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">sons</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">" | "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_print_node</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">_PRECEDENCE_UNION</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">sons</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_print_node</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Regex</span><span class="p">,</span> <span class="n">min_precedence</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Prints one AST node, parenthesizing it when the context demands it."""</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">_print_body</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_node_precedence</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_precedence</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">)"</span>
+    <span class="k">return</span> <span class="n">text</span>
+
 
 <div class="viewcode-block" id="regex_from_text">
 <a class="viewcode-back" href="../../../../../reference/queries/rpq/generated/flpq_data.queries.rpq.readwrite.regex.html#flpq_data.queries.rpq.readwrite.regex.regex_from_text">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">regex_from_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Regex</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Create a regular expression [1]_ from text.</span>
+
+<span class="sd">    The text uses the dataset's canonical regular expression syntax:</span>
+
+<span class="sd">    - a symbol is a maximal run of characters outside the metacharacter set</span>
+<span class="sd">      (an edge label or a nonterminal);</span>
+<span class="sd">    - concatenation is whitespace, union is ``|``, grouping is parentheses;</span>
+<span class="sd">    - ``*`` and ``+`` are postfix Kleene star and Kleene plus (``X+`` is</span>
+<span class="sd">      sugar for ``X X*``);</span>
+<span class="sd">    - ``$`` is the empty word (epsilon).</span>
+
+<span class="sd">    Precedence: postfix operators &gt; concatenation &gt; union.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -458,18 +646,33 @@
 <span class="sd">    &gt;&gt;&gt; from flpq_data import *</span>
 <span class="sd">    &gt;&gt;&gt; regex = regex_from_text("a (bc|d*)")</span>
 <span class="sd">    &gt;&gt;&gt; regex_to_text(regex)</span>
-<span class="sd">    '(a (bc|(d)*))'</span>
+<span class="sd">    'a (bc | d*)'</span>
+<span class="sd">    &gt;&gt;&gt; regex = regex_from_text("a+")</span>
+<span class="sd">    &gt;&gt;&gt; regex.accepts(["a"])</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; regex.accepts([])</span>
+<span class="sd">    False</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    regex : Regex</span>
 <span class="sd">        Regular expression.</span>
 
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the text is empty or is not a well-formed expression (unbalanced</span>
+<span class="sd">        parentheses, dangling operators).</span>
+
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] https://en.wikipedia.org/wiki/Regular_expression#Formal_definition</span>
 <span class="sd">    """</span>
-    <span class="n">regex</span> <span class="o">=</span> <span class="n">Regex</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">_tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"the regular expression is empty"</span><span class="p">)</span>
+
+    <span class="n">regex</span> <span class="o">=</span> <span class="n">_RegexParser</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">()</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Create </span><span class="si">{</span><span class="n">regex</span><span class="si">=}</span><span class="s2"> from </span><span class="si">{</span><span class="n">text</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
 
@@ -480,7 +683,11 @@
 <div class="viewcode-block" id="regex_to_text">
 <a class="viewcode-back" href="../../../../../reference/queries/rpq/generated/flpq_data.queries.rpq.readwrite.regex.html#flpq_data.queries.rpq.readwrite.regex.regex_to_text">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">regex_to_text</span><span class="p">(</span><span class="n">regex</span><span class="p">:</span> <span class="n">Regex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Turns a regular expression [1]_ into its text representation.</span>
+<span class="w">    </span><span class="sd">"""Turns a regular expression [1]_ into its canonical text representation.</span>
+
+<span class="sd">    The output follows the canonical syntax of :func:`regex_from_text` with</span>
+<span class="sd">    minimal parentheses, so ``regex_from_text(regex_to_text(r))`` is</span>
+<span class="sd">    equivalent to ``r`` and ``regex_to_text`` is idempotent.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -492,7 +699,7 @@
 <span class="sd">    &gt;&gt;&gt; from flpq_data import *</span>
 <span class="sd">    &gt;&gt;&gt; regex = regex_from_text("a (bc|d*)")</span>
 <span class="sd">    &gt;&gt;&gt; regex_to_text(regex)</span>
-<span class="sd">    '(a (bc|(d)*))'</span>
+<span class="sd">    'a (bc | d*)'</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -504,7 +711,7 @@
 <span class="sd">    .. [1] https://en.wikipedia.org/wiki/Regular_expression#Formal_definition</span>
 <span class="sd">    """</span>
 
-    <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="s2">" "</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">_print_node</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">_PRECEDENCE_UNION</span><span class="p">)</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Turn </span><span class="si">{</span><span class="n">regex</span><span class="si">=}</span><span class="s2"> into </span><span class="si">{</span><span class="n">text</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
 
@@ -529,7 +736,7 @@
 <span class="sd">    &gt;&gt;&gt; path = regex_to_txt(regex_1, "test.txt")</span>
 <span class="sd">    &gt;&gt;&gt; regex = regex_from_txt(path)</span>
 <span class="sd">    &gt;&gt;&gt; regex_to_text(regex)</span>
-<span class="sd">    '(a (bc|(d)*))'</span>
+<span class="sd">    'a (bc | d*)'</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>

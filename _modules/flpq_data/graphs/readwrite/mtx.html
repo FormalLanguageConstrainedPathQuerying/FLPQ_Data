@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>flpq_data.graphs.readwrite.mtx &#8212; FLPQ_Data 6.1.2 documentation</title>
+    <title>flpq_data.graphs.readwrite.mtx &#8212; FLPQ_Data 6.2.0 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../../_static/documentation_options.js?v=10584ae1"></script>
+    <script src="../../../../_static/documentation_options.js?v=ee8dae47"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -49,7 +49,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/flpq_data/graphs/readwrite/mtx';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within FLPQ_Data 6.1.2 documentation"
+          title="Search within FLPQ_Data 6.2.0 documentation"
           href="../../../../_static/opensearch.xml"/>
     <link rel="author" title="About these documents" href="../../../../about.html" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -158,8 +158,8 @@
       
     
     
-    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.1.2 documentation - Home"/>
-    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.1.2 documentation - Home"/>
+    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-light" alt="FLPQ_Data 6.2.0 documentation - Home"/>
+    <img src="../../../../_static/FLPQDataLogo.svg" class="logo__image only-dark pst-js-only" alt="FLPQ_Data 6.2.0 documentation - Home"/>
   
   
 </a></div>
@@ -442,6 +442,8 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"filename_to_label"</span><span class="p">,</span>
     <span class="s2">"label_to_filename"</span><span class="p">,</span>
+    <span class="s2">"iter_edges_from_mtx_file"</span><span class="p">,</span>
+    <span class="s2">"mtx_file_header"</span><span class="p">,</span>
     <span class="s2">"iter_edges_from_mtx_dir"</span><span class="p">,</span>
     <span class="s2">"mtx_dir_from_edges"</span><span class="p">,</span>
     <span class="s2">"graph_from_mtx_dir"</span><span class="p">,</span>
@@ -519,6 +521,116 @@
 
 
 
+<div class="viewcode-block" id="iter_edges_from_mtx_file">
+<a class="viewcode-back" href="../../../../reference/graphs/generated/flpq_data.graphs.readwrite.mtx.html#flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_file">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">iter_edges_from_mtx_file</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""Yields the entries of one Boolean MatrixMarket file as a stream.</span>
+
+<span class="sd">    The file must follow the dataset format: a two-line header</span>
+<span class="sd">    (``%%MatrixMarket matrix coordinate pattern general`` /</span>
+<span class="sd">    ``%%GraphBLAS type bool``), a dimension line (``rows cols nnz``), and one</span>
+<span class="sd">    ``u v`` entry per line (0-based indices, no values). The file is read line</span>
+<span class="sd">    by line, so the memory stays O(1) in the number of entries.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : Union[Path, str]</span>
+<span class="sd">        The path to the MatrixMarket file.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import pathlib, tempfile</span>
+<span class="sd">    &gt;&gt;&gt; p = pathlib.Path(tempfile.mkdtemp()) / "a.mtx"</span>
+<span class="sd">    &gt;&gt;&gt; _ = p.write_text(</span>
+<span class="sd">    ...     "%%MatrixMarket matrix coordinate pattern general\\n"</span>
+<span class="sd">    ...     "%%GraphBLAS type bool\\n3 3 2\\n0 1\\n1 2\\n"</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; list(iter_edges_from_mtx_file(p))</span>
+<span class="sd">    [(0, 1), (1, 2)]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    entries : Iterator[Tuple[int, int]]</span>
+<span class="sd">        The ``(u, v)`` entry tuples in file order.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the file has an unexpected header, a malformed entry line, or its</span>
+<span class="sd">        entry count differs from the declared nnz.</span>
+<span class="sd">    """</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">!=</span> <span class="n">_MTX_HEADER</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unexpected header in </span><span class="si">{</span><span class="n">path</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+            <span class="k">yield</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">count</span> <span class="o">!=</span> <span class="n">nnz</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">path</span><span class="si">=}</span><span class="s2"> declares </span><span class="si">{</span><span class="n">nnz</span><span class="si">}</span><span class="s2"> entries but has </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mtx_file_header">
+<a class="viewcode-back" href="../../../../reference/graphs/generated/flpq_data.graphs.readwrite.mtx.html#flpq_data.graphs.readwrite.mtx.mtx_file_header">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mtx_file_header</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""The ``(rows, cols, nnz)`` declared by one Boolean MatrixMarket file.</span>
+
+<span class="sd">    Returns ``None`` when the file does not follow the dataset format (the</span>
+<span class="sd">    two-line header and a dimension line of three integers). Streams — only</span>
+<span class="sd">    the first lines are read.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : Union[Path, str]</span>
+<span class="sd">        The path to the MatrixMarket file.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import pathlib, tempfile</span>
+<span class="sd">    &gt;&gt;&gt; p = pathlib.Path(tempfile.mkdtemp()) / "a.mtx"</span>
+<span class="sd">    &gt;&gt;&gt; _ = p.write_text(</span>
+<span class="sd">    ...     "%%MatrixMarket matrix coordinate pattern general\\n"</span>
+<span class="sd">    ...     "%%GraphBLAS type bool\\n3 3 2\\n0 1\\n1 2\\n"</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; mtx_file_header(p)</span>
+<span class="sd">    (3, 3, 2)</span>
+<span class="sd">    &gt;&gt;&gt; _ = p.write_text("%%MatrixMarket matrix coordinate real\\n1 1 0\\n")</span>
+<span class="sd">    &gt;&gt;&gt; mtx_file_header(p) is None</span>
+<span class="sd">    True</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    header : Optional[Tuple[int, int, int]]</span>
+<span class="sd">        The declared ``(rows, cols, nnz)``, or ``None`` if the header does not</span>
+<span class="sd">        match the dataset format.</span>
+<span class="sd">    """</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">!=</span> <span class="n">_MTX_HEADER</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">!=</span> <span class="n">_MTX_HEADER</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span></div>
+
+
+
 <div class="viewcode-block" id="iter_edges_from_mtx_dir">
 <a class="viewcode-back" href="../../../../reference/graphs/generated/flpq_data.graphs.readwrite.mtx.html#flpq_data.graphs.readwrite.mtx.iter_edges_from_mtx_dir">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">iter_edges_from_mtx_dir</span><span class="p">(</span>
@@ -567,22 +679,8 @@
 
     <span class="k">for</span> <span class="n">mtx_file</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.mtx"</span><span class="p">)):</span>
         <span class="n">label</span> <span class="o">=</span> <span class="n">filename_to_label</span><span class="p">(</span><span class="n">mtx_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mtx_file</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">!=</span> <span class="n">_MTX_HEADER</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unexpected header in </span><span class="si">{</span><span class="n">mtx_file</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
-            <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">nnz</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-
-            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
-                    <span class="k">continue</span>
-                <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-                <span class="k">yield</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">j</span>
-                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="k">if</span> <span class="n">count</span> <span class="o">!=</span> <span class="n">nnz</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">mtx_file</span><span class="si">=}</span><span class="s2"> declares </span><span class="si">{</span><span class="n">nnz</span><span class="si">}</span><span class="s2"> entries but has </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">iter_edges_from_mtx_file</span><span class="p">(</span><span class="n">mtx_file</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">u</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">v</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Stream edges from </span><span class="si">{</span><span class="n">path</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span></div>
 
