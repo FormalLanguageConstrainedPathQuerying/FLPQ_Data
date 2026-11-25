@@ -14,6 +14,13 @@ pre-publishes to TestPyPI as a packaging check.
 
 ## Procedure
 
+History is kept **linear**: no merge commits on `master`. Before the
+release PR, rebase `dev` onto `origin/master` (resolving conflicts, e.g.
+`uv.lock`, by regenerating with `uv lock`), run the quality gate, and push
+`dev` (`--force-with-lease` when the rebase rewrote published commits).
+Merge the PR with **rebase or fast-forward** — never a merge commit, never
+squash.
+
 1. Bump the version and finalize the changelog:
 
    ```bash
