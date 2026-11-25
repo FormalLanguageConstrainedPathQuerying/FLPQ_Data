@@ -21,6 +21,8 @@ scopes.
    data/name_resolution_shattered_pixel_dungeon
    data/name_resolution_libgdx
 
+.. graph-table:begin
+
 .. list-table::
 
    * - Graph
@@ -53,6 +55,8 @@ scopes.
      - not available
      - 11.54
      - `libgdx.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/libgdx.tar.gz>`_ 📥
+
+.. graph-table:end
 
 Canonical grammars
 ------------------

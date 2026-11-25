@@ -60,7 +60,7 @@ class GraphInfo:
         The number of stored edges (the sum of the MTX nnz).
     size_mb : float
         The archive size in MB (three decimals, derived from
-        :attr:`size_bytes`).
+        ``size_bytes``).
     size_bytes : int
         The exact archive size in bytes.
     sha256 : str

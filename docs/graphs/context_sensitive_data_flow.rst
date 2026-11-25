@@ -26,6 +26,8 @@ families), as in `"Taming Transitive Redundancy for Context-Free Language Reacha
    data/omnetpp
    data/perlbench
 
+.. graph-table:begin
+
 .. list-table::
 
    * - Graph
@@ -94,6 +96,8 @@ families), as in `"Taming Transitive Redundancy for Context-Free Language Reacha
      - 297504186
      - 728.83
      - `perlbench.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/perlbench.tar.gz>`_ 📥
+
+.. graph-table:end
 
 Canonical grammars
 ------------------

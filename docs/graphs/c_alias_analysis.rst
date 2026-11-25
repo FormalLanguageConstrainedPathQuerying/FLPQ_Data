@@ -37,6 +37,8 @@ discovered for each program.
    data/postgre
    data/kernel
 
+.. graph-table:begin
+
 .. list-table::
 
    * - Graph
@@ -165,6 +167,8 @@ discovered for each program.
      - 16747731
      - 148.57
      - `kernel.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/kernel.tar.gz>`_ 📥
+
+.. graph-table:end
 
 Canonical grammars
 ------------------

@@ -34,9 +34,25 @@ Consequences:
   no tolerance) covering every column.
 
 Verified before planning (all 9 tables, 115 rows): tables are structurally
-uniform (single-row header, no directive options); Num Nodes/Num Edges and
-Size cells already match the registry / exact S3 bytes (0 mismatches); count
-columns match the CSV; row sets are identical across site, registry, and CSV.
+uniform (single-row header, no directive options); Size cells match the exact
+S3 bytes; count columns match the CSV; row sets are identical across site,
+registry, and CSV.
+
+**Corrected during S2:** the pre-planning "Num Edges match" check was
+vacuous (its download-cell regex silently failed on every row, so the
+registry comparison never ran). The real state: **39 `Num Edges` cells are
+stale** — they list the *logical* edge count (forward + reverse) while the
+registry lists the *stored* count (forward only; reverse edges are
+auto-generated at load and must not be stored). The registry is correct (the
+contribution template defines `Num Edges` as "the number of stored edges";
+the archive READMEs state the stored count; the `java_points_to` category —
+stripped in #136 — has docs matching the registry). The stale cells:
+biological_uniprot (10), data_provenance (18), field_sensitive_alias (10),
+rdf `geospecies` (1, off by 14 — a separate smaller drift). The per-graph
+data pages of these categories are stale too (they still list `_r` reverse
+labels). Confirmed with the user: render from the registry (correcting the
+39 cells), also fix the stale data pages, and document the reverse-edge
+policy canonically (new S3).
 
 ## Reuse analysis (per the `reusing` skill)
 
@@ -58,7 +74,7 @@ columns match the CSV; row sets are identical across site, registry, and CSV.
 
 ## Subtasks
 
-### S1: Add exact `size_bytes` to the registry (generator, API, bundled data)
+### S1: Add exact `size_bytes` to the registry (generator, API, bundled data) [done] faf95f9
 
 **Code:**
 - `utils/generate_registry.py` — `build_record`: store
@@ -101,7 +117,7 @@ columns match the CSV; row sets are identical across site, registry, and CSV.
   `round(size_bytes / 10**6, 3) == size_mb`, and
   `format_size_mb(size_bytes)` equals the current docs cell (115/115).
 
-### S2: `utils/graph_tables.py` — render the category tables from registry + CSV
+### S2: `utils/graph_tables.py` — render the category tables from registry + CSV [done]
 
 **Code:**
 - New `utils/graph_tables.py`:
@@ -128,16 +144,21 @@ columns match the CSV; row sets are identical across site, registry, and CSV.
     on any drift or validation problem.
 - `utils/reachable_pairs_tables.py` — add `graph_pages` (moved from
   `applicable_graphs.py`, next to `page_to_graph`); `applicable_graphs.py`
-  imports it from there (its local definition is removed).
+  imports it from there (its local definition is removed). Also add
+  `display_path` (moved from `applicable_graphs._rel`, made public): a short
+  display path when the path is under the repo root, the full path otherwise
+  (needed so the check-mode reporting works for both the real repo and the
+  tmp_path test fixtures). `applicable_graphs` and `graph_tables` both use it.
 - One-time marker insertion into the 9 category pages (throwaway script
   using the existing `iter_graph_tables` to locate each table):
   `.. graph-table:begin` before the `.. list-table::` line,
   `.. graph-table:end` after the last cell line, blank-line separated per
   the existing marker convention.
-- Run `python utils/graph_tables.py --update` once: the expected diff is
-  exactly 2 reordered rows (rdf: `eclass` before `geospecies`/`go`;
-  biological_uniprot: `unigraph_7` before `unigraph_6`); every cell value
-  unchanged.
+- Run `python utils/graph_tables.py --update` once: the diff is the 39 stale
+  `Num Edges` corrections (logical → stored count; see the corrected
+  verification note above) plus 2 reordered rows (rdf: `eclass` before
+  `geospecies`/`go`; biological_uniprot: `unigraph_7` before `unigraph_6`);
+  every other cell unchanged.
 
 **Tests:**
 - New `tests/utils/test_graph_tables.py`:
@@ -173,7 +194,41 @@ columns match the CSV; row sets are identical across site, registry, and CSV.
 - The rendered region text starts at `.. list-table::` and ends at the last
   cell line (no surrounding blank lines — `replace_marked_region` adds them).
 
-### S3: Retire `archive_sizes.py` and `update_category_columns`
+### S3: Fix the stale data pages + document the reverse-edge policy canonically
+
+**Context:** 39 data pages (biological_uniprot 10, data_provenance 18,
+field_sensitive_alias 10, rdf `geospecies` 1) list the *logical* edge count
+(forward + reverse) and `_r` reverse-label rows, but the archives store only
+forward edges (reverse edges are auto-generated at load and must not be
+stored). The registry and the (now-rendered) category tables use the stored
+count; the data pages must match.
+
+**Code:** n/a (docs only).
+
+**Docs:**
+- The 39 stale data pages (`docs/graphs/data/*.rst`):
+  - "Graph Statistics" `Num Edges` → the registry's `num_edges` (stored).
+  - "Edges Statistics": drop the reverse-label rows (the `_r` / `r_i`
+    variants); the remaining forward-label rows sum to the stored count.
+- Canonical reverse-edge policy statement in the right shared place
+  (`docs/graphs/index.rst`, the graph-data conventions): reverse edges are
+  not stored in the archives, are auto-generated at load time
+  (`add_reverse_edges`), and are **not** counted in `Num Edges` — the
+  registry, the category tables, and the data pages all count stored edges
+  only.
+
+**Verification:**
+- For each fixed data page: the "Edges Statistics" rows sum to the registry
+  `num_edges`, and no reverse-style label remains.
+- The canonical statement is the single source of truth; the issue template
+  ("stored edges", "no `_r` rows") and the data pages align with it.
+
+**Spec:**
+- After this subtask, every data page's `Num Edges` and `Edges Statistics`
+  match the registry (stored edges only), and the reverse-edge policy is
+  stated once in a canonical place.
+
+### S4: Retire `archive_sizes.py` and `update_category_columns`
 
 **Code:**
 - Delete `utils/archive_sizes.py` and `tests/utils/test_archive_sizes.py`.
@@ -212,7 +267,7 @@ columns match the CSV; row sets are identical across site, registry, and CSV.
   `CHANGELOG.md` history and `tasks/global_plan.md`, which are historical
   records and stay untouched).
 
-### S4: Point the workflows at the rendered tables + changelog
+### S5: Point the workflows at the rendered tables + changelog
 
 **Code:**
 - `utils/upload_to_s3.py` — docstring: the verified size is recorded in the
@@ -246,11 +301,12 @@ green).
 
 ## Execution notes
 
-- S1 → S2 → S3 → S4 strictly in order (S2 needs `size_bytes`; S3 retires
-  the old writers only after the new one is in place and green; S4
-  documents the final state).
-- One commit per subtask: `feat(194-S1)`, `feat(194-S2)`,
-  `refactor(194-S3)`, `docs(194-S4)`; the last carries `Closes #194`.
-- The S2 `--update` run must produce exactly the 2-row reorder diff — a
-  larger diff means the renderer output deviates from the current layout
-  and must be investigated before committing.
+- S1 → S2 → S3 → S4 → S5 strictly in order (S2 needs `size_bytes`; S3 fixes
+  the stale data pages and documents the reverse-edge policy; S4 retires the
+  old writers only after the new one is in place and green; S5 documents the
+  final state).
+- One commit per subtask: `feat(194-S1)`, `feat(194-S2)`, `docs(194-S3)`,
+  `refactor(194-S4)`, `docs(194-S5)`; the last carries `Closes #194`.
+- The S2 `--update` run produced the expected diff: the 39 stale `Num Edges`
+  corrections (logical → stored count) plus the 2 row reorders (rdf `eclass`,
+  biological_uniprot `unigraph_6`/`unigraph_7`); every other cell unchanged.

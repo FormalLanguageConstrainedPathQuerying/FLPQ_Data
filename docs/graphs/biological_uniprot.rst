@@ -27,6 +27,8 @@ as in `"Subgraph queries by context-free grammars" <https://researchportal.helsi
    data/unigraph_9
    data/unigraph_10
 
+.. graph-table:begin
+
 .. list-table::
 
    * - Graph
@@ -37,64 +39,66 @@ as in `"Subgraph queries by context-free grammars" <https://researchportal.helsi
      - Download
    * - :ref:`unigraph_1`
      - 3082
-     - 11966
+     - 6033
      - 376578
      - 0.972
      - `unigraph_1.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_1.tar.gz>`_ 📥
    * - :ref:`unigraph_2`
      - 36468
-     - 168344
+     - 88353
      - 39888347
      - 106.10
      - `unigraph_2.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_2.tar.gz>`_ 📥
    * - :ref:`unigraph_3`
      - 41333
-     - 193866
+     - 101718
      - 52471840
      - 138.87
      - `unigraph_3.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_3.tar.gz>`_ 📥
    * - :ref:`unigraph_4`
      - 215481
-     - 1346130
+     - 691906
      - 808091802
      - 2163.03
      - `unigraph_4.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_4.tar.gz>`_ 📥
    * - :ref:`unigraph_5`
      - 243839
-     - 1818404
+     - 942263
      - 2303590109
      - 6007.86
      - `unigraph_5.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_5.tar.gz>`_ 📥
-   * - :ref:`unigraph_6`
-     - 286645
-     - 1708910
-     - 1722963921
-     - 4603.69
-     - `unigraph_6.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_6.tar.gz>`_ 📥
    * - :ref:`unigraph_7`
      - 285577
-     - 2073268
+     - 1069173
      - 2320964134
      - 6098.27
      - `unigraph_7.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_7.tar.gz>`_ 📥
+   * - :ref:`unigraph_6`
+     - 286645
+     - 881565
+     - 1722963921
+     - 4603.69
+     - `unigraph_6.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_6.tar.gz>`_ 📥
    * - :ref:`unigraph_8`
      - 449237
-     - 3385168
+     - 1749604
      - not available
      - 5.72
      - `unigraph_8.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_8.tar.gz>`_ 📥
    * - :ref:`unigraph_9`
      - 475479
-     - 3579034
+     - 1851322
      - not available
      - 6.10
      - `unigraph_9.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_9.tar.gz>`_ 📥
    * - :ref:`unigraph_10`
      - 2055882
-     - 17223588
+     - 8948375
      - not available
      - 29.27
      - `unigraph_10.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/unigraph_10.tar.gz>`_ 📥
+
+.. graph-table:end
 
 Canonical grammars
 ------------------

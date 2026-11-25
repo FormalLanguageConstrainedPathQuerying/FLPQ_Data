@@ -49,7 +49,9 @@ __all__ = [
     "toctree_entries",
     "category_order",
     "category_pages",
+    "display_path",
     "page_to_graph",
+    "graph_pages",
     "graph_to_category",
     "load_rows",
     "render_tables_region",
@@ -99,6 +101,18 @@ _URL_RE = re.compile(
     r"\d+\.\d+\.\d+/graph/([^.]+)\.tar\.gz"
 )
 _REF_RE = re.compile(r"^:ref:`([^`]+)`")
+
+
+def display_path(path: pathlib.Path) -> str:
+    """A short display path when possible, the full path otherwise.
+
+    Paths under the repo root are shown relative to it; anything else
+    (e.g. a test fixture in a temp dir) is shown as-is.
+    """
+    try:
+        return str(path.relative_to(MAIN_FOLDER))
+    except ValueError:
+        return str(path)
 
 
 def toctree_entries(path: pathlib.Path) -> list[str]:
@@ -177,6 +191,24 @@ def page_to_graph(docs_dir: pathlib.Path) -> dict[str, str]:
                 raise ValueError(f"no Yandex download link in data/{page}.rst")
             mapping[page] = match.group(1)
     return mapping
+
+
+def graph_pages(docs_dir: pathlib.Path) -> dict[str, str]:
+    """Maps every graph name to its shared docs page stem.
+
+    The inverse of :func:`page_to_graph`.
+
+    Parameters
+    ----------
+    docs_dir : pathlib.Path
+        The docs directory.
+
+    Returns
+    -------
+    mapping : dict[str, str]
+        Graph name -> data-page stem.
+    """
+    return {graph: page for page, graph in page_to_graph(docs_dir).items()}
 
 
 def graph_to_category(docs_dir: pathlib.Path) -> dict[str, str]:

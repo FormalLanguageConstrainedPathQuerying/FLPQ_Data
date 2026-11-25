@@ -221,6 +221,49 @@ Behavior:
 When a query is added for a graph, add its row to the CSV first and run this
 tool with ``--update`` before committing.
 
+.. _graph_tables:
+
+Graph tables
+------------
+
+``utils/graph_tables.py`` renders the per-category graph tables of
+``docs/graphs/*.rst`` from the machine sources, so no cell is maintained by
+hand::
+
+   python utils/graph_tables.py [--update]
+
+Every cell of a category table is machine-derivable, so the whole table is
+rendered — between the ``graph-table`` markers — instead of edited:
+
+- ``Num Nodes``, ``Num Edges``, and ``Size (MB)`` come from the registry
+  (:ref:`generate_registry`); the size is rendered from the exact
+  ``size_bytes`` with the shared MB formatting of ``utils/sizes.py``.
+- the ``Reachable pairs`` count columns come from
+  ``flpq_data/dataset/reachable_pairs.csv`` (CFPQ rows only; the (column,
+  grammar) pairs per category are ``GRAMMAR_COLUMNS`` in
+  :ref:`reachable_pairs_tables`).
+- the ``Graph`` cell is a ``:ref:`` to the graph's data page (the page
+  mapping is derived from the site, as in :ref:`reachable_pairs_tables`).
+- the ``Download`` link is the archive name plus the dataset URL.
+
+Rows are sorted by (num_nodes, name). Before anything is written the
+registry, the CSV, and the site are cross-checked pairwise: a registry graph
+the docs do not list (or list in the wrong category), a registry graph
+without a reachable-pairs row, a CSV graph the registry does not know, or a
+docs category with no registry graph is a validation problem that blocks the
+run.
+
+Behavior:
+
+- **Check mode (default).** Renders every table and reports the regions that
+  disagree with the registry and the CSV (or any validation problem), exiting
+  non-zero, so it can gate a commit. The check is offline: it reads the
+  bundled registry and the CSV only.
+- **``--update``.** Rewrites the drifted regions.
+
+When the registry or the CSV changes (a new graph, a new count, a
+re-uploaded archive), run this tool with ``--update`` before committing.
+
 .. _generate_registry:
 
 Graph registry

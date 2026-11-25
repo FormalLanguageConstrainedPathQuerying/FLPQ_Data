@@ -26,6 +26,8 @@ field (the ``f_i`` family), as in `"Taming Transitive Redundancy for Context-Fre
    data/imagick_field_sensitive_alias
    data/omnetpp_field_sensitive_alias
 
+.. graph-table:begin
+
 .. list-table::
 
    * - Graph
@@ -36,64 +38,66 @@ field (the ``f_i`` family), as in `"Taming Transitive Redundancy for Context-Fre
      - Download
    * - :ref:`xz_field_sensitive_alias`
      - 2808
-     - 6604
+     - 3302
      - 205164
      - 0.536
      - `xz_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/xz_field_sensitive_alias.tar.gz>`_ 📥
    * - :ref:`nab_field_sensitive_alias`
      - 3444
-     - 7982
+     - 3991
      - 262566
      - 0.677
      - `nab_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/nab_field_sensitive_alias.tar.gz>`_ 📥
    * - :ref:`leela_field_sensitive_alias`
      - 8090
-     - 19888
+     - 9944
      - 3968276
      - 9.92
      - `leela_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/leela_field_sensitive_alias.tar.gz>`_ 📥
    * - :ref:`povray_field_sensitive_alias`
      - 15137
-     - 38886
+     - 19443
      - 27219043
      - 70.24
      - `povray_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/povray_field_sensitive_alias.tar.gz>`_ 📥
    * - :ref:`x264_field_sensitive_alias`
      - 18051
-     - 44780
+     - 22390
      - 5246565
      - 13.02
      - `x264_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/x264_field_sensitive_alias.tar.gz>`_ 📥
    * - :ref:`cactus_field_sensitive_alias`
      - 22350
-     - 56636
+     - 28318
      - 37625324
      - 97.87
      - `cactus_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/cactus_field_sensitive_alias.tar.gz>`_ 📥
    * - :ref:`parest_field_sensitive_alias`
      - 29788
-     - 64528
+     - 32264
      - 49415038
      - 126.35
      - `parest_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/parest_field_sensitive_alias.tar.gz>`_ 📥
    * - :ref:`perlbench_field_sensitive_alias`
      - 38091
-     - 110874
+     - 55437
      - 851737865
      - 2105.77
      - `perlbench_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/perlbench_field_sensitive_alias.tar.gz>`_ 📥
    * - :ref:`imagick_field_sensitive_alias`
      - 41652
-     - 111550
+     - 55775
      - 369956094
      - 953.16
      - `imagick_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/imagick_field_sensitive_alias.tar.gz>`_ 📥
    * - :ref:`omnetpp_field_sensitive_alias`
      - 49962
-     - 119064
+     - 59532
      - 158255766
      - 407.47
      - `omnetpp_field_sensitive_alias.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/omnetpp_field_sensitive_alias.tar.gz>`_ 📥
+
+.. graph-table:end
 
 Canonical grammars
 ------------------

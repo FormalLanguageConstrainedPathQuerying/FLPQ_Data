@@ -19,6 +19,8 @@ Queries are regular path queries over those relations.
    data/pokec
    data/yago2s
 
+.. graph-table:begin
+
 .. list-table::
 
    * - Graph
@@ -36,3 +38,5 @@ Queries are regular path queries over those relations.
      - 77869864
      - 405.98
      - `yago2s.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/yago2s.tar.gz>`_ 📥
+
+.. graph-table:end

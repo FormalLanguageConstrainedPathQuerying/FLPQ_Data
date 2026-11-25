@@ -29,9 +29,10 @@ from reachable_pairs_tables import (
     _section_title,
     _validation_problems,
     category_order,
+    display_path,
+    graph_pages,
     graph_to_category,
     load_rows,
-    page_to_graph,
     replace_marked_region,
 )
 
@@ -59,22 +60,6 @@ CLASS_PAGES: dict[str, pathlib.Path] = {
     "rpq": DOCS_DIR / "queries" / "rpq" / "index.rst",
     "mcfpq": DOCS_DIR / "queries" / "mcfpq" / "index.rst",
 }
-
-
-def _rel(path: pathlib.Path) -> str:
-    """A short display path when possible, the full path otherwise."""
-    try:
-        return str(path.relative_to(MAIN_FOLDER))
-    except ValueError:
-        return str(path)
-
-
-def graph_pages(docs_dir: pathlib.Path) -> dict[str, str]:
-    """Maps every graph name to its shared docs page stem.
-
-    The inverse of :func:`reachable_pairs_tables.page_to_graph`.
-    """
-    return {graph: page for page, graph in page_to_graph(docs_dir).items()}
 
 
 def render_class_region(
@@ -183,7 +168,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 text, render[cls], BEGIN_MARKER, END_MARKER
             )
         except ValueError as error:
-            print(f"error: {_rel(path)}: {error}")
+            print(f"error: {display_path(path)}: {error}")
             return 1
         updates.append((path, text, updated))
 
@@ -191,12 +176,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         for path, text, updated in updates:
             if updated != text:
                 path.write_text(updated, encoding="utf-8")
-                print(f"{_rel(path)}: region updated")
+                print(f"{display_path(path)}: region updated")
         print("OK: applicable-graphs lists are in sync with the CSV.")
         return 0
 
     problems = [
-        f"{_rel(path)}: the applicable-graphs list is out of sync with the CSV"
+        f"{display_path(path)}: the applicable-graphs list is out of sync with the CSV"
         for path, text, updated in updates
         if updated != text
     ]

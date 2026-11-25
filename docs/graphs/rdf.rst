@@ -36,6 +36,8 @@ queries over RDF as in `"Context-Free Path Queries on RDF Graphs" <https://arxiv
    data/taxonomy_hierarchy
    data/taxonomy
 
+.. graph-table:begin
+
 .. list-table::
 
    * - Graph
@@ -182,9 +184,18 @@ queries over RDF as in `"Context-Free Path Queries on RDF Graphs" <https://arxiv
      - 14267542
      - 38.43
      - `enzyme.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/enzyme.tar.gz>`_ 📥
+   * - :ref:`eclass`
+     - 239111
+     - 360248
+     - 90988
+     - 90994
+     - 6
+     -
+     - 2.10
+     - `eclass.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/eclass.tar.gz>`_ 📥
    * - :ref:`geospecies`
      - 450609
-     - 2201532
+     - 2201518
      - 0
      - 85
      - 85
@@ -200,15 +211,6 @@ queries over RDF as in `"Context-Free Path Queries on RDF Graphs" <https://arxiv
      -
      - 11.23
      - `go.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/go.tar.gz>`_ 📥
-   * - :ref:`eclass`
-     - 239111
-     - 360248
-     - 90988
-     - 90994
-     - 6
-     -
-     - 2.10
-     - `eclass.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/eclass.tar.gz>`_ 📥
    * - :ref:`taxonomy_hierarchy`
      - 2112625
      - 32876289
@@ -227,6 +229,8 @@ queries over RDF as in `"Context-Free Path Queries on RDF Graphs" <https://arxiv
      -
      - 59.52
      - `taxonomy.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/taxonomy.tar.gz>`_ 📥
+
+.. graph-table:end
 
 Canonical grammars
 ------------------

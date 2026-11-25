@@ -39,6 +39,8 @@ are not stored (see :ref:`graphs`).
    data/tradebeans
    data/tradesoap
 
+.. graph-table:begin
+
 .. list-table::
 
    * - Graph
@@ -173,6 +175,8 @@ are not stored (see :ref:`graphs`).
      - 698567
      - 4.30
      - `tradesoap.tar.gz <https://cfpq-data.storage.yandexcloud.net/6.0.0/graph/tradesoap.tar.gz>`_ 📥
+
+.. graph-table:end
 
 Canonical grammars
 ------------------
