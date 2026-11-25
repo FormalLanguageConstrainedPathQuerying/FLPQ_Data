@@ -471,6 +471,7 @@ published to object storage as ``<version>/registry.json``::
    { "version": "6.0.0",
      "graphs": { "skos": { "category": "rdf", "num_nodes": 144,
                            "num_edges": 252, "size_mb": 0.003,
+                           "size_bytes": 3374,
                            "sha256": "...",
                            "queries": [ {"class": "cfpq",
                                          "name": "nested_parentheses_subClassOf",
@@ -478,9 +479,9 @@ published to object storage as ``<version>/registry.json``::
 
 Field sources: the graph list and ``category`` from
 ``reachable_pairs.csv``; ``num_nodes``/``num_edges`` from the MTX headers of
-the archive's ``graph/`` dir; ``size_mb`` from the stored object size;
-``sha256`` of the ``.tar.gz``; ``queries`` from the archive's ``queries/``
-tree. The repo-only ``utils/generate_registry.py`` (pattern of
+the archive's ``graph/`` dir; ``size_bytes`` the exact stored object size in
+bytes and ``size_mb`` (three decimals) derived from it; ``sha256`` of the
+``.tar.gz``; ``queries`` from the archive's ``queries/`` tree. The repo-only ``utils/generate_registry.py`` (pattern of
 ``utils/archive_sizes.py``) regenerates the file; it runs locally, never in
 CI (no-network policy).
 

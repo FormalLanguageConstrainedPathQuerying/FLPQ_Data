@@ -6,6 +6,7 @@
       "num_nodes": 90673,
       "num_edges": 257831,
       "size_mb": 1.152,
+      "size_bytes": 1151804,
       "sha256": "a19570647a8d17ae1a8d0cb7b33c589f78a73d87bde085bdd316174667324257",
       "queries": [
         {
@@ -22,6 +23,7 @@
       "num_nodes": 1721418,
       "num_edges": 1510411,
       "size_mb": 364.198,
+      "size_bytes": 364197739,
       "sha256": "d0171fd28bb34884e557c7f44e724de8cdbb9882d14fd4e3c49d512e8ebaf4d0",
       "queries": [
         {
@@ -40,6 +42,7 @@
       "num_nodes": 3448422,
       "num_edges": 2970242,
       "size_mb": 45.264,
+      "size_bytes": 45263604,
       "sha256": "6044f0a0fbef2168cddab9e576c0caa69857efa87f679268002daab3c455f4de",
       "queries": [
         {
@@ -58,6 +61,7 @@
       "num_nodes": 291,
       "num_edges": 425,
       "size_mb": 0.004,
+      "size_bytes": 3771,
       "sha256": "d6ea6982ddc180009826c86c0b3f42094cbf8a95a4ac712472b03401e390c991",
       "queries": [
         {
@@ -89,6 +93,7 @@
       "num_nodes": 24690,
       "num_edges": 25196,
       "size_mb": 0.212,
+      "size_bytes": 212176,
       "sha256": "66b6a24618f1c637bb734c634cfe141c7f2c982dd64e194f9062c28f3244d7f4",
       "queries": [
         {
@@ -107,6 +112,7 @@
       "num_nodes": 60175,
       "num_edges": 63089,
       "size_mb": 0.454,
+      "size_bytes": 454064,
       "sha256": "231edc7bb42b2fec9b7f5c8c91fef5be243db300ea308c3d58c396ff0892a24f",
       "queries": [
         {
@@ -125,6 +131,7 @@
       "num_nodes": 341,
       "num_edges": 459,
       "size_mb": 0.004,
+      "size_bytes": 3767,
       "sha256": "a08c1e422c7faaf914e1cee9886dccc071aa9f12d88882174a5c8b5273038054",
       "queries": [
         {
@@ -156,6 +163,7 @@
       "num_nodes": 3423234,
       "num_edges": 2951393,
       "size_mb": 45.205,
+      "size_bytes": 45204616,
       "sha256": "3d8a28b80f1a184a894fd947c42b7e56261bf7719ff2704cca0ee1af36ccf4ef",
       "queries": [
         {
@@ -174,6 +182,7 @@
       "num_nodes": 632,
       "num_edges": 556,
       "size_mb": 0.005,
+      "size_bytes": 4820,
       "sha256": "1e438d092ed3678f24911854460f95a7fbb326714e9538186f94058da2320ca8",
       "queries": [
         {
@@ -192,6 +201,7 @@
       "num_nodes": 359200,
       "num_edges": 580297,
       "size_mb": 123.502,
+      "size_bytes": 123502213,
       "sha256": "00af336fe6f8eeea9025bfed7cc71ec8f876ab0081b3e2624ae2292f3fa1f343",
       "queries": [
         {
@@ -209,6 +219,7 @@
       "num_nodes": 22350,
       "num_edges": 28318,
       "size_mb": 97.868,
+      "size_bytes": 97868217,
       "sha256": "89c88b33d6bce77e77db1b122a49f7970e1fae85f1a0b3eda8090795aa67af3e",
       "queries": [
         {
@@ -226,6 +237,7 @@
       "num_nodes": 6880,
       "num_edges": 21245,
       "size_mb": 0.158,
+      "size_bytes": 157540,
       "sha256": "bf2d0ff31d81c5bc85ed95d8280252c5360bac7df7be646885da0f0dbf2777ac",
       "queries": [
         {
@@ -242,6 +254,7 @@
       "num_nodes": 944,
       "num_edges": 2784,
       "size_mb": 0.02,
+      "size_bytes": 19537,
       "sha256": "f9ecdddf927ae455ac7d6e1813daa57d67812af99bdfcc212948e62e82afff13",
       "queries": [
         {
@@ -258,6 +271,7 @@
       "num_nodes": 26188,
       "num_edges": 31214,
       "size_mb": 0.261,
+      "size_bytes": 260657,
       "sha256": "75dbbd98342eb4d2b81912d21b3f2c8a53b46ced71f5640f7f03c4c85f16b6fd",
       "queries": [
         {
@@ -276,6 +290,7 @@
       "num_nodes": 40970,
       "num_edges": 48427,
       "size_mb": 0.371,
+      "size_bytes": 371500,
       "sha256": "05607caac6f9e9e28d307b7c12f97c1d1c1b1c9112904184abcf4e044311214d",
       "queries": [
         {
@@ -294,6 +309,7 @@
       "num_nodes": 1323,
       "num_edges": 2752,
       "size_mb": 0.014,
+      "size_bytes": 13893,
       "sha256": "8518070562a596b9351111232ce7d8e68a84a9a84c5cdab2652f2fcdb2adfd1b",
       "queries": [
         {
@@ -325,6 +341,7 @@
       "num_nodes": 3464970,
       "num_edges": 2988387,
       "size_mb": 45.836,
+      "size_bytes": 45836182,
       "sha256": "22af058cfe638637e056d6f6bf9e6ed611f53445a62e1d68274444ac39d1f6aa",
       "queries": [
         {
@@ -343,6 +360,7 @@
       "num_nodes": 23749,
       "num_edges": 68328,
       "size_mb": 1.936,
+      "size_bytes": 1935697,
       "sha256": "924d3ce5126b5222127d860ac101e055ce64aa39cd216ab182f0ad874a8a55c8",
       "queries": [
         {
@@ -359,6 +377,7 @@
       "num_nodes": 4273803,
       "num_edges": 3707769,
       "size_mb": 110.634,
+      "size_bytes": 110634127,
       "sha256": "91a0ba48257bafda9a5376d65d2cd6baf39962200319b90cdf6eb4e2f85cc0d5",
       "queries": [
         {
@@ -377,6 +396,7 @@
       "num_nodes": 239111,
       "num_edges": 360248,
       "size_mb": 2.099,
+      "size_bytes": 2098513,
       "sha256": "11afa97b6120ecb3059d5d0de5386d84db33dd166b22294394bc295cc2a9084b",
       "queries": [
         {
@@ -408,6 +428,7 @@
       "num_nodes": 41383,
       "num_edges": 40200,
       "size_mb": 0.284,
+      "size_bytes": 283818,
       "sha256": "48bdf0adab227b92445aaab7ac7bb286a59b86c155598aef5643dff4a78fa294",
       "queries": [
         {
@@ -426,6 +447,7 @@
       "num_nodes": 48815,
       "num_edges": 86543,
       "size_mb": 38.43,
+      "size_bytes": 38430229,
       "sha256": "3120a81fbd11b88ae5239238640b26b33e9f43f8237028117e255c2244d50c0f",
       "queries": [
         {
@@ -464,6 +486,7 @@
       "num_nodes": 6455,
       "num_edges": 16487,
       "size_mb": 0.094,
+      "size_bytes": 93708,
       "sha256": "07d3f34467ee3d44101b732bb0ad507549702203684c05a2b41ee0c8fc7a3df9",
       "queries": [
         {
@@ -480,6 +503,7 @@
       "num_nodes": 1517,
       "num_edges": 4611,
       "size_mb": 0.041,
+      "size_bytes": 41359,
       "sha256": "9e8cc500b704da7f177ee27bea86bc3eac22d952b4df8494d18f2bb0ff342cf6",
       "queries": [
         {
@@ -496,6 +520,7 @@
       "num_nodes": 256,
       "num_edges": 631,
       "size_mb": 0.004,
+      "size_bytes": 4323,
       "sha256": "ec0e82c81c86ee5a4e32669b4f508446e30a828aec1638867037388b8b12236d",
       "queries": [
         {
@@ -527,6 +552,7 @@
       "num_nodes": 86183,
       "num_edges": 83016,
       "size_mb": 0.67,
+      "size_bytes": 670043,
       "sha256": "61044e84497d347c219ae48301101667883410c41a97bff961b86bef08170fac",
       "queries": [
         {
@@ -545,6 +571,7 @@
       "num_nodes": 4177416,
       "num_edges": 3609373,
       "size_mb": 69.654,
+      "size_bytes": 69654312,
       "sha256": "40d4e9561ddce5e490a0f0a2ea44d56a9b6f9deeba609dd19f4394e613d7d1fb",
       "queries": [
         {
@@ -563,6 +590,7 @@
       "num_nodes": 778,
       "num_edges": 1086,
       "size_mb": 0.007,
+      "size_bytes": 6781,
       "sha256": "7f04bcbd176e2aeb30657e2619ffcd8de0d52a1f23742780b911adf371922ea7",
       "queries": [
         {
@@ -594,6 +622,7 @@
       "num_nodes": 129,
       "num_edges": 273,
       "size_mb": 0.003,
+      "size_bytes": 3265,
       "sha256": "c2242cd11869bd9296501d892a31135ab9bc40e5fcc073cb44f15e4f59c40ab9",
       "queries": [
         {
@@ -625,6 +654,7 @@
       "num_nodes": 450609,
       "num_edges": 2201518,
       "size_mb": 593.142,
+      "size_bytes": 593141589,
       "sha256": "239cb0636526cfafc9b41c809448e813a2825c02d1908bc44ec2aedf1b520724",
       "queries": [
         {
@@ -663,6 +693,7 @@
       "num_nodes": 582929,
       "num_edges": 1437437,
       "size_mb": 11.227,
+      "size_bytes": 11226859,
       "sha256": "27e4e5921c1cd641c03f456803af1da4d162781963ad2deac5f2298c6d54697f",
       "queries": [
         {
@@ -694,6 +725,7 @@
       "num_nodes": 45007,
       "num_edges": 490109,
       "size_mb": 4.966,
+      "size_bytes": 4966330,
       "sha256": "0b0ce63a3e526b9807866048a05bae168dcf43f98deda9da70dba943963038e1",
       "queries": [
         {
@@ -725,6 +757,7 @@
       "num_nodes": 14114,
       "num_edges": 17467,
       "size_mb": 0.268,
+      "size_bytes": 268408,
       "sha256": "9bf3c2d092c0dd2ea354abcaa9a5fcfe7d4a11440716f44a720829f595f660be",
       "queries": [
         {
@@ -743,6 +776,7 @@
       "num_nodes": 129562,
       "num_edges": 168116,
       "size_mb": 71.9,
+      "size_bytes": 71900115,
       "sha256": "c2d924380cc5a025c394d66c12c46a2ffcee8d54b4ef03d195a5ac7e42d30bb7",
       "queries": [
         {
@@ -761,6 +795,7 @@
       "num_nodes": 2687,
       "num_edges": 2293,
       "size_mb": 0.017,
+      "size_bytes": 16994,
       "sha256": "fbf9567b84f9731382fa110871cdbdd150f0d7963e662113ba6118b3738d7e53",
       "queries": [
         {
@@ -779,6 +814,7 @@
       "num_nodes": 44717,
       "num_edges": 56683,
       "size_mb": 0.519,
+      "size_bytes": 518803,
       "sha256": "7aeaa4a09331459a76d0959ab020fb5d78f6bb62b2264cf082de6d3e766c7f7a",
       "queries": [
         {
@@ -797,6 +833,7 @@
       "num_nodes": 826,
       "num_edges": 2517,
       "size_mb": 0.023,
+      "size_bytes": 23044,
       "sha256": "92925a062e9c3606774fc75b1290ea1aa7c9fc3e78eaea89f870c75d11b9dfe8",
       "queries": [
         {
@@ -813,6 +850,7 @@
       "num_nodes": 331177,
       "num_edges": 445544,
       "size_mb": 35.411,
+      "size_bytes": 35411096,
       "sha256": "126c29e6e368b9c0e9f8138fc2ca4d41dfafbd9c9c5f1a05a3eca5f9f8fc614a",
       "queries": [
         {
@@ -830,6 +868,7 @@
       "num_nodes": 41652,
       "num_edges": 55775,
       "size_mb": 953.157,
+      "size_bytes": 953157478,
       "sha256": "906964d4482e6202be59a8c1c7dc8c56b7d46ef1a1303c0fb987ceeb31154ac2",
       "queries": [
         {
@@ -847,6 +886,7 @@
       "num_nodes": 2446224,
       "num_edges": 2112809,
       "size_mb": 31.761,
+      "size_bytes": 31761088,
       "sha256": "7f177eefbf52f25e884addbeee18d7af262abdee5fcab30e192e9cfce9642310",
       "queries": [
         {
@@ -865,6 +905,7 @@
       "num_nodes": 3401022,
       "num_edges": 2931498,
       "size_mb": 44.558,
+      "size_bytes": 44557824,
       "sha256": "7cbba65f445c0086b9557d9dcc1b71cf537171b3db8c2dd957035792809dc4b6",
       "queries": [
         {
@@ -883,6 +924,7 @@
       "num_nodes": 425,
       "num_edges": 1315,
       "size_mb": 0.014,
+      "size_bytes": 13937,
       "sha256": "b079ea1f8a492d4b5e9c48708ba3de18ea6d60b3f0f16ca12118ab82576ce57a",
       "queries": [
         {
@@ -899,6 +941,7 @@
       "num_nodes": 149404,
       "num_edges": 197678,
       "size_mb": 10.668,
+      "size_bytes": 10668096,
       "sha256": "ac2b13d8707268ff21c83c69dcdabdf7bf2a80c833e5a2e8019b220236ce467f",
       "queries": [
         {
@@ -917,6 +960,7 @@
       "num_nodes": 54952,
       "num_edges": 46322,
       "size_mb": 0.294,
+      "size_bytes": 293560,
       "sha256": "cada211c12a3e287aca5a7474598a8e16a9a8e03612df30b05715892e39f9d0b",
       "queries": [
         {
@@ -933,6 +977,7 @@
       "num_nodes": 1202,
       "num_edges": 3722,
       "size_mb": 0.036,
+      "size_bytes": 35635,
       "sha256": "fbead87ccb12d409bf8ca7476ad05ba656f1b8e4a0cef5a44374ab964ad518c2",
       "queries": [
         {
@@ -949,6 +994,7 @@
       "num_nodes": 185421,
       "num_edges": 161488,
       "size_mb": 1.026,
+      "size_bytes": 1026367,
       "sha256": "afcd96a0be55d966cb2eeacf29fda0aa9657774223bcb8aac7be479770be6394",
       "queries": [
         {
@@ -965,6 +1011,7 @@
       "num_nodes": 59818,
       "num_edges": 74685,
       "size_mb": 0.861,
+      "size_bytes": 860826,
       "sha256": "033d0c1d395d86eb47ceb88368a590b25a61fd5bbd01be6eb9eee98877e5d01b",
       "queries": [
         {
@@ -983,6 +1030,7 @@
       "num_nodes": 191895,
       "num_edges": 260034,
       "size_mb": 2.578,
+      "size_bytes": 2577998,
       "sha256": "5b77256849138a21296d12b156b302218e33ad1268869292539423ad0ab2072a",
       "queries": [
         {
@@ -1001,6 +1049,7 @@
       "num_nodes": 11254434,
       "num_edges": 9484213,
       "size_mb": 148.573,
+      "size_bytes": 148573500,
       "sha256": "4de8773316ff098664865822cd801ba00bc2439ea1c43a6716be41906c0267cf",
       "queries": [
         {
@@ -1019,6 +1068,7 @@
       "num_nodes": 47665,
       "num_edges": 63996,
       "size_mb": 2.009,
+      "size_bytes": 2008600,
       "sha256": "2550b683d6b40a170c895b349f38c05295e11ccef95c051f1cb2090cc6ffbf5f",
       "queries": [
         {
@@ -1036,6 +1086,7 @@
       "num_nodes": 8090,
       "num_edges": 9944,
       "size_mb": 9.925,
+      "size_bytes": 9924771,
       "sha256": "b2e38020195e277f0e661770dae01be2249b20ce6cebf4956a9468b1c8b125cc",
       "queries": [
         {
@@ -1053,6 +1104,7 @@
       "num_nodes": 3401355,
       "num_edges": 2931880,
       "size_mb": 44.682,
+      "size_bytes": 44682495,
       "sha256": "a230f38156d02c649f0292872d8760b7a91677b9713828794123f93662f04527",
       "queries": [
         {
@@ -1071,6 +1123,7 @@
       "num_nodes": 2571363,
       "num_edges": 2321366,
       "size_mb": 11.542,
+      "size_bytes": 11541752,
       "sha256": "b924226a67f3ec482d6f0ba714e33e0c8d60c1e16c5846546b22577e07aa360a",
       "queries": [
         {
@@ -1087,6 +1140,7 @@
       "num_nodes": 1687,
       "num_edges": 1453,
       "size_mb": 0.011,
+      "size_bytes": 10871,
       "sha256": "3c805901b114ff8d071e685902d854146ffd5d63c8aec561173adf54cba52610",
       "queries": [
         {
@@ -1105,6 +1159,7 @@
       "num_nodes": 18532,
       "num_edges": 17375,
       "size_mb": 0.133,
+      "size_bytes": 132513,
       "sha256": "66b6c159745460b385c8500dafe57a6145adddf6cb8c0d23397a37dddad812aa",
       "queries": [
         {
@@ -1123,6 +1178,7 @@
       "num_nodes": 15774,
       "num_edges": 14994,
       "size_mb": 0.114,
+      "size_bytes": 113632,
       "sha256": "41f11754bed5f96f2defbe8d08c627a385b4047200cbce66955b35b9372f6a3d",
       "queries": [
         {
@@ -1141,6 +1197,7 @@
       "num_nodes": 2538243,
       "num_edges": 2191079,
       "size_mb": 33.301,
+      "size_bytes": 33301428,
       "sha256": "3e0c80f5430ce1c98c11fd7983407c354e302451e77b0bb9debdc1935b186f46",
       "queries": [
         {
@@ -1159,6 +1216,7 @@
       "num_nodes": 25436,
       "num_edges": 31194,
       "size_mb": 0.249,
+      "size_bytes": 249284,
       "sha256": "c7f535bdbac2d9c3aad372f880bedb74c78ae7645e0e25e7c50f1965c023f4eb",
       "queries": [
         {
@@ -1177,6 +1235,7 @@
       "num_nodes": 31215,
       "num_edges": 37484,
       "size_mb": 1.945,
+      "size_bytes": 1945187,
       "sha256": "ad884a8f42c64a26377b61ffc792aa2ee77d5bdbebb8e312542ac775e66f5eb8",
       "queries": [
         {
@@ -1194,6 +1253,7 @@
       "num_nodes": 3444,
       "num_edges": 3991,
       "size_mb": 0.677,
+      "size_bytes": 676737,
       "sha256": "8cadbdc5b0e4c50cadee2bbedb236fba9c367c967f50f6b06548e471d915094f",
       "queries": [
         {
@@ -1211,6 +1271,7 @@
       "num_nodes": 4039470,
       "num_edges": 3500141,
       "size_mb": 65.471,
+      "size_bytes": 65470508,
       "sha256": "54fb0062e22b0c40ee4e4ac0458ddcd9570df9fbb7eb9d13cbab69fd265cd73a",
       "queries": [
         {
@@ -1229,6 +1290,7 @@
       "num_nodes": 463454,
       "num_edges": 958487,
       "size_mb": 28.878,
+      "size_bytes": 28877543,
       "sha256": "2075832473f12807663ad94f77c1d134b025b81928874a529cc7616717a86881",
       "queries": [
         {
@@ -1246,6 +1308,7 @@
       "num_nodes": 49962,
       "num_edges": 59532,
       "size_mb": 407.468,
+      "size_bytes": 407467662,
       "sha256": "eafa7b5be5d94ddc64d607411890655aae879fe13a581a4eb1fa1a6037620b05",
       "queries": [
         {
@@ -1263,6 +1326,7 @@
       "num_nodes": 13696,
       "num_edges": 42255,
       "size_mb": 0.601,
+      "size_bytes": 600828,
       "sha256": "f1d64d46c63474edb0eadf3ceb6df32695cb32f1f462e743d9028fd0992095be",
       "queries": [
         {
@@ -1279,6 +1343,7 @@
       "num_nodes": 233900,
       "num_edges": 307850,
       "size_mb": 5.168,
+      "size_bytes": 5168081,
       "sha256": "0e90568a6e661c4711094b86300282df3e2172533ef3615378d02e5bd09aa594",
       "queries": [
         {
@@ -1296,6 +1361,7 @@
       "num_nodes": 29788,
       "num_edges": 32264,
       "size_mb": 126.354,
+      "size_bytes": 126353566,
       "sha256": "ca326743fc0b125e7fe280581a5c352770c39f4f166139901bab0d6a9499269c",
       "queries": [
         {
@@ -1313,6 +1379,7 @@
       "num_nodes": 6238,
       "num_edges": 12363,
       "size_mb": 0.052,
+      "size_bytes": 51846,
       "sha256": "3ca703a103072d3871ca0ea2438aadcde50d1769a5ebf8e1d1cd2a51555d04f5",
       "queries": [
         {
@@ -1344,6 +1411,7 @@
       "num_nodes": 337,
       "num_edges": 640,
       "size_mb": 0.005,
+      "size_bytes": 5240,
       "sha256": "3a949f7e54c36d490fd57a2b4e260ed30e1c02921ec278dc4e8ff6d0587b7783",
       "queries": [
         {
@@ -1375,6 +1443,7 @@
       "num_nodes": 605864,
       "num_edges": 1114892,
       "size_mb": 728.829,
+      "size_bytes": 728828572,
       "sha256": "8f096465eb048208db620956fd5e11f45c6b6b0efb8a160f2f30be217be07a39",
       "queries": [
         {
@@ -1392,6 +1461,7 @@
       "num_nodes": 38091,
       "num_edges": 55437,
       "size_mb": 2105.77,
+      "size_bytes": 2105770204,
       "sha256": "4081d52ef738e845cf2fc4e949287effaed3005620f03032dd44d61f59178c10",
       "queries": [
         {
@@ -1409,6 +1479,7 @@
       "num_nodes": 671,
       "num_edges": 1980,
       "size_mb": 0.013,
+      "size_bytes": 13257,
       "sha256": "cf0e0abd9ac9170b96533227ac2fb16bcd37078a6bae2edf47e49afcee0db78a",
       "queries": [
         {
@@ -1440,6 +1511,7 @@
       "num_nodes": 353,
       "num_edges": 1080,
       "size_mb": 0.008,
+      "size_bytes": 7899,
       "sha256": "1e1199d00173ab8500e03bc5867da4e691bc50602b6061d982a36b61513fbc60",
       "queries": [
         {
@@ -1456,6 +1528,7 @@
       "num_nodes": 54444,
       "num_edges": 59329,
       "size_mb": 0.46,
+      "size_bytes": 459586,
       "sha256": "df2661b4183e73400e740df679b2ccea8c11a928d85c85fce485d630114b5ad9",
       "queries": [
         {
@@ -1474,6 +1547,7 @@
       "num_nodes": 1632803,
       "num_edges": 30622564,
       "size_mb": 257.685,
+      "size_bytes": 257684840,
       "sha256": "22155484c7132a4dcef736f7f2f615fe8c7e197f674561467a0430060352b1fb",
       "queries": [
         {
@@ -1491,6 +1565,7 @@
       "num_nodes": 5203419,
       "num_edges": 4678543,
       "size_mb": 424.643,
+      "size_bytes": 424643276,
       "sha256": "ed8b4d37a8e5c570cab11650231ecd205086f95de67bdaa77577755a8d0a88ce",
       "queries": [
         {
@@ -1509,6 +1584,7 @@
       "num_nodes": 346034,
       "num_edges": 581210,
       "size_mb": 90.665,
+      "size_bytes": 90664697,
       "sha256": "faa054181899c8119197b8fb433e1051f04ba98391761ae8ee6c83bd5fa272d4",
       "queries": [
         {
@@ -1526,6 +1602,7 @@
       "num_nodes": 15137,
       "num_edges": 19443,
       "size_mb": 70.244,
+      "size_bytes": 70243945,
       "sha256": "d11ddbb97ac461631609583f6d620227b4aadb8e2943b13a32a3cd7c8ff6f70c",
       "queries": [
         {
@@ -1543,6 +1620,7 @@
       "num_nodes": 815,
       "num_edges": 692,
       "size_mb": 0.006,
+      "size_bytes": 5711,
       "sha256": "e79310fed312d4c2d1340b9f0d68bfdeeb0aca2fbcd0726a673081e8b4e29b82",
       "queries": [
         {
@@ -1561,6 +1639,7 @@
       "num_nodes": 682,
       "num_edges": 2015,
       "size_mb": 0.016,
+      "size_bytes": 15862,
       "sha256": "6d5dadd931bc8c1b0595f5aa0ff1eea72fbe80ff5cd0e29e781e9ef2f95a2c34",
       "queries": [
         {
@@ -1577,6 +1656,7 @@
       "num_nodes": 148,
       "num_edges": 447,
       "size_mb": 0.004,
+      "size_bytes": 4187,
       "sha256": "81b3e1e1ab3633bfe703737e496d4cb58add94311faeb340b228901620dd1ba7",
       "queries": [
         {
@@ -1593,6 +1673,7 @@
       "num_nodes": 11706,
       "num_edges": 35836,
       "size_mb": 0.725,
+      "size_bytes": 725081,
       "sha256": "f9873f549d8c2488ee0a4afc72581b2aec6f1bcd7a8ee8121d0fd1d898910fca",
       "queries": [
         {
@@ -1609,6 +1690,7 @@
       "num_nodes": 3479982,
       "num_edges": 3003326,
       "size_mb": 46.739,
+      "size_bytes": 46738815,
       "sha256": "9ef60323453d905276784f26b160e43455c875f73e1f907d6dbb6dda54fb91b1",
       "queries": [
         {
@@ -1627,6 +1709,7 @@
       "num_nodes": 1179205,
       "num_edges": 1017798,
       "size_mb": 8.147,
+      "size_bytes": 8146800,
       "sha256": "a1a6d38e9de79d1d9cb65f0364febc9e79f23c56893b0751b62f2f902d9defd2",
       "queries": [
         {
@@ -1643,6 +1726,7 @@
       "num_nodes": 144,
       "num_edges": 252,
       "size_mb": 0.003,
+      "size_bytes": 3374,
       "sha256": "a818471fb2c15f22d85ab8341f29adb830a520f1de2f24af0543c3ce7c32b315",
       "queries": [
         {
@@ -1674,6 +1758,7 @@
       "num_nodes": 3528861,
       "num_edges": 3049732,
       "size_mb": 49.406,
+      "size_bytes": 49406454,
       "sha256": "f3d1e1afba4a878ff62b37935ed86a35acd8b9e10ffe1ab2e2be11eddc069a2d",
       "queries": [
         {
@@ -1692,6 +1777,7 @@
       "num_nodes": 13431,
       "num_edges": 43014,
       "size_mb": 0.974,
+      "size_bytes": 973539,
       "sha256": "b8498a89625fe3fa9720796f1b1046031404ef79c9b87683104f7de374a46169",
       "queries": [
         {
@@ -1708,6 +1794,7 @@
       "num_nodes": 15464,
       "num_edges": 15957,
       "size_mb": 0.129,
+      "size_bytes": 128752,
       "sha256": "bc2116dfbfea643bbf04ce15c76c1cde378762733f1cf52f3ecca3b131acec5b",
       "queries": [
         {
@@ -1726,6 +1813,7 @@
       "num_nodes": 76348,
       "num_edges": 222575,
       "size_mb": 1.032,
+      "size_bytes": 1032422,
       "sha256": "4d1f2f1185122b5e48c25d0b08cd6e75a060516e4e66f959b0b8d1af4f5d7edf",
       "queries": [
         {
@@ -1742,6 +1830,7 @@
       "num_nodes": 5728398,
       "num_edges": 14922125,
       "size_mb": 59.52,
+      "size_bytes": 59519522,
       "sha256": "0d168f3c76983b6a20bc3b732087aba08b92923140a93e2a6fec2a69b88874c9",
       "queries": [
         {
@@ -1773,6 +1862,7 @@
       "num_nodes": 2112625,
       "num_edges": 32876289,
       "size_mb": 133.908,
+      "size_bytes": 133908074,
       "sha256": "ce2d82787eee5e04fffe392f4bf396fb4470a01d59fb20ad42f24f31b99c6bf9",
       "queries": [
         {
@@ -1804,6 +1894,7 @@
       "num_nodes": 111327,
       "num_edges": 110884,
       "size_mb": 0.832,
+      "size_bytes": 832056,
       "sha256": "f0afc1d553e134883623a5413c20504fb5fd1e6528e446571e57c0b623882d46",
       "queries": [
         {
@@ -1822,6 +1913,7 @@
       "num_nodes": 439693,
       "num_edges": 466969,
       "size_mb": 4.298,
+      "size_bytes": 4298364,
       "sha256": "c81d3ba74d8c09fb4f304ef3abc7732840f4fb8e589d9de0e3d0988c7ab3ac43",
       "queries": [
         {
@@ -1840,6 +1932,7 @@
       "num_nodes": 440680,
       "num_edges": 468263,
       "size_mb": 4.302,
+      "size_bytes": 4302149,
       "sha256": "b2a1f5fd81c4c5c3a7ca4ef977ff782f648e997464a9ccfc40fc96cb9e8aca01",
       "queries": [
         {
@@ -1858,6 +1951,7 @@
       "num_nodes": 131,
       "num_edges": 277,
       "size_mb": 0.004,
+      "size_bytes": 3705,
       "sha256": "d0dafe25534fcff262c18932c344c6f29198e0066c0ee252b03a5f0d90ec8d76",
       "queries": [
         {
@@ -1889,6 +1983,7 @@
       "num_nodes": 3082,
       "num_edges": 6033,
       "size_mb": 0.972,
+      "size_bytes": 971533,
       "sha256": "41db17fb973d0ea179401ff0ed81adc845150342dc5e2c4febe42b743483ef94",
       "queries": [
         {
@@ -1905,6 +2000,7 @@
       "num_nodes": 2055882,
       "num_edges": 8948375,
       "size_mb": 29.272,
+      "size_bytes": 29272489,
       "sha256": "0dc4ba028f50a6805fa97b8f2f5c148c103cd98213ba855fcf1f7a77594768c1",
       "queries": [
         {
@@ -1921,6 +2017,7 @@
       "num_nodes": 36468,
       "num_edges": 88353,
       "size_mb": 106.104,
+      "size_bytes": 106103644,
       "sha256": "7d3a6beb667511a455683bd8bea4b26058e743b332bf2f2980e3f1c87879e81f",
       "queries": [
         {
@@ -1937,6 +2034,7 @@
       "num_nodes": 41333,
       "num_edges": 101718,
       "size_mb": 138.87,
+      "size_bytes": 138870004,
       "sha256": "9f2b13946cae3106b2b0660ce0318f75227b0ee606e0822e700e29eb19458250",
       "queries": [
         {
@@ -1953,6 +2051,7 @@
       "num_nodes": 215481,
       "num_edges": 691906,
       "size_mb": 2163.028,
+      "size_bytes": 2163027739,
       "sha256": "bd5711927a061966870e6588b6a099623b77f5a7e495ad65e81b2d2409305718",
       "queries": [
         {
@@ -1969,6 +2068,7 @@
       "num_nodes": 243839,
       "num_edges": 942263,
       "size_mb": 6007.858,
+      "size_bytes": 6007858240,
       "sha256": "f05230b1891fbef2ee73121edf11881b6cd1639763ef14174fac0fa715ca18f5",
       "queries": [
         {
@@ -1985,6 +2085,7 @@
       "num_nodes": 286645,
       "num_edges": 881565,
       "size_mb": 4603.695,
+      "size_bytes": 4603694918,
       "sha256": "6618253b59a75d6546750f42522815e414e9c05aaa5ff4bd6966535fcfb66abe",
       "queries": [
         {
@@ -2001,6 +2102,7 @@
       "num_nodes": 285577,
       "num_edges": 1069173,
       "size_mb": 6098.271,
+      "size_bytes": 6098270632,
       "sha256": "6e04a6a75adf9863c3d6d1c0373a77274d9264c56f7393784c0566ae2ac8217e",
       "queries": [
         {
@@ -2017,6 +2119,7 @@
       "num_nodes": 449237,
       "num_edges": 1749604,
       "size_mb": 5.724,
+      "size_bytes": 5723600,
       "sha256": "2f7f866f1244e878bc2e4f1aa53c0c10833beeca4a4cb734d7fa325f317548ff",
       "queries": [
         {
@@ -2033,6 +2136,7 @@
       "num_nodes": 475479,
       "num_edges": 1851322,
       "size_mb": 6.099,
+      "size_bytes": 6098980,
       "sha256": "8d24a389b49b77034c777d92b62cc100d1d86ab2f208c12e9ce7c1901c85a966",
       "queries": [
         {
@@ -2049,6 +2153,7 @@
       "num_nodes": 179,
       "num_edges": 293,
       "size_mb": 0.003,
+      "size_bytes": 3295,
       "sha256": "4be710aa10ce7b5687de95872165f147c4c595f211ae41b035e0e7668b20aa1e",
       "queries": [
         {
@@ -2080,6 +2185,7 @@
       "num_nodes": 332,
       "num_edges": 269,
       "size_mb": 0.003,
+      "size_bytes": 3121,
       "sha256": "7a05c79324f311369eca525b938c5f4f95f4a98719b12a108a6e19ffee8ed289",
       "queries": [
         {
@@ -2098,6 +2204,7 @@
       "num_nodes": 316,
       "num_edges": 798,
       "size_mb": 0.009,
+      "size_bytes": 8708,
       "sha256": "1b6548d5046374bf37ee386bc9e60a905f3f77a94788662adaf2d7870ab034b1",
       "queries": [
         {
@@ -2114,6 +2221,7 @@
       "num_nodes": 733,
       "num_edges": 1839,
       "size_mb": 0.012,
+      "size_bytes": 11831,
       "sha256": "00392cddb48d3852359d0f9a137a16fc3acbf19227663b0afc61fe3eb727af31",
       "queries": [
         {
@@ -2145,6 +2253,7 @@
       "num_nodes": 138702,
       "num_edges": 201034,
       "size_mb": 48.869,
+      "size_bytes": 48868713,
       "sha256": "b0ad9bad0bc595205537444e694e4015cf3ac983ad150adeb319f7dbd0b67117",
       "queries": [
         {
@@ -2162,6 +2271,7 @@
       "num_nodes": 18051,
       "num_edges": 22390,
       "size_mb": 13.018,
+      "size_bytes": 13018251,
       "sha256": "03a3e70ad69e8945ab9a29d2017dbb3b774c0621a1c088956228780abb4ce300",
       "queries": [
         {
@@ -2179,6 +2289,7 @@
       "num_nodes": 58476,
       "num_edges": 62758,
       "size_mb": 0.476,
+      "size_bytes": 475910,
       "sha256": "32ea05b91203d262cac9a4312dc85d21dd53b03a03a5b196c16922d3afaa4be3",
       "queries": [
         {
@@ -2197,6 +2308,7 @@
       "num_nodes": 30492,
       "num_edges": 37173,
       "size_mb": 1.101,
+      "size_bytes": 1101329,
       "sha256": "9e6eb89a773d43511148a19723d70e253abf223a5e893a261be70e9c63309e28",
       "queries": [
         {
@@ -2214,6 +2326,7 @@
       "num_nodes": 2808,
       "num_edges": 3302,
       "size_mb": 0.536,
+      "size_bytes": 535967,
       "sha256": "03a053e805d6bd892238ed617e2a3a38c023a9bb1881f36497e108e4b2184b20",
       "queries": [
         {
@@ -2231,6 +2344,7 @@
       "num_nodes": 25314540,
       "num_edges": 77869864,
       "size_mb": 405.979,
+      "size_bytes": 405979445,
       "sha256": "d6aa99fb273cf2a2abc90e32de82257474243481601778ea98f92ccf127eeca4",
       "queries": [
         {
@@ -2552,6 +2666,7 @@
       "num_nodes": 59854,
       "num_edges": 177068,
       "size_mb": 1.215,
+      "size_bytes": 1214795,
       "sha256": "7bad10ca09a1821a9af555bad9c1970b622d94cf7afbf335506207e127dd27a0",
       "queries": [
         {

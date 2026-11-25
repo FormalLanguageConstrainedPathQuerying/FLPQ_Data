@@ -1,97 +1,256 @@
-# Detailed plan: #189 Stream the `graph/` validation in `flpq-check-archive`
+# Detailed Plan: Task 194 — Eliminate the manual sync of the docs Size (MB) column
 
-- **Task:** [#189](https://github.com/FormalLanguageConstrainedPathQuerying/FLPQ_Data/issues/189) — `flpq-check-archive` OOMs on large archives because `_validate_root` materializes the whole graph via `graph_from_mtx_dir` purely for its `ValueError` side effect.
-- **Branch:** `feature/189-stream-graph-validation` (from `dev`).
-- **Closes:** #189 (own task); **Fixes** #188 (the defect it resolves).
-- **Context:** the streaming decision (#153, from #138) scoped to format conversion left the archive *validation* path materializing. The fix is centralized in `validate_archive`, so it repairs every archive-lifecycle tool at once (`flpq-check-archive`, `upload_to_s3`, `merge_archive` ×3, `add_reachable_pairs`, `strip_reverse_edges`).
+## Design (confirmed with the user)
 
-## Locked decisions (confirmed with the user)
+Render the **whole** per-category graph table (`docs/graphs/<category>.rst`)
+from machine sources instead of maintaining any cell by hand:
 
-| # | Decision | Choice |
-|---|---|---|
-| 1 | Fix scope | **Minimal + reuse cleanup** — stream the format check (D1) *and* fold the checker's local `_mtx_entries`/`_mtx_header` onto the shared MTX reader so there is one source of truth for MTX parsing (D2) |
-| 2 | Shared reader | A new single-file streaming reader `iter_edges_from_mtx_file` in `mtx.py` (the single source of truth for MTX file parsing); `iter_edges_from_mtx_dir` delegates to it |
-| 3 | Header reader | Move the checker's `_mtx_header` to `mtx.py` as `mtx_file_header` (the single source of truth for MTX header reading) |
-| 4 | Error-message change | Accepted: a `results.mtx` nnz mismatch now reports "cannot be parsed as a Boolean MatrixMarket file" (unified with the other format problems) instead of "declares N entries but has M". No test pins the old wording. |
-| 5 | Latent-bug fix | Accepted: a 1-value entry line now raises `ValueError` (caught) instead of `IndexError` (previously uncaught in the range/results checks) — a robustness improvement that falls out of D2 |
+- `Num Nodes`, `Num Edges`, `Size (MB)` ← `flpq_data/dataset/registry.json`
+  (the registry gains an exact `size_bytes` field — the 3-decimal `size_mb`
+  is provably insufficient: 4 of 115 archives sit on a `.xx5` tie and
+  double-rounding shifts their rendered cell by 0.01 MB);
+- the `Reachable pairs` count columns ← `flpq_data/dataset/reachable_pairs.csv`
+  (the existing `GRAMMAR_COLUMNS` spec, CFPQ rows only);
+- rows ← the registry's per-category graph set, sorted by
+  `(num_nodes, name)` (canonical order; 7 of 9 tables already use it — the
+  first `--update` reorders exactly 2 rows: rdf `eclass`, biological_uniprot
+  `unigraph_6`/`unigraph_7`);
+- `:ref:` targets ← the site (existing `page_to_graph` mapping);
+- `Download` links ← graph name + `DATASET_URL`.
 
-## Why the subtasks are shaped this way
+Mechanism: the project's marked-region pattern — each table is wrapped in
+`.. graph-table:begin` / `.. graph-table:end` and replaced wholesale by the
+existing generic `replace_marked_region` helper. Check mode renders and
+compares (no RST parsing needed); `--update` rewrites.
 
-- **S1** lands the shared single-file reader + header in `mtx.py` first (self-contained: the directory reader keeps its exact behavior, the new functions are tested). **S2** then rewires the checker onto them and removes the materialization. S2 depends on S1; each is a compilable, testable increment.
+Consequences:
 
----
+- `utils/archive_sizes.py` is **retired** (its parser, in-place updater, and
+  S3 HEAD code all become dead; the S3 link stays guarded by download-time
+  sha256 + registry regeneration on every archive change).
+- `reachable_pairs_tables.update_category_columns` is **retired** (absorbed
+  into the renderer — one owner per table).
+- The gate is an **offline** in-sync test in the standard suite (no network,
+  no tolerance) covering every column.
 
-### S1: Add the shared single-file MTX streaming reader and header to `mtx.py`
+Verified before planning (all 9 tables, 115 rows): tables are structurally
+uniform (single-row header, no directive options); Num Nodes/Num Edges and
+Size cells already match the registry / exact S3 bytes (0 mismatches); count
+columns match the CSV; row sets are identical across site, registry, and CSV.
 
-**Code:** `flpq_data/graphs/readwrite/mtx.py`
-- New `iter_edges_from_mtx_file(path) -> Iterator[Tuple[int, int]]` — streams the `(u, v)` entries of **one** Boolean MatrixMarket file; validates the two-line header, yields one tuple per non-blank entry line, and validates the entry count against the declared nnz on exhaustion. Raises `ValueError` on an unexpected header, a malformed entry line, or an nnz mismatch. This is the single source of truth for MTX file parsing.
-- New `mtx_file_header(path) -> Optional[Tuple[int, int, int]]` — returns the `(rows, cols, nnz)` declared by one file, or `None` when the two-line header does not match the dataset format (or the dimension line is not three integers). Reads only the first lines (streams). Moved verbatim from the checker's `_mtx_header`.
-- Refactor `iter_edges_from_mtx_dir` to delegate to `iter_edges_from_mtx_file` (it keeps yielding `(u, label, v)` in file order and keeps its exact error behavior).
-- Add `iter_edges_from_mtx_file` and `mtx_file_header` to `__all__`.
+## Reuse analysis (per the `reusing` skill)
 
-**Reuse:** generalizes the existing `iter_edges_from_mtx_dir` (no new parser is invented — the per-file loop body moves into `iter_edges_from_mtx_file`); `mtx_file_header` is the checker's `_mtx_header` relocated next to the `_MTX_HEADER` constant it depends on.
+- `flpq_data/dataset/registry.py` — `GraphInfo`/`_to_graph_info`/
+  `graph_info`/`graph_names`/`categories` (extended with `size_bytes`).
+- `flpq_data/dataset/data.py` — `DATASET_URL` (download links).
+- `utils/reachable_pairs_tables.py` — `load_rows`, `category_order`,
+  `page_to_graph`, `graph_to_category`, `GRAMMAR_COLUMNS`, `NOT_AVAILABLE`,
+  `replace_marked_region`, `_validation_problems`, `REACHABLE_PAIRS_CSV`,
+  `DOCS_DIR` (all reused by the new renderer).
+- `utils/applicable_graphs.py::graph_pages` — **moved** to
+  `reachable_pairs_tables.py` (next to `page_to_graph`, its inverse);
+  `applicable_graphs` imports it from there.
+- `utils/sizes.py::format_size_mb` — the exact formatter of the Size cells.
+- `utils/archive_sizes.py::fetch_sizes` — reused **once** for the S1
+  backfill (headers-only HEADs), then retired with the module.
+- Test pattern: `test_check_mode_on_the_real_repo_is_in_sync`
+  (real-repo in-sync test, offline).
 
-**Tests:** `tests/graphs/readwrite/test_mtx.py`
-- `test_iter_edges_from_mtx_file` — yields the expected `(u, v)` pairs for a known file.
-- `test_iter_edges_from_mtx_file_is_lazy` — `inspect.isgenerator(...)`, first `next()` is correct.
-- `test_iter_edges_from_mtx_file_rejects_bad_header` — `ValueError` matching "Unexpected header".
-- `test_iter_edges_from_mtx_file_rejects_malformed_entry` — `ValueError` for a non-numeric line **and** for a 1-value line (locks in the IndexError→ValueError fix).
-- `test_iter_edges_from_mtx_file_rejects_bad_nnz` — `ValueError` matching "declares N entries but has M".
-- `test_mtx_file_header` — returns `(rows, cols, nnz)` for a valid file.
-- `test_mtx_file_header_returns_none` — `None` for a wrong header line and for a non-numeric dimension line.
+## Subtasks
 
-**Docs:** the two new public functions are added to `__all__`, so the git-ignored autosummary page `docs/reference/graphs/generated/flpq_data.graphs.readwrite.mtx.rst` picks them up on a fresh build; write numpydoc docstrings with self-contained doctest `Examples`. Verify with a fresh docs build (no warnings).
+### S1: Add exact `size_bytes` to the registry (generator, API, bundled data)
+
+**Code:**
+- `utils/generate_registry.py` — `build_record`: store
+  `record["size_bytes"] = size` (the exact byte count is already computed as
+  `size = archive.stat().st_size`); update the Returns docstring.
+- `flpq_data/dataset/registry.py` — `GraphInfo`: new field
+  `size_bytes: int` (after `size_mb`); `_to_graph_info` maps it (strict,
+  like the other fields); docstring Attributes.
+- `flpq_data/dataset/registry.json` — backfill `size_bytes` for all 115
+  records via a one-time throwaway script that reuses
+  `archive_sizes.fetch_sizes` (headers-only HEADs of the 115 `DATASET_URL`
+  archives) and rewrites the JSON in the existing deterministic format.
+
+**Tests:**
+- `tests/dataset/test_registry.py` — `test_registry_file_shape`: add
+  `"size_bytes"` to the expected key set; `test_graph_info_skos`: assert the
+  exact `size_bytes`; new test: for every graph,
+  `round(info.size_bytes / 10**6, 3) == info.size_mb`.
+- `tests/dataset/test_data.py` — `_fake_info`: add `size_bytes=1000`.
+- `tests/utils/test_generate_registry.py` — the two `fake_build_record`
+  dicts gain `"size_bytes": 1000`; `test_build_registry_success` asserts the
+  field passes through.
+
+**Docs:**
+- `docs/flpq.rst` "Graph registry" — schema example gains `"size_bytes"`;
+  field-sources line: `size_bytes` is the exact stored size in bytes,
+  `size_mb` is derived from it (three decimals).
+- `docs/utils.rst` "Graph registry" — the recorded-fields list gains the
+  exact byte size.
 
 **Spec:**
-- `iter_edges_from_mtx_file(path)`:
-  - Open `path` text; read two lines; if `tuple(line.strip() for _ in range(2)) != _MTX_HEADER` raise `ValueError(f"Unexpected header in {path=}")`.
-  - Read the dimension line; `rows, cols, nnz = map(int, line.split())` (a non-numeric / wrong-arity line raises `ValueError`, matching `iter_edges_from_mtx_dir`).
-  - For each subsequent line: skip blank lines; `i, j = map(int, line.split())`; `yield i, j`; increment a running count.
-  - After the loop (file exhausted): `if count != nnz: raise ValueError(f"{path=} declares {nnz} entries but has {count}")`.
-  - Must be a generator (lazy); the nnz check fires on exhaustion, so a consumer that breaks early does not trigger it.
-- `mtx_file_header(path)`:
-  - `try:` open text; if `readline().rstrip() != _MTX_HEADER[0]` or `!= _MTX_HEADER[1]` return `None`; `rows, cols, nnz = (int(v) for v in readline().split())`; `except (OSError, ValueError): return None`; else `return rows, cols, nnz`.
-  - Preserve the current `_mtx_header` semantics exactly (`.rstrip()` on the header lines; exactly-three-integers dimension line).
-- `iter_edges_from_mtx_dir(path)`: `for mtx_file in sorted(path.glob("*.mtx")): label = filename_to_label(mtx_file.name); for u, v in iter_edges_from_mtx_file(mtx_file): yield u, label, v`; keep the trailing `logging.info`. Behavior (order, laziness, error classes/messages) is unchanged.
+- JSON record key order is additive: `category, num_nodes, num_edges,
+  size_mb, size_bytes, sha256, queries` (no reordering of existing keys).
+- `size_bytes` = exact stored `.tar.gz` size in bytes (int); `size_mb`
+  stays `round(size_bytes / 10**6, 3)`.
+- `_to_graph_info` stays strict (KeyError on a missing field); the bundled
+  data is backfilled in the same commit, so the package never sees a record
+  without the field.
+- Backfill verification (before committing): for every record,
+  `round(size_bytes / 10**6, 3) == size_mb`, and
+  `format_size_mb(size_bytes)` equals the current docs cell (115/115).
 
----
+### S2: `utils/graph_tables.py` — render the category tables from registry + CSV
 
-### S2: Stream the `graph/` format check and consolidate the checker's MTX helpers
+**Code:**
+- New `utils/graph_tables.py`:
+  - `BEGIN_MARKER = ".. graph-table:begin"`, `END_MARKER =
+    ".. graph-table:end"` (plain reST comments, like the existing markers).
+  - `render_category_table(category, graphs, rows, pages) -> str` — pure
+    rendering: header `Graph | Num Nodes | Num Edges | [count columns from
+    GRAMMAR_COLUMNS.get(category, [])] | Size (MB) | Download`; rows sorted
+    by `(num_nodes, name)`; cells: `:ref:`<page>``; `str(num_nodes)`;
+    `str(num_edges)`; per count column `str(count)` / `NOT_AVAILABLE` /
+    empty (grammar not applicable); `format_size_mb(size_bytes)`;
+    `` `<name>.tar.gz <DATASET_URL><name>.tar.gz>`_ 📥 ``. Layout:
+    `.. list-table::` + blank line + `   * - ` row starts / `     - `
+    continuations; an empty cell is a bare `     -` line.
+  - `_registry_problems(rows, site_map) -> list[str]` — cross-checks the
+    registry against the CSV and the site: every registry graph is listed in
+    the docs with a matching category and has at least one CSV row; every
+    CSV graph is in the registry; every docs category has at least one
+    registry graph.
+  - `main(argv)` — check/--update, modeled on `applicable_graphs.main`:
+    load CSV rows, site maps (`graph_to_category`, `graph_pages`), validate
+    (`_validation_problems` + `_registry_problems`, all-or-nothing), render
+    each category page's region, `replace_marked_region`; check mode exits 1
+    on any drift or validation problem.
+- `utils/reachable_pairs_tables.py` — add `graph_pages` (moved from
+  `applicable_graphs.py`, next to `page_to_graph`); `applicable_graphs.py`
+  imports it from there (its local definition is removed).
+- One-time marker insertion into the 9 category pages (throwaway script
+  using the existing `iter_graph_tables` to locate each table):
+  `.. graph-table:begin` before the `.. list-table::` line,
+  `.. graph-table:end` after the last cell line, blank-line separated per
+  the existing marker convention.
+- Run `python utils/graph_tables.py --update` once: the expected diff is
+  exactly 2 reordered rows (rdf: `eclass` before `geospecies`/`go`;
+  biological_uniprot: `unigraph_7` before `unigraph_6`); every cell value
+  unchanged.
 
-**Code:** `flpq_data/tools/check_archive_structure.py`
-- Import: replace `from flpq_data.graphs.readwrite.mtx import _MTX_HEADER, graph_from_mtx_dir` with `from flpq_data.graphs.readwrite.mtx import iter_edges_from_mtx_dir, iter_edges_from_mtx_file, mtx_file_header`.
-- Delete the local `_mtx_header` and `_mtx_entries` (now provided by `mtx.py`).
-- `_graph_dimensions`: call `mtx_file_header` instead of `_mtx_header`.
-- `_mtx_range_problems`: call `mtx_file_header` + `iter_edges_from_mtx_file` instead of `_mtx_header` + `_mtx_entries`; reword the three "a format problem `graph_from_mtx_dir` already reports" comments to "…the streaming format check already reports".
-- `_results_problems`: call `mtx_file_header` + `iter_edges_from_mtx_file`; drop the now-dead `count`/`done` bookkeeping and the `count != nnz` branch (an nnz mismatch surfaces as the `ValueError` from `iter_edges_from_mtx_file`, reported as "cannot be parsed as a Boolean MatrixMarket file" — decision 4).
-- `_validate_root`: replace `graph_from_mtx_dir(root / "graph")` with a full streaming consumption `for _ in iter_edges_from_mtx_dir(root / "graph"): pass` inside the same `try/except (ValueError, OSError)` and the same `problems.append(f"graph/: {error}")`. The loop must run to completion so the per-file nnz check fires.
-- **Discovered during implementation:** `utils/add_reachable_pairs.py` and `utils/generate_registry.py` imported the checker's *private* `_mtx_header` (a cross-module private import). Relocating it to `mtx.py` as the public `mtx_file_header` forces both to switch to the new import — completing the "one source of truth for MTX parsing" goal and removing the private-import smell. Pure rename (`_mtx_header` → `mtx_file_header`); identical `(rows, cols, nnz) | None` semantics.
+**Tests:**
+- New `tests/utils/test_graph_tables.py`:
+  - golden rendering test (synthetic `GraphInfo`s, CSV rows, pages,
+    monkeypatched `GRAMMAR_COLUMNS`): exact text incl. header, order,
+    `not available`, empty cell (bare `-`), size formatting, download URL;
+  - no-count-columns category (absent from `GRAMMAR_COLUMNS`);
+  - ordering: `(num_nodes, name)` with a node-count tie;
+  - `_registry_problems`: registry graph missing from the site, category
+    mismatch, registry graph without a CSV row, CSV graph missing from the
+    registry, docs category without registry graphs (registry functions
+    monkeypatched);
+  - `test_check_mode_on_the_real_repo_is_in_sync`:
+    `assert graph_tables.main([]) == 0`.
 
-**Reuse:** the checker no longer carries its own MTX parser — it reuses `iter_edges_from_mtx_dir` / `iter_edges_from_mtx_file` / `mtx_file_header` from `mtx.py` (single source of truth). The two `utils/` scripts that reached into the checker's private `_mtx_header` now use the same public `mtx_file_header`.
-
-**Tests:** `tests/tools/test_check_archive_structure.py`
-- New `test_validate_streams_the_graph_dir` — monkeypatch `flpq_data.tools.check_archive_structure.iter_edges_from_mtx_dir` with a spy wrapping the real one; assert `validate_archive(_valid_tree(...)) == []` **and** the spy was called with the `graph/` directory (regression: the format check streams rather than materializing).
-- All existing tests must pass unchanged (behavior is preserved: format problems still reported as `graph/: …`, range/dimension/results messages unchanged except decision 4).
-
-**Docs:** the checker's documented *checks* are unchanged (`docs/reference/tools/index.rst` "Archive structure checker" describes them at a level that stays accurate); the module docstring does not describe the mechanism. The one docs note the task calls for — that validation now *streams* — is a separate subtask (S3), kept out of this code commit.
+**Docs:**
+- `docs/utils.rst` — new "Graph tables" section (anchor
+  `.. _graph_tables:`): the tool, its sources (registry + CSV), check/
+  `--update` behavior, the canonical row order, and the workflow (run
+  `--update` after any registry or CSV change, before committing).
 
 **Spec:**
-- The format check in `_validate_root` must raise-and-report exactly the same three error classes as before (unexpected header, malformed entry line, nnz mismatch) with the same `graph/: {error}` prefix, now sourced from `iter_edges_from_mtx_dir` (O(1) in edges) instead of `graph_from_mtx_dir` (O(V+E)).
-- `_mtx_range_problems` and `_results_problems` keep their skip-on-format-problem semantics (a file whose header is `None`, or whose entry stream raises `ValueError`, is skipped for the range check because the format check already reported it).
-- Net effect: `validate_archive` never builds a `networkx.MultiDiGraph`; peak memory for the `graph/` checks is O(1) in the number of edges.
+- The renderer is the **sole writer** of the category tables; it never
+  parses RST (check = render + compare).
+- Row set per category = the registry's `categories()[category]`; the CSV
+  supplies only the count values; the site supplies only the `:ref:`
+  targets. Validation (all-or-nothing, blocks any update) guarantees the
+  three agree.
+- Count-column semantics are ported unchanged from
+  `update_category_columns`: CFPQ rows only; `(graph, grammar)` key with
+  `grammar = grammar_file or f"{graph}.cnf"`; missing pair → empty cell,
+  present-but-None → `not available`.
+- The rendered region text starts at `.. list-table::` and ends at the last
+  cell line (no surrounding blank lines — `replace_marked_region` adds them).
 
----
+### S3: Retire `archive_sizes.py` and `update_category_columns`
 
-### S3: Note that archive validation streams (docs)
+**Code:**
+- Delete `utils/archive_sizes.py` and `tests/utils/test_archive_sizes.py`.
+- `utils/reachable_pairs_tables.py` — remove `update_category_columns`
+  (and the `header_columns`/`iter_graph_tables` import from
+  `archive_sizes`), remove the category-column loop and `pages_map` from
+  `main()`, update the module docstring (the tool now covers only the
+  reachable_pairs.rst region) and `__all__`; fix the comment that cites
+  `archive_sizes.py`.
 
-**Docs:** `docs/graphs/index.rst` "Memory characteristics" — add one bullet stating that archive validation (`flpq-check-archive` / `validate_archive`) streams the `graph/` check in O(1) in edges, consuming the same streaming reader as the conversion path rather than materializing a graph (#188, #189). This is a specific *fact* about one component, sitting next to the existing conversion-path streaming facts; it is deliberately **not** the global streaming-first principle (that is the separate doc task #191, in `docs/flpq.rst`).
+**Tests:**
+- `tests/utils/test_reachable_pairs_tables.py` — remove the
+  `update_category_columns` tests; the region tests and the real-repo
+  in-sync test stay and pass unchanged.
 
-**Verification (the task's S4):** the O(1) guarantee is a design property, not something measurable on a 30M-edge archive locally. It is established by (a) the S2 regression test proving the streaming reader is the one used, (b) the reader being the same O(1) stream the (tested) conversion path uses, and (c) the full quality gate. Empirical large-archive runs are left to CI/the dataset owners.
+**Docs:**
+- `docs/utils.rst` — remove the "Archive sizes" section (anchor
+  `.. _archive_sizes:`; it also carries a stale claim that the tool covers
+  `old_graphs`); update the "Reachable pair counts" section: the tool
+  covers only the per-graph tables — the category tables (incl. the count
+  columns) are rendered by :ref:`graph_tables`.
+- `docs/flpq.rst` — "Reachable pair counts" section: drop the
+  "(following the pattern of ``utils/archive_sizes.py``)" reference and
+  state that the category tables are rendered whole from the CSV and the
+  registry; "Graph registry" section: drop the "(pattern of
+  ``utils/archive_sizes.py``)" parenthetical.
+- `docs/graphs/index.rst` — the table-conventions paragraph: note that the
+  per-category tables are machine-rendered (see :ref:`graph_tables`).
 
----
+**Spec:**
+- After this subtask: the category tables have exactly one writer
+  (`graph_tables.py`), the reachable_pairs.rst region exactly one writer
+  (`reachable_pairs_tables.py`), and no module in the repo references
+  `archive_sizes` (grep gate: `grep -rn archive_sizes --exclude-dir=.git
+  --exclude-dir=.venv --exclude-dir=node_modules` matches nothing outside
+  `CHANGELOG.md` history and `tasks/global_plan.md`, which are historical
+  records and stay untouched).
 
-## Status
+### S4: Point the workflows at the rendered tables + changelog
 
-- [x] S1: shared single-file MTX reader + header in `mtx.py`
-- [x] S2: stream the `graph/` format check + consolidate the checker's helpers
-- [x] S3: note that archive validation streams (docs)
+**Code:**
+- `utils/upload_to_s3.py` — docstring: the verified size is recorded in the
+  registry (by `generate_registry.py`) and the table row is rendered by
+  `graph_tables.py` (replaces "so a new graph's table row can be filled
+  directly from the upload output").
+
+**Tests:** n/a (docstring/docs only; the suite and math-snippet guard stay
+green).
+
+**Docs:**
+- `.opencode/skills/add-graph/SKILL.md` — "Once per issue" step:
+  `archive_sizes.py --update` → `graph_tables.py --update`; "Documentation"
+  step 4: the row (incl. the `Size (MB)` cell) is rendered — run
+  `python utils/graph_tables.py --update` before committing (see the "Graph
+  tables" section of `docs/utils.rst`); the manual "fill the cell from the
+  upload output" step is gone.
+- `docs/utils.rst` "Upload to Yandex S3" — same rewording as the
+  `upload_to_s3.py` docstring.
+- `CHANGELOG.md` — `[Unreleased]` entry: the per-category graph tables are
+  rendered from the registry and the reachable-pairs CSV (new
+  `utils/graph_tables.py`); the registry gains an exact `size_bytes` field
+  (exposed as `GraphInfo.size_bytes`); `utils/archive_sizes.py` and the
+  in-place count-column sync are retired; the in-sync check is now an
+  offline test covering every table column.
+
+**Spec:**
+- After this subtask, no workflow (add-graph, release, docs) contains a
+  manual size-refresh step; the only step is the mechanical
+  `graph_tables.py --update` after a registry/CSV change.
+
+## Execution notes
+
+- S1 → S2 → S3 → S4 strictly in order (S2 needs `size_bytes`; S3 retires
+  the old writers only after the new one is in place and green; S4
+  documents the final state).
+- One commit per subtask: `feat(194-S1)`, `feat(194-S2)`,
+  `refactor(194-S3)`, `docs(194-S4)`; the last carries `Closes #194`.
+- The S2 `--update` run must produce exactly the 2-row reorder diff — a
+  larger diff means the renderer output deviates from the current layout
+  and must be investigated before committing.

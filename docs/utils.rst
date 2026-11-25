@@ -236,10 +236,10 @@ the live dataset::
 For every graph in ``reachable_pairs.csv`` the tool downloads the archive
 from the current dataset prefix and records: the category (from the CSV),
 the node and edge counts (loaded with the package's own MTX reader), the
-archive size in MB and its sha256, and the query list from the archive's
-``queries/`` tree (class, name, representations — the class-to-representation
-mapping is reused from :ref:`archive_structure`). The result is written as
-deterministic JSON.
+exact archive size in bytes, the archive size in MB, and its sha256, and the
+query list from the archive's ``queries/`` tree (class, name,
+representations — the class-to-representation mapping is reused from
+:ref:`archive_structure`). The result is written as deterministic JSON.
 
 Behavior:
 

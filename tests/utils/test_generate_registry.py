@@ -117,6 +117,7 @@ def test_build_registry_success(monkeypatch, tmp_path):
             "num_nodes": 1,
             "num_edges": 0,
             "size_mb": 0.001,
+            "size_bytes": 1000,
             "sha256": "x" * 64,
             "queries": [],
         }
@@ -127,6 +128,7 @@ def test_build_registry_success(monkeypatch, tmp_path):
     assert list(registry["graphs"]) == ["g1", "g2"]
     assert registry["graphs"]["g1"]["category"] == "c1"
     assert registry["graphs"]["g2"]["category"] == "c2"
+    assert registry["graphs"]["g1"]["size_bytes"] == 1000
 
 
 def test_build_registry_category_conflict(monkeypatch, tmp_path):
@@ -155,6 +157,7 @@ def test_build_registry_all_or_nothing(monkeypatch, tmp_path):
             "num_nodes": 1,
             "num_edges": 0,
             "size_mb": 0.001,
+            "size_bytes": 1000,
             "sha256": "x" * 64,
             "queries": [],
         }

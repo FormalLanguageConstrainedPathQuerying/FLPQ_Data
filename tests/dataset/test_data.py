@@ -51,6 +51,7 @@ def _fake_info(sha256: str) -> GraphInfo:
         num_nodes=2,
         num_edges=1,
         size_mb=0.001,
+        size_bytes=1000,
         sha256=sha256,
         queries=(),
     )

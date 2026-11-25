@@ -59,7 +59,10 @@ class GraphInfo:
     num_edges : int
         The number of stored edges (the sum of the MTX nnz).
     size_mb : float
-        The archive size in MB (three decimals).
+        The archive size in MB (three decimals, derived from
+        :attr:`size_bytes`).
+    size_bytes : int
+        The exact archive size in bytes.
     sha256 : str
         The sha256 hex digest of the ``<name>.tar.gz`` archive.
     queries : tuple[QueryInfo, ...]
@@ -71,6 +74,7 @@ class GraphInfo:
     num_nodes: int
     num_edges: int
     size_mb: float
+    size_bytes: int
     sha256: str
     queries: tuple[QueryInfo, ...]
 
@@ -83,6 +87,7 @@ def _to_graph_info(name: str, record: dict) -> GraphInfo:
         num_nodes=record["num_nodes"],
         num_edges=record["num_edges"],
         size_mb=record["size_mb"],
+        size_bytes=record["size_bytes"],
         sha256=record["sha256"],
         queries=tuple(
             QueryInfo(

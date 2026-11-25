@@ -31,6 +31,7 @@ def test_registry_file_shape():
             "num_nodes",
             "num_edges",
             "size_mb",
+            "size_bytes",
             "sha256",
             "queries",
         }
@@ -52,7 +53,14 @@ def test_graph_info_skos():
     assert info.category == "rdf"
     assert info.num_nodes == 144
     assert info.num_edges == 252
+    assert info.size_bytes == 3374
     assert len(info.sha256) == 64
+
+
+def test_size_mb_is_derived_from_size_bytes():
+    for name in graph_names():
+        info = graph_info(name)
+        assert round(info.size_bytes / 10**6, 3) == info.size_mb
 
 
 def test_graph_info_unknown():

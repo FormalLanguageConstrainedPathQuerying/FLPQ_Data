@@ -227,7 +227,8 @@ def build_record(name: str, url: str, workdir: pathlib.Path) -> dict:
     -------
     record : dict
         The fields of :func:`archive_record` plus ``size_mb`` (the stored
-        size in MB, three decimals) and ``sha256`` (of the ``.tar.gz``).
+        size in MB, three decimals), ``size_bytes`` (the exact stored size
+        in bytes), and ``sha256`` (of the ``.tar.gz``).
 
     Raises
     ------
@@ -255,6 +256,7 @@ def build_record(name: str, url: str, workdir: pathlib.Path) -> dict:
         archive.unlink()
 
     record["size_mb"] = round(size / 1_000_000, 3)
+    record["size_bytes"] = size
     record["sha256"] = sha256
     return record
 
@@ -276,8 +278,8 @@ def build_registry(workdir: pathlib.Path) -> dict:
     -------
     registry : dict
         ``{"version": DATASET_VERSION, "graphs": {<name>: {"category",
-        "num_nodes", "num_edges", "size_mb", "sha256", "queries"}}}`` with
-        graph names in sorted order.
+        "num_nodes", "num_edges", "size_mb", "size_bytes", "sha256",
+        "queries"}}}`` with graph names in sorted order.
 
     Raises
     ------
@@ -323,6 +325,7 @@ def build_registry(workdir: pathlib.Path) -> dict:
             "num_nodes": records[name]["num_nodes"],
             "num_edges": records[name]["num_edges"],
             "size_mb": records[name]["size_mb"],
+            "size_bytes": records[name]["size_bytes"],
             "sha256": records[name]["sha256"],
             "queries": records[name]["queries"],
         }
