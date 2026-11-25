@@ -94,4 +94,4 @@
 
 - [x] S1: shared single-file MTX reader + header in `mtx.py`
 - [x] S2: stream the `graph/` format check + consolidate the checker's helpers
-- [ ] S3: note that archive validation streams (docs)
+- [x] S3: note that archive validation streams (docs)
