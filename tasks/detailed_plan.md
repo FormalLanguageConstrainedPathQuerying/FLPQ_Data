@@ -1,84 +1,87 @@
-# Detailed plan: #192 Plan comment mirror: sync tool + completion gate
+# Detailed plan: #189 Stream the `graph/` validation in `flpq-check-archive`
 
-- **Task:** [#192](https://github.com/FormalLanguageConstrainedPathQuerying/FLPQ_Data/issues/192) — the plan comment on a task issue is a pure mirror of `tasks/detailed_plan.md`, but during #187 it was never re-synced (the comment stayed frozen at its first posting: S0–S4 unchecked, S5/S6 missing) and no gate caught the drift.
-- **Branch:** `feature/192-plan-mirror-sync` (from `dev`).
-- **Context:** #187 (the lapse), #185 (the mirror *was* synced there — the mechanism works; it was skipped, not broken).
+- **Task:** [#189](https://github.com/FormalLanguageConstrainedPathQuerying/FLPQ_Data/issues/189) — `flpq-check-archive` OOMs on large archives because `_validate_root` materializes the whole graph via `graph_from_mtx_dir` purely for its `ValueError` side effect.
+- **Branch:** `feature/189-stream-graph-validation` (from `dev`).
+- **Closes:** #189 (own task); **Fixes** #188 (the defect it resolves).
+- **Context:** the streaming decision (#153, from #138) scoped to format conversion left the archive *validation* path materializing. The fix is centralized in `validate_archive`, so it repairs every archive-lifecycle tool at once (`flpq-check-archive`, `upload_to_s3`, `merge_archive` ×3, `add_reachable_pairs`, `strip_reverse_edges`).
 
 ## Locked decisions (confirmed with the user)
 
 | # | Decision | Choice |
 |---|---|---|
-| 1 | Fix scope | Both parts: the completion-gate checkbox (option 2) **and** the sync script (option 3) |
-| 2 | Immediate fix | The stale #187 comment was already synced before this branch (operational action, no commit) |
-| 3 | GitHub API transport | Shell out to `gh api` — no new dependency, same auth and semantics as the proven skill snippet |
-| 4 | Issue number | Explicit CLI argument (no fragile parsing of the plan file) |
-
-Out of scope (flagged, not fixed): step 7's parenthetical "(`[done]` suffix + commit hash on the subtask heading)" describes a marking format no recent plan file uses (practice is the `## Status` checkbox section); fixing the wording is a separate consistency task.
+| 1 | Fix scope | **Minimal + reuse cleanup** — stream the format check (D1) *and* fold the checker's local `_mtx_entries`/`_mtx_header` onto the shared MTX reader so there is one source of truth for MTX parsing (D2) |
+| 2 | Shared reader | A new single-file streaming reader `iter_edges_from_mtx_file` in `mtx.py` (the single source of truth for MTX file parsing); `iter_edges_from_mtx_dir` delegates to it |
+| 3 | Header reader | Move the checker's `_mtx_header` to `mtx.py` as `mtx_file_header` (the single source of truth for MTX header reading) |
+| 4 | Error-message change | Accepted: a `results.mtx` nnz mismatch now reports "cannot be parsed as a Boolean MatrixMarket file" (unified with the other format problems) instead of "declares N entries but has M". No test pins the old wording. |
+| 5 | Latent-bug fix | Accepted: a 1-value entry line now raises `ValueError` (caught) instead of `IndexError` (previously uncaught in the range/results checks) — a robustness improvement that falls out of D2 |
 
 ## Why the subtasks are shaped this way
 
-- S1 lands the tool first so S2's skill text can reference a working command; the skill change is docs-only and rides on the tool.
-- The script funnels every `gh` call through one module-level `run_gh` boundary so tests monkeypatch it — the `tests/utils/` convention (patch module attributes, cf. `test_upload_to_s3.py` patching `boto3.client`).
-- Body construction must match the skill snippet byte-for-byte (`echo '<!-- detailed-plan -->'; cat tasks/detailed_plan.md`), so a comment synced by the snippet and one synced by the tool are indistinguishable.
+- **S1** lands the shared single-file reader + header in `mtx.py` first (self-contained: the directory reader keeps its exact behavior, the new functions are tested). **S2** then rewires the checker onto them and removes the materialization. S2 depends on S1; each is a compilable, testable increment.
 
-## Subtasks
+---
 
-### S1: `utils/sync_plan_comment.py` — mirror the plan file onto the issue comment
+### S1: Add the shared single-file MTX streaming reader and header to `mtx.py`
 
-**Code:** new `utils/sync_plan_comment.py`:
-- `PLAN_MARKER = "<!-- detailed-plan -->"`; `PLAN_FILE = MAIN_FOLDER / "tasks" / "detailed_plan.md"` (reuses `MAIN_FOLDER` from `utils/config.py`);
-- `build_body(plan_text: str) -> str` — `PLAN_MARKER + "\n" + plan_text`;
-- `run_gh(args: Sequence[str], *, input: str | None = None) -> str` — the single `subprocess.run(["gh", *args], ...)` boundary; raises `RuntimeError` with gh's stderr on non-zero exit;
-- `find_plan_comment(repo: str, issue: int) -> int` — `gh api repos/<repo>/issues/<N>/comments` with the `--jq` filter `[.[] | select(.body | startswith("<!-- detailed-plan -->"))] | last.id`; raises when the result is `null`;
-- `sync(repo: str, issue: int) -> int` — reads `PLAN_FILE`, finds the comment, PATCHes its body via `gh api -X PATCH repos/<repo>/issues/comments/<cid> --input -` with `json.dumps({"body": body})` on stdin; returns the comment id;
-- `check(repo: str, issue: int) -> bool` — fetches the stored body (`gh api repos/<repo>/issues/comments/<cid> --jq .body`) and compares it against `build_body(PLAN_FILE)` ignoring trailing newlines (the GitHub API stores comment bodies with one extra trailing newline — see Design Notes);
-- `main(argv: Sequence[str] | None = None) -> int` — argparse positional `issue` (int) + `--check` flag (verify instead of sync; exit 1 on drift); resolves the repo via `gh repo view --json nameWithOwner -q .nameWithOwner`; prints a one-line report; catches `RuntimeError`/`OSError` → message on stderr, exit 1.
+**Code:** `flpq_data/graphs/readwrite/mtx.py`
+- New `iter_edges_from_mtx_file(path) -> Iterator[Tuple[int, int]]` — streams the `(u, v)` entries of **one** Boolean MatrixMarket file; validates the two-line header, yields one tuple per non-blank entry line, and validates the entry count against the declared nnz on exhaustion. Raises `ValueError` on an unexpected header, a malformed entry line, or an nnz mismatch. This is the single source of truth for MTX file parsing.
+- New `mtx_file_header(path) -> Optional[Tuple[int, int, int]]` — returns the `(rows, cols, nnz)` declared by one file, or `None` when the two-line header does not match the dataset format (or the dimension line is not three integers). Reads only the first lines (streams). Moved verbatim from the checker's `_mtx_header`.
+- Refactor `iter_edges_from_mtx_dir` to delegate to `iter_edges_from_mtx_file` (it keeps yielding `(u, label, v)` in file order and keeps its exact error behavior).
+- Add `iter_edges_from_mtx_file` and `mtx_file_header` to `__all__`.
 
-**Tests:** new `tests/utils/test_sync_plan_comment.py` (monkeypatches `sync_plan_comment.run_gh`):
-- `test_build_body_precedes_marker` — marker line + original content, byte-exact;
-- `test_run_gh_raises_on_failure` — non-zero exit → `RuntimeError` carrying gh's stderr;
-- `test_find_plan_comment_parses_id_and_filters_by_marker` — the `--jq` filter keeps marker comments and takes the last one;
-- `test_find_plan_comment_raises_when_absent` — `null` result → `RuntimeError`;
-- `test_sync_patches_the_comment_body` — captured PATCH call: correct URL, JSON `{"body": marker + "\n" + content}` on stdin;
-- `test_main_end_to_end` — repo resolution, sync, report line (capsys);
-- `test_main_missing_plan_file` — clear error, exit 1;
-- `test_check_returns_true_when_in_sync` / `test_check_returns_false_on_drift` — the stored-body fixture models the API's extra trailing newline;
-- `test_main_check_mode_reports_sync_and_drift` — `--check` exits 0/1, never PATCHes.
+**Reuse:** generalizes the existing `iter_edges_from_mtx_dir` (no new parser is invented — the per-file loop body moves into `iter_edges_from_mtx_file`); `mtx_file_header` is the checker's `_mtx_header` relocated next to the `_MTX_HEADER` constant it depends on.
 
-**Docs:** `docs/utils.rst` — new section appended after the migration-tool section: `.. _sync_plan_comment:` label, title "Sync the plan comment", usage block `python utils/sync_plan_comment.py ISSUE [--check]`, bullets: the local file is the single source of truth and the comment a pure mirror; `--check` verifies (exit 0/1) and ignores trailing newlines because the API stores bodies with one extra; marker discovery (last comment whose first line is the marker); idempotent (re-running PATCHes the same body); transport is `gh api` (requires an authenticated `gh`).
+**Tests:** `tests/graphs/readwrite/test_mtx.py`
+- `test_iter_edges_from_mtx_file` — yields the expected `(u, v)` pairs for a known file.
+- `test_iter_edges_from_mtx_file_is_lazy` — `inspect.isgenerator(...)`, first `next()` is correct.
+- `test_iter_edges_from_mtx_file_rejects_bad_header` — `ValueError` matching "Unexpected header".
+- `test_iter_edges_from_mtx_file_rejects_malformed_entry` — `ValueError` for a non-numeric line **and** for a 1-value line (locks in the IndexError→ValueError fix).
+- `test_iter_edges_from_mtx_file_rejects_bad_nnz` — `ValueError` matching "declares N entries but has M".
+- `test_mtx_file_header` — returns `(rows, cols, nnz)` for a valid file.
+- `test_mtx_file_header_returns_none` — `None` for a wrong header line and for a non-numeric dimension line.
+
+**Docs:** the two new public functions are added to `__all__`, so the git-ignored autosummary page `docs/reference/graphs/generated/flpq_data.graphs.readwrite.mtx.rst` picks them up on a fresh build; write numpydoc docstrings with self-contained doctest `Examples`. Verify with a fresh docs build (no warnings).
 
 **Spec:**
-- `run_gh` uses `subprocess.run(["gh", *args], capture_output=True, text=True, input=input)`; on `returncode != 0` raise `RuntimeError(f"gh {' '.join(args)} failed: {stderr.strip()}")`.
-- `find_plan_comment` strips the `--jq` output; `"null"` (or empty) → `RuntimeError(f"no '<!-- detailed-plan -->' comment on issue {issue}")`.
-- `main` report line: `f"synced issue {issue} plan comment {cid}"`.
-- Commit: `feat(192-S1): add utils/sync_plan_comment.py to mirror the detailed plan onto the task issue` — includes this plan file (replacing the #187 plan) with S1 marked done.
+- `iter_edges_from_mtx_file(path)`:
+  - Open `path` text; read two lines; if `tuple(line.strip() for _ in range(2)) != _MTX_HEADER` raise `ValueError(f"Unexpected header in {path=}")`.
+  - Read the dimension line; `rows, cols, nnz = map(int, line.split())` (a non-numeric / wrong-arity line raises `ValueError`, matching `iter_edges_from_mtx_dir`).
+  - For each subsequent line: skip blank lines; `i, j = map(int, line.split())`; `yield i, j`; increment a running count.
+  - After the loop (file exhausted): `if count != nnz: raise ValueError(f"{path=} declares {nnz} entries but has {count}")`.
+  - Must be a generator (lazy); the nnz check fires on exhaustion, so a consumer that breaks early does not trigger it.
+- `mtx_file_header(path)`:
+  - `try:` open text; if `readline().rstrip() != _MTX_HEADER[0]` or `!= _MTX_HEADER[1]` return `None`; `rows, cols, nnz = (int(v) for v in readline().split())`; `except (OSError, ValueError): return None`; else `return rows, cols, nnz`.
+  - Preserve the current `_mtx_header` semantics exactly (`.rstrip()` on the header lines; exactly-three-integers dimension line).
+- `iter_edges_from_mtx_dir(path)`: `for mtx_file in sorted(path.glob("*.mtx")): label = filename_to_label(mtx_file.name); for u, v in iter_edges_from_mtx_file(mtx_file): yield u, label, v`; keep the trailing `logging.info`. Behavior (order, laziness, error classes/messages) is unchanged.
 
-### S2: Point the subtask-loop skill at the tool and gate the mirror at completion
+---
 
-**Code:** none (skill only).
-**Tests:** none (skill only); the pre-commit hooks still run on the skill file.
-**Docs:** `.opencode/skills/subtask-loop/SKILL.md`:
-- Step 7 "Mark Completed": replace the inline 6-line bash snippet with the one-command invocation `uv run python utils/sync_plan_comment.py <N>`; keep the closing sentence "The local file is the single source of truth; the comment is a pure mirror."
-- "Task Completion Verification": add a checkbox — the plan comment on the task issue is in sync with `tasks/detailed_plan.md` (pure mirror — diff the comment body against the file; `utils/sync_plan_comment.py` performs the sync).
-- Commit: `docs(192-S2): sync the plan comment via the tool and gate it at task completion` with `Closes #192` as a standalone line.
+### S2: Stream the `graph/` format check and consolidate the checker's MTX helpers
 
-## Design Notes (discovered during implementation)
+**Code:** `flpq_data/tools/check_archive_structure.py`
+- Import: replace `from flpq_data.graphs.readwrite.mtx import _MTX_HEADER, graph_from_mtx_dir` with `from flpq_data.graphs.readwrite.mtx import iter_edges_from_mtx_dir, iter_edges_from_mtx_file, mtx_file_header`.
+- Delete the local `_mtx_header` and `_mtx_entries` (now provided by `mtx.py`).
+- `_graph_dimensions`: call `mtx_file_header` instead of `_mtx_header`.
+- `_mtx_range_problems`: call `mtx_file_header` + `iter_edges_from_mtx_file` instead of `_mtx_header` + `_mtx_entries`; reword the three "a format problem `graph_from_mtx_dir` already reports" comments to "…the streaming format check already reports".
+- `_results_problems`: call `mtx_file_header` + `iter_edges_from_mtx_file`; drop the now-dead `count`/`done` bookkeeping and the `count != nnz` branch (an nnz mismatch surfaces as the `ValueError` from `iter_edges_from_mtx_file`, reported as "cannot be parsed as a Boolean MatrixMarket file" — decision 4).
+- `_validate_root`: replace `graph_from_mtx_dir(root / "graph")` with a full streaming consumption `for _ in iter_edges_from_mtx_dir(root / "graph"): pass` inside the same `try/except (ValueError, OSError)` and the same `problems.append(f"graph/: {error}")`. The loop must run to completion so the per-file nnz check fires.
 
-### The GitHub API appends a trailing newline to comment bodies
+**Reuse:** the checker no longer carries its own MTX parser — it reuses `iter_edges_from_mtx_dir` / `iter_edges_from_mtx_file` / `mtx_file_header` from `mtx.py` (single source of truth).
 
-Discovered while dogfooding the tool against #192: PATCHing a comment with
-body `X` stores `X\n`; PATCHing `X\n` stores `X\n\n` (verified with
-controlled bodies). The stored body is therefore always `sent + "\n"`, so:
+**Tests:** `tests/tools/test_check_archive_structure.py`
+- New `test_validate_streams_the_graph_dir` — monkeypatch `flpq_data.tools.check_archive_structure.iter_edges_from_mtx_dir` with a spy wrapping the real one; assert `validate_archive(_valid_tree(...)) == []` **and** the spy was called with the `graph/` directory (regression: the format check streams rather than materializing).
+- All existing tests must pass unchanged (behavior is preserved: format problems still reported as `graph/: …`, range/dimension/results messages unchanged except decision 4).
 
-- The byte-exact invariant applies to the *sent* body: the tool sends
-  exactly `marker + "\n" + file content`, identical to what the retired
-  skill snippet sent — comments synced by either means remain
-  indistinguishable.
-- `--check` compares with `rstrip("\n")` on both sides — robust to the
-  API's newline behavior and to the file's own trailing-newline state,
-  while still catching any content drift.
+**Docs:** no change to the documented behavior — `docs/reference/tools/index.rst` ("Archive structure checker") describes the checks at a level that stays accurate ("Every MTX file parses as a Boolean pattern matrix, every edge endpoint fits the declared dimensions, and all label matrices declare the same dimensions"). The module docstring of `check_archive_structure.py` does not describe the mechanism. No doc edit required; verified against the documentation mapping.
+
+**Spec:**
+- The format check in `_validate_root` must raise-and-report exactly the same three error classes as before (unexpected header, malformed entry line, nnz mismatch) with the same `graph/: {error}` prefix, now sourced from `iter_edges_from_mtx_dir` (O(1) in edges) instead of `graph_from_mtx_dir` (O(V+E)).
+- `_mtx_range_problems` and `_results_problems` keep their skip-on-format-problem semantics (a file whose header is `None`, or whose entry stream raises `ValueError`, is skipped for the range check because the format check already reported it).
+- Net effect: `validate_archive` never builds a `networkx.MultiDiGraph`; peak memory for the `graph/` checks is O(1) in the number of edges.
+
+---
 
 ## Status
 
-- S1: [x]
-- S2: [x]
+- [x] S1: shared single-file MTX reader + header in `mtx.py`
+- [ ] S2: stream the `graph/` format check + consolidate the checker's helpers
