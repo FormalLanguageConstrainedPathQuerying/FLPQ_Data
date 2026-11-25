@@ -79,16 +79,10 @@ the operational procedure (validation, merge) lives in the skill.
 
 Mark the subtask as completed in `tasks/detailed_plan.md` (`[done]` suffix +
 commit hash on the subtask heading), then mirror the file onto the plan
-comment of the task issue: find the comment by its `<!-- detailed-plan -->`
-first line and PATCH its body to the current file content:
+comment of the task issue:
 
 ```bash
-REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
-CID=$(gh api "repos/$REPO/issues/<N>/comments" \
-  --jq '[.[] | select(.body | startswith("<!-- detailed-plan -->"))] | last.id')
-{ echo '<!-- detailed-plan -->'; cat tasks/detailed_plan.md; } > /tmp/plan_comment.md
-gh api -X PATCH "repos/$REPO/issues/comments/$CID" \
-  --input <(jq -Rs '{body: .}' /tmp/plan_comment.md)
+uv run python utils/sync_plan_comment.py <N>
 ```
 
 The local file is the single source of truth; the comment is a pure mirror.
@@ -196,6 +190,9 @@ a task is considered done — its last subtask's commit carries `Closes #<N>`
 - [ ] No requirement was silently skipped or deferred.
 - [ ] All tests pass (0 failures, 0 skipped).
 - [ ] All quality gates pass (see the `quality-gates` skill).
+- [ ] The plan comment on the task issue is in sync with
+      `tasks/detailed_plan.md` (pure mirror — `uv run python
+      utils/sync_plan_comment.py <N> --check` must exit 0).
 - [ ] If any of the above fails, the task is NOT done — it is blocked. Follow
       the Blocked Work Protocol. Do NOT close it with known unresolved
       limitations.

@@ -36,7 +36,8 @@ Out of scope (flagged, not fixed): step 7's parenthetical "(`[done]` suffix + co
 
 **Tests:** new `tests/utils/test_sync_plan_comment.py` (monkeypatches `sync_plan_comment.run_gh`):
 - `test_build_body_precedes_marker` — marker line + original content, byte-exact;
-- `test_find_plan_comment_takes_last_marker_match` — several comments, marker on two; the last wins;
+- `test_run_gh_raises_on_failure` — non-zero exit → `RuntimeError` carrying gh's stderr;
+- `test_find_plan_comment_parses_id_and_filters_by_marker` — the `--jq` filter keeps marker comments and takes the last one;
 - `test_find_plan_comment_raises_when_absent` — `null` result → `RuntimeError`;
 - `test_sync_patches_the_comment_body` — captured PATCH call: correct URL, JSON `{"body": marker + "\n" + content}` on stdin;
 - `test_main_end_to_end` — repo resolution, sync, report line (capsys);
@@ -80,4 +81,4 @@ controlled bodies). The stored body is therefore always `sent + "\n"`, so:
 ## Status
 
 - S1: [x]
-- S2: [ ]
+- S2: [x]
