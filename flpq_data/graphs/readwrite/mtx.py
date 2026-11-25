@@ -13,6 +13,8 @@ from flpq_data.graphs.readwrite.graph import iter_edges_from_graph
 __all__ = [
     "filename_to_label",
     "label_to_filename",
+    "iter_edges_from_mtx_file",
+    "mtx_file_header",
     "iter_edges_from_mtx_dir",
     "mtx_dir_from_edges",
     "graph_from_mtx_dir",
@@ -84,6 +86,110 @@ def label_to_filename(label: str) -> str:
     return f"{label}.mtx"
 
 
+def iter_edges_from_mtx_file(
+    path: Union[pathlib.Path, str],
+) -> Iterator[Tuple[int, int]]:
+    """Yields the entries of one Boolean MatrixMarket file as a stream.
+
+    The file must follow the dataset format: a two-line header
+    (``%%MatrixMarket matrix coordinate pattern general`` /
+    ``%%GraphBLAS type bool``), a dimension line (``rows cols nnz``), and one
+    ``u v`` entry per line (0-based indices, no values). The file is read line
+    by line, so the memory stays O(1) in the number of entries.
+
+    Parameters
+    ----------
+    path : Union[Path, str]
+        The path to the MatrixMarket file.
+
+    Examples
+    --------
+    >>> import pathlib, tempfile
+    >>> p = pathlib.Path(tempfile.mkdtemp()) / "a.mtx"
+    >>> _ = p.write_text(
+    ...     "%%MatrixMarket matrix coordinate pattern general\\n"
+    ...     "%%GraphBLAS type bool\\n3 3 2\\n0 1\\n1 2\\n"
+    ... )
+    >>> list(iter_edges_from_mtx_file(p))
+    [(0, 1), (1, 2)]
+
+    Returns
+    -------
+    entries : Iterator[Tuple[int, int]]
+        The ``(u, v)`` entry tuples in file order.
+
+    Raises
+    ------
+    ValueError
+        If the file has an unexpected header, a malformed entry line, or its
+        entry count differs from the declared nnz.
+    """
+    path = pathlib.Path(path)
+
+    with open(path, "r") as f:
+        if tuple(f.readline().strip() for _ in range(2)) != _MTX_HEADER:
+            raise ValueError(f"Unexpected header in {path=}")
+        rows, cols, nnz = map(int, f.readline().split())
+
+        count = 0
+        for line in f:
+            if not line.strip():
+                continue
+            i, j = map(int, line.split())
+            yield i, j
+            count += 1
+
+    if count != nnz:
+        raise ValueError(f"{path=} declares {nnz} entries but has {count}")
+
+
+def mtx_file_header(
+    path: Union[pathlib.Path, str],
+) -> Optional[Tuple[int, int, int]]:
+    """The ``(rows, cols, nnz)`` declared by one Boolean MatrixMarket file.
+
+    Returns ``None`` when the file does not follow the dataset format (the
+    two-line header and a dimension line of three integers). Streams — only
+    the first lines are read.
+
+    Parameters
+    ----------
+    path : Union[Path, str]
+        The path to the MatrixMarket file.
+
+    Examples
+    --------
+    >>> import pathlib, tempfile
+    >>> p = pathlib.Path(tempfile.mkdtemp()) / "a.mtx"
+    >>> _ = p.write_text(
+    ...     "%%MatrixMarket matrix coordinate pattern general\\n"
+    ...     "%%GraphBLAS type bool\\n3 3 2\\n0 1\\n1 2\\n"
+    ... )
+    >>> mtx_file_header(p)
+    (3, 3, 2)
+    >>> _ = p.write_text("%%MatrixMarket matrix coordinate real\\n1 1 0\\n")
+    >>> mtx_file_header(p) is None
+    True
+
+    Returns
+    -------
+    header : Optional[Tuple[int, int, int]]
+        The declared ``(rows, cols, nnz)``, or ``None`` if the header does not
+        match the dataset format.
+    """
+    path = pathlib.Path(path)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            if f.readline().rstrip() != _MTX_HEADER[0]:
+                return None
+            if f.readline().rstrip() != _MTX_HEADER[1]:
+                return None
+            rows, cols, nnz = (int(value) for value in f.readline().split())
+    except (OSError, ValueError):
+        return None
+    return rows, cols, nnz
+
+
 def iter_edges_from_mtx_dir(
     path: Union[pathlib.Path, str],
 ) -> Iterator[Tuple[int, str, int]]:
@@ -130,22 +236,8 @@ def iter_edges_from_mtx_dir(
 
     for mtx_file in sorted(path.glob("*.mtx")):
         label = filename_to_label(mtx_file.name)
-
-        with open(mtx_file, "r") as f:
-            if tuple(f.readline().strip() for _ in range(2)) != _MTX_HEADER:
-                raise ValueError(f"Unexpected header in {mtx_file=}")
-            rows, cols, nnz = map(int, f.readline().split())
-
-            count = 0
-            for line in f:
-                if not line.strip():
-                    continue
-                i, j = map(int, line.split())
-                yield i, label, j
-                count += 1
-
-        if count != nnz:
-            raise ValueError(f"{mtx_file=} declares {nnz} entries but has {count}")
+        for u, v in iter_edges_from_mtx_file(mtx_file):
+            yield u, label, v
 
     logging.info(f"Stream edges from {path=}")
 

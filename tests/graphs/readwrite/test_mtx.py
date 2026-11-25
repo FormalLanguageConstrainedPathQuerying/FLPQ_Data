@@ -8,8 +8,10 @@ from flpq_data.graphs.readwrite.mtx import (
     graph_from_mtx_dir,
     graph_to_mtx_dir,
     iter_edges_from_mtx_dir,
+    iter_edges_from_mtx_file,
     label_to_filename,
     mtx_dir_from_edges,
+    mtx_file_header,
 )
 
 
@@ -160,6 +162,95 @@ def test_iter_edges_from_mtx_dir_rejects_bad_nnz(tmp_path):
 
     with pytest.raises(ValueError, match="declares 2 entries but has 1"):
         list(iter_edges_from_mtx_dir(tmp_path))
+
+
+def _write_one_file(path, text):
+    (path / "a.mtx").write_text(text)
+    return path / "a.mtx"
+
+
+def test_iter_edges_from_mtx_file(tmp_path):
+    p = _write_one_file(
+        tmp_path,
+        "%%MatrixMarket matrix coordinate pattern general\n"
+        "%%GraphBLAS type bool\n3 3 2\n0 1\n1 2\n",
+    )
+
+    assert list(iter_edges_from_mtx_file(p)) == [(0, 1), (1, 2)]
+
+
+def test_iter_edges_from_mtx_file_is_lazy(tmp_path):
+    p = _write_one_file(
+        tmp_path,
+        "%%MatrixMarket matrix coordinate pattern general\n"
+        "%%GraphBLAS type bool\n3 3 2\n0 1\n1 2\n",
+    )
+
+    entries = iter_edges_from_mtx_file(p)
+    assert inspect.isgenerator(entries)
+    assert next(entries) == (0, 1)
+
+
+def test_iter_edges_from_mtx_file_rejects_bad_header(tmp_path):
+    p = _write_one_file(tmp_path, "%%MatrixMarket matrix coordinate real\n1 1 0\n")
+
+    with pytest.raises(ValueError, match="Unexpected header"):
+        list(iter_edges_from_mtx_file(p))
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        # a non-numeric entry line
+        "%%MatrixMarket matrix coordinate pattern general\n"
+        "%%GraphBLAS type bool\n3 3 1\nx 1\n",
+        # a 1-value entry line
+        "%%MatrixMarket matrix coordinate pattern general\n"
+        "%%GraphBLAS type bool\n3 3 1\n0\n",
+    ],
+)
+def test_iter_edges_from_mtx_file_rejects_malformed_entry(tmp_path, text):
+    p = _write_one_file(tmp_path, text)
+
+    with pytest.raises(ValueError):
+        list(iter_edges_from_mtx_file(p))
+
+
+def test_iter_edges_from_mtx_file_rejects_bad_nnz(tmp_path):
+    p = _write_one_file(
+        tmp_path,
+        "%%MatrixMarket matrix coordinate pattern general\n"
+        "%%GraphBLAS type bool\n3 3 2\n0 1\n",
+    )
+
+    with pytest.raises(ValueError, match="declares 2 entries but has 1"):
+        list(iter_edges_from_mtx_file(p))
+
+
+def test_mtx_file_header(tmp_path):
+    p = _write_one_file(
+        tmp_path,
+        "%%MatrixMarket matrix coordinate pattern general\n"
+        "%%GraphBLAS type bool\n3 3 2\n0 1\n1 2\n",
+    )
+
+    assert mtx_file_header(p) == (3, 3, 2)
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        # a wrong header line
+        "%%MatrixMarket matrix coordinate real\n1 1 0\n",
+        # a non-numeric dimension line
+        "%%MatrixMarket matrix coordinate pattern general\n"
+        "%%GraphBLAS type bool\nx y z\n",
+    ],
+)
+def test_mtx_file_header_returns_none(tmp_path, text):
+    p = _write_one_file(tmp_path, text)
+
+    assert mtx_file_header(p) is None
 
 
 def test_mtx_dir_from_edges(tmp_path):
