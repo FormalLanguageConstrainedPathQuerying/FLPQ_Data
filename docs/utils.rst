@@ -294,3 +294,32 @@ Behavior:
 Use ``--dry-run`` to preview which items would be uploaded without any
 side effects, and ``--limit N`` to migrate only the first N items (for
 testing).
+
+.. _sync_plan_comment:
+
+Sync the plan comment
+---------------------
+
+``utils/sync_plan_comment.py`` mirrors the detailed plan onto the task
+issue::
+
+   python utils/sync_plan_comment.py ISSUE [--check]
+
+The detailed plan lives in ``tasks/detailed_plan.md`` — the single source
+of truth. The task issue carries a mirror: a comment whose first line is
+the ``<!-- detailed-plan -->`` marker. The tool finds that comment (the
+last one, if several exist) and replaces its body with the marker plus the
+current file content.
+
+Behavior:
+
+- **Pure mirror.** The comment is derived from the file, never edited by
+  hand; re-running the tool is idempotent.
+- **``--check``.** Verifies the mirror instead of writing it: exits 0 when
+  the comment is in sync, 1 on drift. The comparison ignores trailing
+  newlines because the GitHub API stores comment bodies with one extra
+  trailing newline.
+- **Marker discovery.** Comments are matched by their first line; the
+  marker is the first line of the comment the plan is posted as.
+- **Transport.** The tool shells out to ``gh api`` and requires an
+  authenticated ``gh``; it never stores credentials.
