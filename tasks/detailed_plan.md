@@ -194,7 +194,7 @@ policy canonically (new S3).
 - The rendered region text starts at `.. list-table::` and ends at the last
   cell line (no surrounding blank lines — `replace_marked_region` adds them).
 
-### S3: Fix the stale data pages + document the reverse-edge policy canonically
+### S3: Fix the stale data pages + document the reverse-edge policy canonically [done] 128461e
 
 **Context:** 39 data pages (biological_uniprot 10, data_provenance 18,
 field_sensitive_alias 10, rdf `geospecies` 1) list the *logical* edge count

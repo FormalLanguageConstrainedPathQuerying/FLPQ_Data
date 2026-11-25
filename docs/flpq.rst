@@ -370,9 +370,9 @@ Reachable pairs; one row per query, grouped by category), so every table
 stays small. The flat table survives as a downloadable CSV — the single
 source of truth for automatic processing — which gains a ``category`` and a
 ``query_class`` column so it is self-describing. A generator script in
-``utils/`` (following the pattern of ``utils/archive_sizes.py``) renders
-both the per-graph tables and the count columns of the category pages from
-that CSV, so no count is hand-maintained in two places.
+``utils/`` renders the per-graph tables from that CSV, and the per-category
+graph tables are rendered whole from the CSV and the registry
+(:ref:`graph_tables`), so no count is hand-maintained in two places.
 
 Package structure
 -----------------
@@ -481,9 +481,9 @@ Field sources: the graph list and ``category`` from
 ``reachable_pairs.csv``; ``num_nodes``/``num_edges`` from the MTX headers of
 the archive's ``graph/`` dir; ``size_bytes`` the exact stored object size in
 bytes and ``size_mb`` (three decimals) derived from it; ``sha256`` of the
-``.tar.gz``; ``queries`` from the archive's ``queries/`` tree. The repo-only ``utils/generate_registry.py`` (pattern of
-``utils/archive_sizes.py``) regenerates the file; it runs locally, never in
-CI (no-network policy).
+``.tar.gz``; ``queries`` from the archive's ``queries/`` tree. The repo-only
+``utils/generate_registry.py`` regenerates the file; it runs locally, never
+in CI (no-network policy).
 
 The metadata API never touches the network: ``graph_names() ->
 list[str]`` (named to avoid clashing with the ``flpq_data.graphs``

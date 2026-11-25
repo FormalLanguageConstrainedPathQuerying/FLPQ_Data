@@ -113,8 +113,10 @@ is dropped.
 Contents
 --------
 
-The per-category tables include one count column per grammar language
-applicable to that category, each headed ``Reachable pairs`` (or
+The per-category tables are machine-rendered from the registry and the
+reachable-pairs CSV (:ref:`graph_tables`), so no cell is maintained by hand.
+Each table includes one count column per grammar language applicable to that
+category, each headed ``Reachable pairs`` (or
 ``Reachable pairs / <grammar>`` in categories with several languages, such
 as RDF). Each cell shows the number of vertex pairs reachable with respect
 to the respective language (i.e. the number of pairs ``(u, v)`` for which

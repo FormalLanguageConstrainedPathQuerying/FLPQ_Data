@@ -4,22 +4,18 @@ The reference counts live once, in
 ``flpq_data/dataset/reachable_pairs.csv`` (the single source of truth for
 automatic processing); each row carries a ``query_class`` (``cfpq``,
 ``rpq``, or ``mcfpq`` — the names of the ``queries/<class>/`` directories
-in the graph archives). Two renderings are derived from it:
+in the graph archives). This tool renders the per-graph tables of
+``docs/reachable_pairs.rst`` (one section per graph category, one table
+per graph, every query class rendered, between the
+``reachable-pairs-tables`` markers); the count columns of the per-category
+graph tables in ``docs/graphs/*.rst`` are rendered by
+``utils/graph_tables.py`` (CFPQ rows only).
 
-- the per-graph tables of ``docs/reachable_pairs.rst`` (one section per
-  graph category, one table per graph, every query class rendered, between
-  the ``reachable-pairs-tables`` markers);
-- the count columns of the eight per-category graph tables in
-  ``docs/graphs/*.rst``.
+This tool keeps the rendering accurate:
 
-The graph tables render CFPQ counts only; the other classes are rendered
-in the per-graph tables of ``docs/reachable_pairs.rst``.
-
-This tool keeps both renderings accurate:
-
-- check mode (default): report every cell or table region that disagrees
-  with the CSV and exit non-zero, so it can gate a commit;
-- ``--update``: rewrite the region and the drifted cells.
+- check mode (default): report every table region that disagrees with the
+  CSV and exit non-zero, so it can gate a commit;
+- ``--update``: rewrite the region.
 
 The graph-to-category mapping is derived from the site itself: each
 category page's toctree lists its data pages, and the archive name in a
@@ -36,7 +32,6 @@ import pathlib
 import re
 from typing import Optional, Sequence
 
-from archive_sizes import header_columns, iter_graph_tables
 from config import MAIN_FOLDER
 
 from flpq_data.tools.check_archive_structure import QUERY_CLASSES
@@ -57,7 +52,6 @@ __all__ = [
     "render_tables_region",
     "replace_marked_region",
     "update_reachable_pairs_page",
-    "update_category_columns",
     "main",
 ]
 
@@ -442,125 +436,6 @@ def update_reachable_pairs_page(text: str, region: str) -> tuple[str, bool]:
     return replace_marked_region(text, region, BEGIN_MARKER, END_MARKER)
 
 
-def update_category_columns(
-    text: str,
-    rows: list[dict],
-    category: str,
-    page_to_graph: dict[str, str],
-    columns: Optional[list[tuple[str, Optional[str]]]] = None,
-) -> tuple[str, list[str]]:
-    """Returns a category page with its count columns synced to ``rows``.
-
-    For each row of the category's graph table (matched by its ``:ref:``
-    page via ``page_to_graph``) and each count column, the cell is set to
-    the CSV value, to ``not available`` when the pair exists with no value
-    yet, or to empty when the grammar does not apply to that graph. Lines
-    that need no change keep their exact text. A category without
-    registered count columns (absent from ``GRAMMAR_COLUMNS``) has nothing
-    to sync and is returned unchanged with no problems.
-
-    Parameters
-    ----------
-    text : str
-        The current source of a category page.
-    rows : list[dict]
-        The CSV rows (see :func:`load_rows`).
-    category : str
-        The category stem; selects the table and, by default, its columns.
-    page_to_graph : dict[str, str]
-        Data-page stem -> graph name (see :func:`page_to_graph`).
-    columns : list[tuple[str, Optional[str]]], optional
-        Override for the (column header, grammar file) pairs; defaults to
-        ``GRAMMAR_COLUMNS[category]``.
-
-    Returns
-    -------
-    updated : str
-        The new text.
-    problems : list[str]
-        One entry per drifted cell or structural problem (empty when in
-        sync).
-
-    Raises
-    ------
-    ValueError
-        If the page does not contain exactly one table with the expected
-        count columns.
-    """
-    if columns is None:
-        columns = GRAMMAR_COLUMNS.get(category)
-        if columns is None:
-            # Nothing to sync: the category's graph table has no count
-            # columns (its per-query counts live in
-            # docs/reachable_pairs.rst).
-            return text, []
-    wanted = {header for header, _ in columns}
-    tables = [t for t in iter_graph_tables(text) if wanted & set(header_columns(t))]
-    if len(tables) != 1:
-        raise ValueError(
-            f"expected exactly one table with a count column from {sorted(wanted)}, "
-            f"found {len(tables)}"
-        )
-    table = tables[0]
-    header = header_columns(table)
-    col_index = {name: i for i, name in enumerate(header)}
-
-    by_pair: dict[tuple[str, str], Optional[int]] = {
-        (r["graph"], r["grammar"]): r["num_reachable_pairs"] for r in _cfpq_rows(rows)
-    }
-    missing = object()
-
-    lines = text.splitlines()
-    replacements: list[tuple[int, str]] = []
-    problems: list[str] = []
-    for col_header, _ in columns:
-        if col_header not in col_index:
-            problems.append(f"column {col_header} is missing from the table header")
-    for row in table.rows[table.header_rows :]:
-        ref_match = _REF_RE.match(row[0][1])
-        if ref_match is None:
-            continue
-        graph = page_to_graph.get(ref_match.group(1))
-        if graph is None:
-            continue
-        for col_header, grammar_file in columns:
-            if col_header not in col_index:
-                continue
-            idx = col_index[col_header]
-            if len(row) <= idx:
-                problems.append(
-                    f"line {row[0][0] + 1}: row {graph} "
-                    f"has no cell for column {col_header}"
-                )
-                continue
-            line_idx, current = row[idx]
-            grammar = grammar_file if grammar_file is not None else f"{graph}.cnf"
-            value = by_pair.get((graph, grammar), missing)
-            if value is missing:
-                expected = ""
-            elif value is None:
-                expected = NOT_AVAILABLE
-            else:
-                expected = str(value)
-            if current != expected:
-                indent = lines[line_idx][
-                    : len(lines[line_idx]) - len(lines[line_idx].lstrip())
-                ]
-                new_line = f"{indent}- {expected}" if expected else f"{indent}-"
-                replacements.append((line_idx, new_line))
-                problems.append(
-                    f"line {line_idx + 1}: {graph}/{grammar}: table says "
-                    f"{current or '<empty>'}, CSV says {expected or '<empty>'}"
-                )
-
-    for line_idx, new_line in sorted(replacements, key=lambda p: p[0]):
-        lines[line_idx] = new_line
-    updated = "\n".join(lines)
-    if text.endswith("\n"):
-        updated += "\n"
-    return updated, problems
-
-
 def _grammar_has_column(
     columns: list[tuple[str, Optional[str]]], graph: str, grammar: str
 ) -> bool:
@@ -628,9 +503,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Check or update the reachable-pairs tables (the per-graph "
-            "tables of docs/reachable_pairs.rst and the count columns of "
-            "docs/graphs/*.rst) against the CSV."
+            "Check or update the per-graph reachable-pairs tables "
+            "(docs/reachable_pairs.rst) against the CSV."
         )
     )
     parser.add_argument(
@@ -644,14 +518,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     try:
         site_map = graph_to_category(DOCS_DIR)
-        pages_map = page_to_graph(DOCS_DIR)
     except ValueError as error:
         print(f"error: {error}")
         return 1
 
-    # Validation problems block any update (all-or-nothing, like
-    # archive_sizes.py): a CSV row the site cannot account for must be fixed
-    # in the CSV before anything is rewritten.
+    # Validation problems block any update (all-or-nothing): a CSV row the
+    # site cannot account for must be fixed in the CSV before anything is
+    # rewritten.
     problems = _validation_problems(rows, site_map)
     if problems:
         print("\n".join(problems))
@@ -667,30 +540,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(f"error: {error}")
         return 1
 
-    category_updates: list[tuple[pathlib.Path, str, list[str]]] = []
-    for category in category_order(DOCS_DIR):
-        path = DOCS_DIR / "graphs" / f"{category}.rst"
-        text = path.read_text(encoding="utf-8")
-        try:
-            updated, cell_problems = update_category_columns(
-                text, rows, category, pages_map
-            )
-        except ValueError as error:
-            print(f"error: {path.relative_to(MAIN_FOLDER)}: {error}")
-            return 1
-        category_updates.append((path, updated, cell_problems))
-
     if args.update:
         if updated_page != page_text:
             REACHABLE_PAIRS_PAGE.write_text(updated_page, encoding="utf-8")
             print(f"{REACHABLE_PAIRS_PAGE.relative_to(MAIN_FOLDER)}: region updated")
-        for path, updated, cell_problems in category_updates:
-            if cell_problems:
-                path.write_text(updated, encoding="utf-8")
-                print(
-                    f"{path.relative_to(MAIN_FOLDER)}: "
-                    f"updated {len(cell_problems)} cell(s)"
-                )
         print("OK: reachable-pairs tables are in sync with the CSV.")
         return 0
 
@@ -700,8 +553,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             f"{REACHABLE_PAIRS_PAGE.relative_to(MAIN_FOLDER)}: the per-graph "
             "tables are out of sync with the CSV"
         )
-    for path, _, cell_problems in category_updates:
-        problems.extend(f"{path.relative_to(MAIN_FOLDER)}: {p}" for p in cell_problems)
     if problems:
         print("\n".join(problems))
         print(f"FAILED: {len(problems)} problem(s).")

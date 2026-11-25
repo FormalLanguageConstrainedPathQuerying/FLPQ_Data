@@ -42,42 +42,6 @@ megabytes, with the same MB formatting as the ``Size (MB)`` column of the
 graph tables, so a new graph's table row can be
 filled directly from the upload output.
 
-.. _archive_sizes:
-
-Archive sizes
--------------
-
-``utils/archive_sizes.py`` keeps the ``Size (MB)`` column of the graph tables
-in sync with the stored archives::
-
-   python utils/archive_sizes.py [--update]
-
-The tool covers every list-table with a ``Download`` column in
-``docs/graphs/*.rst`` and ``docs/old_graphs/index.rst`` — currently the nine
-per-category tables (115 archives at the ``6.0.0/graph/`` prefix) and the
-old-graphs table (54 archives at the ``4.0.0/graph/`` prefix). For every
-referenced archive it issues an S3 ``HEAD`` request and compares the
-``Content-Length`` with the table cell, formatted in MB (three decimals below
-one megabyte, two from one up — the rule lives in ``utils/sizes.py`` and is
-shared with :ref:`upload_to_s3`).
-
-Behavior:
-
-- **Check mode (default).** Reports every row whose size cell disagrees with
-  the stored object (or a missing column or link) and exits non-zero, so it
-  can gate a commit.
-- **``--update``.** Fetches all sizes first, then rewrites the tables —
-  inserting the ``Size (MB)`` column before ``Download`` where it is missing
-  and fixing drifted cells. All-or-nothing: if any archive cannot be fetched,
-  nothing is written.
-- **URL keying.** Sizes are keyed by full URL, not archive name: the
-  ``4.0.0``, ``5.0.0``, and ``6.0.0`` prefixes hold same-named archives with
-  different content.
-
-When adding a new graph, upload it first (:ref:`upload_to_s3` prints the
-verified size), add the table row with that value, and run this tool before
-committing so every row — including the new one — matches S3.
-
 .. _strip_reverse_edges:
 
 Strip stored reverse edges
@@ -157,36 +121,31 @@ prints the rows instead of writing them.
 Reachable pair counts
 ---------------------
 
-``utils/reachable_pairs_tables.py`` keeps the reachable-pairs renderings in
-sync with ``flpq_data/dataset/reachable_pairs.csv``, the single source of
-truth for the reference counts (:ref:`reachable_pairs`)::
+``utils/reachable_pairs_tables.py`` keeps the per-graph reachable-pairs
+tables of ``docs/reachable_pairs.rst`` in sync with
+``flpq_data/dataset/reachable_pairs.csv``, the single source of truth for
+the reference counts (:ref:`reachable_pairs`)::
 
    python utils/reachable_pairs_tables.py [--update]
 
-The tool covers two renderings: the per-graph tables of
-``docs/reachable_pairs.rst`` (one section per graph category, one table
-per graph, every query class rendered, between the
-``reachable-pairs-tables`` markers) and the count columns of the eight
-per-category graph tables in ``docs/graphs/*.rst``. The graph-to-category
-mapping is derived from the site itself: each category page's toctree lists
-its data pages, and the archive name in a data page's download URL is the
-graph name (page titles are not reliable).
+The tool covers the per-graph tables (one section per graph category, one
+table per graph, every query class rendered, between the
+``reachable-pairs-tables`` markers); the count columns of the per-category
+graph tables in ``docs/graphs/*.rst`` are rendered by :ref:`graph_tables`.
+The graph-to-category mapping is derived from the site itself: each category
+page's toctree lists its data pages, and the archive name in a data page's
+download URL is the graph name (page titles are not reliable).
 
 Behavior:
 
-- **Check mode (default).** Reports every drifted cell or table region —
-  plus CSV rows with an unknown ``query_class``, whose graph is unknown,
-  whose category disagrees with the docs, or which has no count column in
-  its category — and exits non-zero, so it can gate a commit. The
-  count-column check applies to CFPQ rows only: the graph tables render
-  CFPQ counts only, while the other classes are rendered in the per-graph
-  tables of ``docs/reachable_pairs.rst``.
-- **``--update``.** Rewrites the reachable-pairs region and fixes the
-  drifted cells in place; lines that need no change keep their exact text.
-
-On the category pages a cell is a number (the count), ``not available``
-(a pair without a computed value yet), or empty (the grammar does not apply
-to that graph) — the convention explained on the :ref:`graphs` page.
+- **Check mode (default).** Reports every drifted table region — plus CSV
+  rows with an unknown ``query_class``, whose graph is unknown, whose
+  category disagrees with the docs, or which has no count column in its
+  category — and exits non-zero, so it can gate a commit. The count-column
+  check applies to CFPQ rows only: the graph tables render CFPQ counts only,
+  while the other classes are rendered in the per-graph tables of
+  ``docs/reachable_pairs.rst``.
+- **``--update``.** Rewrites the reachable-pairs region.
 
 When a new count is computed, add the row to the CSV with the graph's
 category and query class and run this tool with ``--update`` before
@@ -241,7 +200,10 @@ rendered — between the ``graph-table`` markers — instead of edited:
 - the ``Reachable pairs`` count columns come from
   ``flpq_data/dataset/reachable_pairs.csv`` (CFPQ rows only; the (column,
   grammar) pairs per category are ``GRAMMAR_COLUMNS`` in
-  :ref:`reachable_pairs_tables`).
+  :ref:`reachable_pairs_tables`). A cell is a number (the count),
+  ``not available`` (a pair without a computed value yet), or empty (the
+  grammar does not apply to that graph) — the convention explained on the
+  :ref:`graphs` page.
 - the ``Graph`` cell is a ``:ref:`` to the graph's data page (the page
   mapping is derived from the site, as in :ref:`reachable_pairs_tables`).
 - the ``Download`` link is the archive name plus the dataset URL.
