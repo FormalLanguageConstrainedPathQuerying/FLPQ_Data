@@ -65,14 +65,15 @@
 - `_mtx_range_problems`: call `mtx_file_header` + `iter_edges_from_mtx_file` instead of `_mtx_header` + `_mtx_entries`; reword the three "a format problem `graph_from_mtx_dir` already reports" comments to "…the streaming format check already reports".
 - `_results_problems`: call `mtx_file_header` + `iter_edges_from_mtx_file`; drop the now-dead `count`/`done` bookkeeping and the `count != nnz` branch (an nnz mismatch surfaces as the `ValueError` from `iter_edges_from_mtx_file`, reported as "cannot be parsed as a Boolean MatrixMarket file" — decision 4).
 - `_validate_root`: replace `graph_from_mtx_dir(root / "graph")` with a full streaming consumption `for _ in iter_edges_from_mtx_dir(root / "graph"): pass` inside the same `try/except (ValueError, OSError)` and the same `problems.append(f"graph/: {error}")`. The loop must run to completion so the per-file nnz check fires.
+- **Discovered during implementation:** `utils/add_reachable_pairs.py` and `utils/generate_registry.py` imported the checker's *private* `_mtx_header` (a cross-module private import). Relocating it to `mtx.py` as the public `mtx_file_header` forces both to switch to the new import — completing the "one source of truth for MTX parsing" goal and removing the private-import smell. Pure rename (`_mtx_header` → `mtx_file_header`); identical `(rows, cols, nnz) | None` semantics.
 
-**Reuse:** the checker no longer carries its own MTX parser — it reuses `iter_edges_from_mtx_dir` / `iter_edges_from_mtx_file` / `mtx_file_header` from `mtx.py` (single source of truth).
+**Reuse:** the checker no longer carries its own MTX parser — it reuses `iter_edges_from_mtx_dir` / `iter_edges_from_mtx_file` / `mtx_file_header` from `mtx.py` (single source of truth). The two `utils/` scripts that reached into the checker's private `_mtx_header` now use the same public `mtx_file_header`.
 
 **Tests:** `tests/tools/test_check_archive_structure.py`
 - New `test_validate_streams_the_graph_dir` — monkeypatch `flpq_data.tools.check_archive_structure.iter_edges_from_mtx_dir` with a spy wrapping the real one; assert `validate_archive(_valid_tree(...)) == []` **and** the spy was called with the `graph/` directory (regression: the format check streams rather than materializing).
 - All existing tests must pass unchanged (behavior is preserved: format problems still reported as `graph/: …`, range/dimension/results messages unchanged except decision 4).
 
-**Docs:** no change to the documented behavior — `docs/reference/tools/index.rst` ("Archive structure checker") describes the checks at a level that stays accurate ("Every MTX file parses as a Boolean pattern matrix, every edge endpoint fits the declared dimensions, and all label matrices declare the same dimensions"). The module docstring of `check_archive_structure.py` does not describe the mechanism. No doc edit required; verified against the documentation mapping.
+**Docs:** the checker's documented *checks* are unchanged (`docs/reference/tools/index.rst` "Archive structure checker" describes them at a level that stays accurate); the module docstring does not describe the mechanism. The one docs note the task calls for — that validation now *streams* — is a separate subtask (S3), kept out of this code commit.
 
 **Spec:**
 - The format check in `_validate_root` must raise-and-report exactly the same three error classes as before (unexpected header, malformed entry line, nnz mismatch) with the same `graph/: {error}` prefix, now sourced from `iter_edges_from_mtx_dir` (O(1) in edges) instead of `graph_from_mtx_dir` (O(V+E)).
@@ -81,7 +82,16 @@
 
 ---
 
+### S3: Note that archive validation streams (docs)
+
+**Docs:** `docs/graphs/index.rst` "Memory characteristics" — add one bullet stating that archive validation (`flpq-check-archive` / `validate_archive`) streams the `graph/` check in O(1) in edges, consuming the same streaming reader as the conversion path rather than materializing a graph (#188, #189). This is a specific *fact* about one component, sitting next to the existing conversion-path streaming facts; it is deliberately **not** the global streaming-first principle (that is the separate doc task #191, in `docs/flpq.rst`).
+
+**Verification (the task's S4):** the O(1) guarantee is a design property, not something measurable on a 30M-edge archive locally. It is established by (a) the S2 regression test proving the streaming reader is the one used, (b) the reader being the same O(1) stream the (tested) conversion path uses, and (c) the full quality gate. Empirical large-archive runs are left to CI/the dataset owners.
+
+---
+
 ## Status
 
 - [x] S1: shared single-file MTX reader + header in `mtx.py`
-- [ ] S2: stream the `graph/` format check + consolidate the checker's helpers
+- [x] S2: stream the `graph/` format check + consolidate the checker's helpers
+- [ ] S3: note that archive validation streams (docs)

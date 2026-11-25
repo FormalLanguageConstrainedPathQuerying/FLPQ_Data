@@ -25,6 +25,23 @@ def test_valid_tarball_passes(tmp_path):
     assert validate_archive(_tarball(tree, tmp_path / "g.tar.gz")) == []
 
 
+def test_validate_streams_the_graph_dir(tmp_path):
+    # Regression for #188: the graph/ format check must stream the edges
+    # (iter_edges_from_mtx_dir) rather than materialize a MultiDiGraph.
+    import flpq_data.tools.check_archive_structure as cas
+    from flpq_data.graphs.readwrite.mtx import iter_edges_from_mtx_dir
+
+    tree = _valid_tree(tmp_path)
+    graph_dir = tree / "graph"
+
+    with mock.patch.object(
+        cas, "iter_edges_from_mtx_dir", wraps=iter_edges_from_mtx_dir
+    ) as spy:
+        assert validate_archive(tree) == []
+
+    spy.assert_called_once_with(graph_dir)
+
+
 def test_tarball_top_level_must_match_name(tmp_path):
     tree = _valid_tree(tmp_path, name="other")
     tarball = _tarball(tree, tmp_path / "g.tar.gz")

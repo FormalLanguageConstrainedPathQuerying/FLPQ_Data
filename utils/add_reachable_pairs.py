@@ -30,9 +30,9 @@ from typing import Optional, Sequence
 
 from config import MAIN_FOLDER
 
+from flpq_data.graphs.readwrite.mtx import mtx_file_header
 from flpq_data.tools.check_archive_structure import (
     QUERY_CLASSES,
-    _mtx_header,
     unpack_single_dir,
     validate_archive,
 )
@@ -141,7 +141,7 @@ def derive_rows(root: pathlib.Path, graph: str, category: str) -> list[dict[str,
                     f"files must be named after the query directory "
                     f"(expected {expected})"
                 )
-            header = _mtx_header(query_dir / "results.mtx")
+            header = mtx_file_header(query_dir / "results.mtx")
             if header is None:
                 raise ValueError(
                     f"queries/{cls}/{query_dir.name}/results.mtx: cannot be parsed"

@@ -37,10 +37,10 @@ from reachable_pairs_tables import load_rows
 
 from flpq_data.config import DATASET_VERSION
 from flpq_data.dataset.data import DATASET_URL
+from flpq_data.graphs.readwrite.mtx import mtx_file_header
 from flpq_data.tools.check_archive_structure import (
     QUERY_CLASSES,
     _graph_dimensions,
-    _mtx_header,
 )
 
 __all__ = [
@@ -143,7 +143,7 @@ def archive_record(graph_dir: pathlib.Path) -> dict:
     rows, cols = dimensions.pop()
     num_edges = 0
     for mtx_file in sorted(mtx_dir.glob("*.mtx")):
-        header = _mtx_header(mtx_file)
+        header = mtx_file_header(mtx_file)
         if header is None:
             raise ValueError(f"{mtx_file} does not follow the dataset MTX format")
         num_edges += header[2]
