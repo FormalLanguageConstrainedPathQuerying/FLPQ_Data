@@ -29,7 +29,11 @@ from typing import Optional, Sequence, Set, Union
 
 from pyformlang.rsa import RecursiveAutomaton as RSA
 
-from flpq_data.graphs.readwrite.mtx import _MTX_HEADER, graph_from_mtx_dir
+from flpq_data.graphs.readwrite.mtx import (
+    iter_edges_from_mtx_dir,
+    iter_edges_from_mtx_file,
+    mtx_file_header,
+)
 from flpq_data.queries.cfpq.converters.cfg import cfg_from_rsa
 from flpq_data.queries.cfpq.readwrite.cnf_template import cnf_template_from_text
 from flpq_data.queries.mcfpq.readwrite.mcfg import mcfg_from_text
@@ -234,46 +238,11 @@ def _query_dir_problems(
     return problems
 
 
-def _mtx_header(path: pathlib.Path) -> Optional[tuple[int, int, int]]:
-    """The (rows, cols, nnz) declared by one Boolean MatrixMarket file.
-
-    Returns None when the file does not follow the dataset format (the
-    two-line header and a dimension line). Streams — only the first lines
-    are read.
-    """
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            if f.readline().rstrip() != _MTX_HEADER[0]:
-                return None
-            if f.readline().rstrip() != _MTX_HEADER[1]:
-                return None
-            rows, cols, nnz = (int(value) for value in f.readline().split())
-    except (OSError, ValueError):
-        return None
-    return rows, cols, nnz
-
-
-def _mtx_entries(path: pathlib.Path):
-    """Yields the (tail, head) entry pairs of one Boolean MatrixMarket file,
-    streaming line by line (O(1) memory).
-
-    Raises ValueError on a malformed entry line.
-    """
-    with open(path, "r", encoding="utf-8") as f:
-        for _ in range(3):  # the two header lines and the dimension line
-            f.readline()
-        for line in f:
-            if not line.strip():
-                continue
-            parts = line.split()
-            yield int(parts[0]), int(parts[1])
-
-
 def _graph_dimensions(graph_dir: pathlib.Path) -> set[tuple[int, int]]:
     """The declared dimensions of every parseable graph label matrix."""
     dimensions = set()
     for mtx_file in sorted(graph_dir.glob("*.mtx")):
-        header = _mtx_header(mtx_file)
+        header = mtx_file_header(mtx_file)
         if header is not None:
             dimensions.add((header[0], header[1]))
     return dimensions
@@ -283,14 +252,12 @@ def _mtx_range_problems(graph_dir: pathlib.Path) -> list[str]:
     """Check that edge endpoints fit the declared matrix dimensions."""
     problems = []
     for mtx_file in sorted(graph_dir.glob("*.mtx")):
-        header = _mtx_header(mtx_file)
+        header = mtx_file_header(mtx_file)
         if header is None:
-            continue  # a format problem graph_from_mtx_dir already reports
-        rows, cols, nnz = header
-        count = 0
+            continue  # a format problem the streaming format check already reports
+        rows, cols, _ = header
         try:
-            for tail, head in _mtx_entries(mtx_file):
-                count += 1
+            for tail, head in iter_edges_from_mtx_file(mtx_file):
                 if not 0 <= tail < rows or not 0 <= head < cols:
                     problems.append(
                         f"graph/{mtx_file.name}: edge ({tail}, {head}) is outside "
@@ -298,9 +265,7 @@ def _mtx_range_problems(graph_dir: pathlib.Path) -> list[str]:
                     )
                     break
         except ValueError:
-            continue  # a format problem graph_from_mtx_dir already reports
-        if count != nnz:
-            continue  # a format problem graph_from_mtx_dir already reports
+            continue  # a format problem the streaming format check already reports
     dimensions = _graph_dimensions(graph_dir)
     if len(dimensions) > 1:
         problems.append(
@@ -456,38 +421,31 @@ def _results_problems(root: pathlib.Path) -> list[str]:
                 continue
             results = query_dir / "results.mtx"
             rel = f"queries/{cls}/{query_dir.name}/results.mtx"
-            header = _mtx_header(results)
+            header = mtx_file_header(results)
             if header is None:
                 problems.append(
                     f"{rel}: cannot be parsed as a Boolean MatrixMarket file"
                 )
                 continue
-            rows, cols, nnz = header
+            rows, cols, _ = header
             if (rows, cols) != expected:
                 problems.append(
                     f"{rel}: must be a {expected[0]}x{expected[1]} matrix "
                     f"(the graph declares {expected[0]}x{expected[1]})"
                 )
                 continue
-            count = 0
-            done = False
             try:
-                for tail, head in _mtx_entries(results):
-                    count += 1
+                for tail, head in iter_edges_from_mtx_file(results):
                     if not 0 <= tail < rows or not 0 <= head < cols:
                         problems.append(
                             f"{rel}: entry ({tail}, {head}) is outside the "
                             f"declared {rows}x{cols} matrix"
                         )
-                        done = True
                         break
             except ValueError:
                 problems.append(
                     f"{rel}: cannot be parsed as a Boolean MatrixMarket file"
                 )
-                done = True
-            if not done and count != nnz:
-                problems.append(f"{rel}: declares {nnz} entries but has {count}")
     return problems
 
 
@@ -600,7 +558,10 @@ def _validate_root(root: pathlib.Path, partial: bool = False) -> list[str]:
     if problems:
         return problems  # the deeper checks are meaningless without the skeleton
     try:
-        graph_from_mtx_dir(root / "graph")
+        # Fully consume the stream so the per-file nnz check fires; the
+        # edges themselves are discarded (only the parse errors matter).
+        for _ in iter_edges_from_mtx_dir(root / "graph"):
+            pass
     except (ValueError, OSError) as error:
         problems.append(f"graph/: {error}")
     problems.extend(_mtx_range_problems(root / "graph"))
