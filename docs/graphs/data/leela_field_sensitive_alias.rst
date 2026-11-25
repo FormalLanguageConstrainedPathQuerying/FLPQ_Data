@@ -28,7 +28,7 @@ Graph Statistics
    * - Num Nodes
      - Num Edges
    * - 8090
-     - 19888
+     - 9944
 
 
 Edges Statistics
@@ -41,13 +41,7 @@ Edges Statistics
      - Num Edge Label
    * - :math:`a`
      - 3782
-   * - :math:`a_r`
-     - 3782
    * - :math:`d`
      - 2306
-   * - :math:`d_r`
-     - 2306
    * - :math:`f_i`
-     - 3856
-   * - :math:`f_{r\_i}`
      - 3856

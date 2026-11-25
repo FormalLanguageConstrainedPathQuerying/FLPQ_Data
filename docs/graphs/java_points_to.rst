@@ -12,7 +12,7 @@ Exhaustive, field-sensitive points-to graphs for Java programs, produced by
 the analysis of `"Giga-scale exhaustive points-to analysis for Java in under a minute" <https://dl.acm.org/doi/10.1145/2858965.2814307>`_.
 Edges are the points-to relations (allocations, assignments, loads, stores,
 calls, returns); reversed edges are auto-generated from the forward edges and
-are not stored (see :ref:`graphs`).
+are not stored (see :ref:`file_structure`).
 
 .. toctree::
    :hidden:

@@ -28,7 +28,7 @@ Graph Statistics
    * - Num Nodes
      - Num Edges
    * - 41333
-     - 193866
+     - 101718
 
 
 Edges Statistics
@@ -41,27 +41,15 @@ Edges Statistics
      - Num Edge Label
    * - is_homologous_to
      - 4231
-   * - is_homologous_to_r
-     - 4231
    * - belongs_to
-     - 4618
-   * - belongs_to_r
      - 4618
    * - codes_for
      - 4963
-   * - codes_for_r
-     - 4963
    * - has
-     - 20960
-   * - has_r
      - 20960
    * - interacts_with
      - 9570
    * - participate_in
      - 42751
-   * - participate_in_r
-     - 42751
    * - refers_to
-     - 14625
-   * - refers_to_r
      - 14625

@@ -117,7 +117,7 @@ policy canonically (new S3).
   `round(size_bytes / 10**6, 3) == size_mb`, and
   `format_size_mb(size_bytes)` equals the current docs cell (115/115).
 
-### S2: `utils/graph_tables.py` — render the category tables from registry + CSV [done]
+### S2: `utils/graph_tables.py` — render the category tables from registry + CSV [done] e47cffd
 
 **Code:**
 - New `utils/graph_tables.py`:

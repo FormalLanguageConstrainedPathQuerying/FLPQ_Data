@@ -124,7 +124,9 @@ may generate the same language and yield the same count. A cell reading
 "not available" means the value has not been computed yet; an empty cell
 means the grammar does not apply to that graph. Each table also has a
 ``Size (MB)`` column: the download size of the graph's archive, in
-megabytes. A category table omits the ``Reachable pairs`` column when no
+megabytes. ``Num Edges`` counts stored edges only — reversed edges are not
+stored in the archives and are not part of the count (:ref:`file_structure`).
+A category table omits the ``Reachable pairs`` column when no
 single canonical grammar applies to the whole category (e.g. per-graph RPQ
 queries); the per-query counts then live in the per-graph tables of the
 :ref:`reachable_pairs` page.

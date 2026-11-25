@@ -30,7 +30,7 @@ Graph Statistics
    * - Num Nodes
      - Num Edges
    * - 450609
-     - 2201532
+     - 2201518
 
 
 Edges Statistics
@@ -243,8 +243,6 @@ Edges Statistics
      - 13
    * - exampleResource
      - 12
-   * - hasWisconsinHerbariumHabitatAssociation
-     - 12
    * - comment
      - 8
    * - hasEOL
@@ -258,8 +256,6 @@ Edges Statistics
    * - siteOrder
      - 3
    * - hasFamilyInfoContributor
-     - 2
-   * - hasWI_Herbarium_Habitat
      - 2
    * - summary
      - 2

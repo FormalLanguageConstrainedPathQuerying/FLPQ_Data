@@ -92,4 +92,6 @@ For every edge label ``L`` there is a reversed label ``L_r``: an edge ``(u, v)``
 not stored in the archives; they are derived by
 :obj:`add_reverse_edges <flpq_data.graphs.utils.add_reverse_edges>`, and the
 "Edges Statistics" tables of the per-graph pages list the stored labels
-only.
+only. ``Num Edges`` — in the registry, the per-category tables, and the
+per-graph pages — counts stored edges only: reversed edges are not part of
+the count.

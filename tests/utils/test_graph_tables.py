@@ -7,11 +7,14 @@ from graph_tables import (
     _registry_problems,
     render_category_table,
 )
+
 from flpq_data.dataset.data import DATASET_URL
 from flpq_data.dataset.registry import GraphInfo
 
 
-def _info(name: str, category: str, nodes: int, edges: int, size_bytes: int) -> GraphInfo:
+def _info(
+    name: str, category: str, nodes: int, edges: int, size_bytes: int
+) -> GraphInfo:
     return GraphInfo(
         name=name,
         category=category,
@@ -71,14 +74,14 @@ def test_render_category_table_golden(monkeypatch):
             "     - not available",
             "     - 100",
             "     - 0.005",
-            f"     - `a.tar.gz <{DATASET_URL}a.tar.gz>`_ \U0001F4E5",
+            f"     - `a.tar.gz <{DATASET_URL}a.tar.gz>`_ \U0001f4e5",
             "   * - :ref:`page_b`",
             "     - 10",
             "     - 20",
             "     - 200",
             "     -",
             "     - 0.010",
-            f"     - `b.tar.gz <{DATASET_URL}b.tar.gz>`_ \U0001F4E5",
+            f"     - `b.tar.gz <{DATASET_URL}b.tar.gz>`_ \U0001f4e5",
         ]
     )
     assert text == expected
@@ -103,7 +106,7 @@ def test_render_category_table_no_count_columns(monkeypatch):
         "     - 3",
         "     - 4",
         "     - 0.003",
-        f"     - `a.tar.gz <{DATASET_URL}a.tar.gz>`_ \U0001F4E5",
+        f"     - `a.tar.gz <{DATASET_URL}a.tar.gz>`_ \U0001f4e5",
     ]
 
 

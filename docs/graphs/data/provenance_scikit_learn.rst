@@ -30,7 +30,7 @@ Graph Statistics
    * - Num Nodes
      - Num Edges
    * - 11706
-     - 60181
+     - 35836
 
 
 Edges Statistics
@@ -47,25 +47,13 @@ Edges Statistics
      - 967
    * - wasDerivedFrom
      - 3236
-   * - wasDerivedFrom_r
-     - 3236
    * - specializationOf
-     - 5368
-   * - specializationOf_r
      - 5368
    * - wasGeneratedBy
      - 5203
-   * - wasGeneratedBy_r
-     - 5203
    * - used
-     - 3236
-   * - used_r
      - 3236
    * - wasAssociatedWith
      - 1934
-   * - wasAssociatedWith_r
-     - 1934
    * - wasAttributedTo
-     - 5368
-   * - wasAttributedTo_r
      - 5368

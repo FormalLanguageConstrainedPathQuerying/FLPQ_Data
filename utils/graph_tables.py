@@ -173,13 +173,10 @@ def _registry_problems(rows: list[dict], site_map: dict[str, str]) -> list[str]:
         info = graph_info(name)
         expected = site_map.get(name)
         if expected is None:
-            problems.append(
-                f"registry graph {name} is not listed in any docs category"
-            )
+            problems.append(f"registry graph {name} is not listed in any docs category")
         elif expected != info.category:
             problems.append(
-                f"registry says {name} is in {info.category}, "
-                f"the docs say {expected}"
+                f"registry says {name} is in {info.category}, the docs say {expected}"
             )
         if name not in csv_graphs:
             problems.append(f"registry graph {name} has no reachable-pairs row")
@@ -230,9 +227,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     # Validation problems block any update (all-or-nothing, like
     # reachable_pairs_tables.py): a record the other sources cannot
     # account for must be fixed before anything is rewritten.
-    problems = _validation_problems(rows, site_map) + _registry_problems(
-        rows, site_map
-    )
+    problems = _validation_problems(rows, site_map) + _registry_problems(rows, site_map)
     if problems:
         print("\n".join(problems))
         print(f"FAILED: {len(problems)} problem(s).")
