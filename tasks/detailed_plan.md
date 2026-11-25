@@ -228,7 +228,7 @@ count; the data pages must match.
   match the registry (stored edges only), and the reverse-edge policy is
   stated once in a canonical place.
 
-### S4: Retire `archive_sizes.py` and `update_category_columns`
+### S4: Retire `archive_sizes.py` and `update_category_columns` [done] 7ff70af
 
 **Code:**
 - Delete `utils/archive_sizes.py` and `tests/utils/test_archive_sizes.py`.
@@ -267,7 +267,7 @@ count; the data pages must match.
   `CHANGELOG.md` history and `tasks/global_plan.md`, which are historical
   records and stay untouched).
 
-### S5: Point the workflows at the rendered tables + changelog
+### S5: Point the workflows at the rendered tables + changelog [done]
 
 **Code:**
 - `utils/upload_to_s3.py` — docstring: the verified size is recorded in the

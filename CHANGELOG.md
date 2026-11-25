@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- The per-category graph tables of `docs/graphs/*.rst` are now rendered
+  from the machine sources instead of maintained by hand (#194): a new
+  `utils/graph_tables.py` renders the whole table between
+  `graph-table` markers — `Num Nodes`, `Num Edges`, and `Size (MB)` from
+  the registry, the `Reachable pairs` count columns from
+  `flpq_data/dataset/reachable_pairs.csv` (CFPQ rows only), the `Graph`
+  cell from the site, and the `Download` link from the dataset URL — so
+  drift in any column is structurally impossible. The in-sync check is an
+  offline test covering every table column.
+- An exact `size_bytes` field to the per-graph registry
+  (`flpq_data/dataset/registry.json`, exposed as `GraphInfo.size_bytes`):
+  the 3-decimal `size_mb` is provably insufficient for the rendered
+  `Size (MB)` cell (4 of 115 archives sit on a `.xx5` tie where
+  double-rounding shifts the cell by 0.01 MB) (#194).
+
+### Changed
+
+- The 39 stale `Num Edges` cells of the per-category graph tables and the
+  matching per-graph data pages now list the stored edge count (forward
+  edges only) instead of the logical count (forward + reverse) (#194);
+  the reverse-edge policy (reversed edges are not stored, are derived by
+  `add_reverse_edges`, and are not part of the `Num Edges` count) is
+  stated canonically in the "Reversed edges" section of
+  `docs/file_structure.rst`.
+
+### Removed
+
+- `utils/archive_sizes.py` and the in-place count-column sync
+  (`reachable_pairs_tables.update_category_columns`): the `Size (MB)`
+  column is rendered from the registry's exact `size_bytes` (offline) and
+  the count columns are rendered by `utils/graph_tables.py`, so the S3
+  HEAD fetch of every archive is no longer needed for the docs (#194).
+
 ## [6.2.0] - 2026-11-25
 
 ### Added

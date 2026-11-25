@@ -52,9 +52,9 @@ Per archive, in order:
 
 Once per issue, after every archive is in: regenerate the registry
 (`python utils/generate_registry.py`), do the "Documentation" steps (per-graph
-pages, category table(s), canonical grammars, new category page), then run
+pages, canonical grammars, new category page), then run
 `python utils/reachable_pairs_tables.py --update` and
-`python utils/archive_sizes.py --update`.
+`python utils/graph_tables.py --update`.
 
 ## Wiring a new graph into the code
 
@@ -84,17 +84,15 @@ pages, category table(s), canonical grammars, new category page), then run
    - *new category* — create `docs/graphs/<category>.rst` with the category
      description, the graph table (one column per grammar), and the
      "Canonical grammars" section.
-3. Register it **twice**: a row in the per-category table of its source area
-   (`docs/graphs/<category>.rst`) and an entry in the matching captioned
-   toctree of `docs/graphs/index.rst` (the left navigation bar is generated
-   from those toctrees). Keep both in the same order, and bump the category's
-   graph count in the Contents table of `docs/graphs/index.rst`. For a new
-   category, also add its page to the `docs/graphs/index.rst` toctree and a
-   row to the Contents table.
- 4. Fill the new row's `Size (MB)` cell with the size the upload tool
-   reported, then run `python utils/archive_sizes.py --update` before
-   committing so every table row — including the new one — matches S3 (see
-   the "Archive sizes" section of `docs/utils.rst`).
+3. Register the data page in the category page's toctree
+   (`docs/graphs/<category>.rst`) — the per-category table row is rendered
+   by `graph_tables.py` — and bump the category's graph count in the
+   Contents table of `docs/graphs/index.rst`. For a new category, also add
+   its page to the `docs/graphs/index.rst` toctree and a row to the
+   Contents table.
+ 4. Run `python utils/graph_tables.py --update` before committing so the
+   new row — including its `Size (MB)` cell — is rendered from the registry
+   (see the "Graph tables" section of `docs/utils.rst`).
 
 Note: a `data/*.rst` page missing from all toctrees produces only a Sphinx
 *warning*, not an error, so the docs quality gate will not catch it — check

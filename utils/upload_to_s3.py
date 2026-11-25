@@ -51,7 +51,9 @@ def upload_file(
         The verified size of the stored object in bytes (equal to the local
         file size; the upload is aborted otherwise). The CLI reports it in
         MB with the same formatting as the ``Size (MB)`` column of the docs
-        graph tables.
+        graph tables; the size is recorded in the registry by
+        ``utils/generate_registry.py`` and the table row is rendered by
+        ``utils/graph_tables.py``.
 
     Raises
     ------

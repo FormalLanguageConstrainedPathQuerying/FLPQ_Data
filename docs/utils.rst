@@ -39,8 +39,9 @@ Before uploading any ``.tar.gz`` the tool validates it as a graph archive
 verifies that the stored object size equals the local file size and reports
 an error otherwise. The verified size is then reported in bytes and
 megabytes, with the same MB formatting as the ``Size (MB)`` column of the
-graph tables, so a new graph's table row can be
-filled directly from the upload output.
+graph tables; the size is recorded in the registry by
+:ref:`generate_registry` and the table row is rendered by
+:ref:`graph_tables`.
 
 .. _strip_reverse_edges:
 
