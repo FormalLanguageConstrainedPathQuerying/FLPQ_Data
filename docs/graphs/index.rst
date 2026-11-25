@@ -67,6 +67,9 @@ Memory characteristics
   strings are accepted, anything else is an error).
 - An ``rdf`` **source** is materialized: rdflib has no streaming parser, so
   reading RDF costs O(E) RAM. It is the only unavoidable materialization.
+- Archive validation (``flpq-check-archive``) streams the ``graph/`` check in
+  O(1) in edges — it consumes the same streaming reader as the conversion
+  path rather than materializing a graph (#188, #189).
 
 RDF encoding
 ^^^^^^^^^^^^
